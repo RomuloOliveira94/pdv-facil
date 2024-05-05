@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellController;
@@ -26,8 +27,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('products', ProductController::class)->middleware('auth');
+Route::resource('/products', ProductController::class)->middleware('auth');
 
-Route::resource('sells', SellController::class)->middleware('auth');
+Route::resource('/sells', SellController::class)->middleware('auth');
+
+Route::resource('/cashiers', CashierController::class)->middleware('auth');
 
 require __DIR__.'/auth.php';
