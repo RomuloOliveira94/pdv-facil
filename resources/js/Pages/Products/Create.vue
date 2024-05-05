@@ -1,5 +1,6 @@
 <script setup>
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import { vMaska } from "maska";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputError from "@/Components/InputError.vue";
@@ -8,7 +9,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 
 const form = useForm({
     name: "",
-    price: 0,
+    price: "",
     category: "",
 });
 
@@ -36,7 +37,6 @@ const submit = () => {
                         type="text"
                         class="mt-1 block w-full"
                         v-model="form.name"
-                        required
                         autofocus
                         autocomplete="name"
                     />
@@ -49,25 +49,27 @@ const submit = () => {
 
                     <TextInput
                         id="price"
-                        type="number"
+                        type="text"
                         class="mt-1 block w-full"
                         v-model="form.price"
-                        required
                         autocomplete="price"
+                        v-maska
+                        data-maska="R$ 0.99"
+                        data-maska-tokens="0:\d:multiple|9:\d:optional"
+                        placeholder="R$ 00.00"
                     />
 
                     <InputError class="mt-2" :message="form.errors.price" />
                 </div>
 
                 <div class="mt-4">
-                    <InputLabel for="category" value="category" />
+                    <InputLabel for="category" value="Category" />
 
                     <TextInput
                         id="category"
                         type="text"
                         class="mt-1 block w-full"
                         v-model="form.category"
-                        required
                         autocomplete="new-category"
                     />
 
@@ -79,6 +81,7 @@ const submit = () => {
                         class="btn btn-success"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
+                        type="submit"
                     >
                         Criar
                     </button>
