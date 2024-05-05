@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
+        Schema::table('users', function (Blueprint $table) {
             $table->foreignId('company_id')->constrained();
-            $table->string('name');
-            $table->string('category');
-            $table->integer('price');
-            $table->text('imageUrl');
-            $table->timestamps();
+            $table->enum('role', ['admin', 'cashier', 'manager'])->default('manager');
         });
     }
 
@@ -27,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('company_id');
+            $table->dropColumn('role');
+        });
     }
 };

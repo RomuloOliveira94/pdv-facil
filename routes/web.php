@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellController;
@@ -33,4 +34,8 @@ Route::resource('/sells', SellController::class)->middleware('auth');
 
 Route::resource('/cashiers', CashierController::class)->middleware('auth');
 
-require __DIR__.'/auth.php';
+Route::get('/company', [CompanyController::class, 'index'])->middleware('auth');
+
+Route::patch('company/{company}', [CompanyController::class, 'update'])->middleware('auth');
+
+require __DIR__ . '/auth.php';
