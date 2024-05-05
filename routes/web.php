@@ -34,8 +34,8 @@ Route::resource('/sells', SellController::class)->middleware('auth');
 
 Route::resource('/cashiers', CashierController::class)->middleware('auth');
 
-Route::get('/company', [CompanyController::class, 'index'])->middleware('auth');
+Route::get('/company', [CompanyController::class, 'index'])->middleware('auth')->name('companies.index');
 
-Route::patch('company/{company}', [CompanyController::class, 'update'])->middleware('auth');
+Route::patch('company/{company}', [CompanyController::class, 'update'])->middleware('auth')->name('company.update');
 
 require __DIR__ . '/auth.php';
