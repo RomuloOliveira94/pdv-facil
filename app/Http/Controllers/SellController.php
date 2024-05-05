@@ -13,7 +13,9 @@ class SellController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('Sells/Index', [
+            'sells' => Sell::with('product')->get()
+        ]);
     }
 
     /**
