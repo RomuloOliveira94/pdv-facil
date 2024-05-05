@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SellController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,5 +27,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('products', ProductController::class)->middleware('auth');
+
+Route::resource('sells', SellController::class)->middleware('auth');
 
 require __DIR__.'/auth.php';
