@@ -3,6 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import InputError from "@/Components/InputError.vue";
 import { Link, useForm } from "@inertiajs/vue3";
+import { vMaska } from "maska";
 
 const props = defineProps({
     company: Object,
@@ -45,7 +46,7 @@ const submit = () => {
                         </div>
                         <input
                             type="text"
-                            placeholder="Type here"
+                            placeholder="Nome da empresa"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.name"
                         />
@@ -62,6 +63,10 @@ const submit = () => {
                             placeholder="Type here"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.cnpj"
+                            v-maska
+                            data-maska="[
+                              '##.###.###/####-##'
+                            ]"
                         />
                         <InputError class="mt-2" :message="form.errors.cnpj" />
                     </label>
@@ -88,6 +93,11 @@ const submit = () => {
                             placeholder="Type here"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.phone"
+                            v-maska
+                            data-maska="[
+                              '(##) #####-####',
+                              '(##) ####-####'
+                            ]"
                         />
                         <InputError class="mt-2" :message="form.errors.phone" />
                     </label>
@@ -120,6 +130,8 @@ const submit = () => {
                                 placeholder="Type here"
                                 class="input input-bordered bg-inherit w-24"
                                 v-model="form.address_number"
+                                v-maska
+                                data-maska="######"
                             />
                             <InputError
                                 class="mt-2"
@@ -171,6 +183,8 @@ const submit = () => {
                             placeholder="Type here"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.zip_code"
+                            v-maska
+                            data-maska="#####-###"
                         />
                         <InputError
                             class="mt-2"

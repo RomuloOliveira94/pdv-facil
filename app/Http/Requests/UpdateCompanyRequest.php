@@ -27,9 +27,9 @@ class UpdateCompanyRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'cnpj' => ['nullable', 'string', 'min:14', 'max:18'],
+            'cnpj' => ['nullable', 'string', 'min:18', 'max:18'],
             'email' => ['nullable', 'string', 'email', 'max:255'],
-            'phone' => ['required', 'string', 'min:11', 'max:14'],
+            'phone' => ['required', 'string', 'min:11', 'max:15'],
             'address' => ['required', 'string', 'max:255'],
             'address_number' => ['required', 'string', 'max:255'],
             'address_complement' => ['nullable', 'string', 'max:255'],
