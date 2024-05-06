@@ -1,7 +1,17 @@
 <script setup>
 import SectionContainer from "@/Components/SectionContainer.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
+
+const props = defineProps({
+    products: Object,
+});
+
+const destroy = (company_id) => {
+    if (confirm("Tem certeza que quer deletar esse produto?")) {
+        router.delete(route("products.destroy", company_id));
+    }
+};
 </script>
 
 <template>
@@ -13,21 +23,52 @@ import { Head, Link } from "@inertiajs/vue3";
             </h2>
         </template>
         <div class="mb-3">
-            <Link :href="route('products.create')"  class="btn btn-primary">Criar Novo Produto</Link>
+            <Link :href="route('products.create')" class="btn btn-primary"
+                >Criar Novo Produto</Link
+            >
         </div>
         <SectionContainer>
-            <div class="card card-side bg-base-100 shadow-xl">
-                <figure>
-                    <img
-                        src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.jpg"
-                        alt="Movie"
-                    />
-                </figure>
-                <div class="card-body">
-                    <h2 class="card-title">New movie is released!</h2>
-                    <p>Click the button to watch on Jetflix app.</p>
-                    <div class="card-actions justify-end">
-                        <button class="btn btn-primary">Watch</button>
+            <div class="grid grid-cols-4 w-full gap-3">
+                <div
+                    v-for="(product, index) in products"
+                    :key="index"
+                    class="card card-side border border-slate-100 items-center"
+                >
+                    <div class="p-2 w-full grid gap-3">
+                        <figure v-show="product.imageUrl" class="w-full h-32">
+                            <img
+                                :src="product.imageUrl"
+                                :alt="product.name"
+                                class="object-cover w-full h-full rounded-lg"
+                            />
+                        </figure>
+                        <div class="flex justify-between w-full items-center">
+                            <div>
+                                <h2 class="card-title">{{ product.name }}</h2>
+                                <p>
+                                    {{
+                                        product.price.toLocaleString("pt-BR", {
+                                            minimumFractionDigits: 2,
+                                            style: "currency",
+                                            currency: "BRL",
+                                        })
+                                    }}
+                                </p>
+                            </div>
+                            <div class="card-actions justify-end flex-col">
+                                <Link
+                                    :href="route('products.edit', product.id)"
+                                    class="btn btn-info btn-sm w-full"
+                                    >Editar</Link
+                                >
+                                <button
+                                    @click="destroy(product.id)"
+                                    class="btn btn-error btn-sm w-full"
+                                >
+                                    Deletar
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

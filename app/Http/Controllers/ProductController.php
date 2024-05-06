@@ -31,8 +31,19 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        dd($request->validated());
-        Product::create($request->validated());
+        $company_id = null;
+
+        if (auth()->user()->role === 'manager') {
+            $company_id = auth()->user()->company_id;
+        }
+
+        if ($company_id) {
+            $request->merge([
+                'company_id' => $company_id
+            ]);
+        }
+
+        Product::create($request->all());
 
         return redirect()->route('products.index');
     }
@@ -50,7 +61,9 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return inertia('Products/Edit', [
+            'product' => $product,
+        ]);
     }
 
     /**
@@ -58,7 +71,9 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $product->update($request->all());
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -66,6 +81,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
+
+        return redirect()->route('products.index');
     }
 }
