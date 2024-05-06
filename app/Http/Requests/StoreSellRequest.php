@@ -11,18 +11,24 @@ class StoreSellRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if (auth()->user()) {
+            return true;
+        }
         return false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'delivery_tax' => floatval(str_replace('R$', '', str_replace(',', '.', $this->delivery_tax))),
+            'discount' => floatval(str_replace('R$', '', str_replace(',', '.', $this->discount))),
+            'subtotal' => floatval(str_replace('R$', '', str_replace(',', '.', $this->subtotal))),
+            'total' => floatval(str_replace('R$', '', str_replace(',', '.', $this->total))),
+        ]);
+    }
+
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 }

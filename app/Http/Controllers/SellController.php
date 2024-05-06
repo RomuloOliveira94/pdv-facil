@@ -6,6 +6,7 @@ use App\Http\Requests\StoreSellRequest;
 use App\Http\Requests\UpdateSellRequest;
 use App\Models\Product;
 use App\Models\Sell;
+use Illuminate\Support\Facades\Auth;
 
 class SellController extends Controller
 {
@@ -37,7 +38,31 @@ class SellController extends Controller
      */
     public function store(StoreSellRequest $request)
     {
-        //
+        $company_id = auth()->user()->company_id;
+
+        if (!$company_id) {
+            return redirect()->route('sells.index');
+        }
+
+        $request->merge([
+            'company_id' => $company_id,
+            'cashier_id' => Auth::id(),
+            'payment_type_id' => $request->payment_type_id ?? '1',
+            'delivery_tax' => $request->delivery_tax ?? 0,
+            'discount' => $request->discount ?? 0,
+            'subtotal' => $request->subtotal ?? 0,
+            'total' => $request->total ?? 0,
+        ]);
+
+        dd($request->all());
+        $sell = Sell::create($request->all());
+
+        foreach ($request->products as $product) {
+            $sell->products()->attach($product['id'], [
+                'quantity' => $product['quantity'],
+            ]);
+        }
+        return redirect()->route('sells.index');
     }
 
     /**

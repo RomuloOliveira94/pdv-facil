@@ -4,7 +4,7 @@ import SectionContainer from "@/Components/SectionContainer.vue";
 import TextInput from "@/Components/TextInput.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { vMaska } from "maska";
-import { Head } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import { defineProps, reactive, computed, ref } from "vue";
 
 defineProps({
@@ -94,6 +94,22 @@ const removeProduct = (product) => {
         (acc, product) => acc + product.price * product.quantity,
         0
     );
+};
+
+const createSell = () => {
+    const data = {
+        products: sell.products.map((product) => ({
+            id: product.id,
+            quantity: product.quantity,
+        })),
+        delivery_tax: deliveryTax.value,
+        discount: discount.value,
+        payment_type_id: sell.paymentMethod,
+        subtotal: sell.total,
+        total: sell.total + deliveryTax.value - discount.value,
+    };
+
+    router.post(route("sells.store"), data);
 };
 </script>
 
@@ -208,7 +224,9 @@ const removeProduct = (product) => {
                 class="btn btn-link"
                 @click="showDiscount = !showDiscount"
             >
-                {{ !showDiscount ? "Adicionar desconto?" : "Remover desconto." }}
+                {{
+                    !showDiscount ? "Adicionar desconto?" : "Remover desconto."
+                }}
             </button>
             <div
                 v-if="sell.total > 0"
@@ -273,7 +291,10 @@ const removeProduct = (product) => {
                     </h2>
                 </div>
             </div>
-            <button class="btn btn-primary self-center mt-6 w-1/2 text-xl">
+            <button
+                @click="createSell"
+                class="btn btn-primary self-center mt-6 w-1/2 text-xl"
+            >
                 Criar venda
             </button>
         </SectionContainer>
