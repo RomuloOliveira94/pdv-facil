@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, Head } from "@inertiajs/vue3";
 
 defineProps({
     company: Object,
@@ -10,9 +10,11 @@ defineProps({
 
 <template>
     <AuthenticatedLayout>
+        <Head title="Empresa" />
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Dados da Empresa: {{ company.name }}
+                <span v-show="company.cnpj">- {{ company.cnpj }}</span>
             </h2>
         </template>
         <SectionContainer>

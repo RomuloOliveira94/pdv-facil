@@ -25,7 +25,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.put(route("company.update", props.company));
+    form.put(route("company.update", props.company), form);
 };
 </script>
 
@@ -38,102 +38,138 @@ const submit = () => {
         </template>
         <SectionContainer>
             <form @submit.prevent="submit">
-                <div class="grid grid-cols-3">
-                    <label class="form-control w-full max-w-xs">
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Nome</span>
                         </div>
                         <input
                             type="text"
                             placeholder="Type here"
-                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            class="input input-bordered bg-inherit w-full"
                             v-model="form.name"
                         />
 
                         <InputError class="mt-2" :message="form.errors.name" />
                     </label>
 
-                    <label class="form-control w-full max-w-xs">
+                    <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Cnpj</span>
                         </div>
                         <input
                             type="text"
                             placeholder="Type here"
-                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            class="input input-bordered bg-inherit w-full"
                             v-model="form.cnpj"
                         />
+                        <InputError class="mt-2" :message="form.errors.cnpj" />
                     </label>
 
-                    <label class="form-control w-full max-w-xs">
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">Email</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full"
+                            v-model="form.email"
+                        />
+                        <InputError class="mt-2" :message="form.errors.email" />
+                    </label>
+
+                    <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Telefone</span>
                         </div>
                         <input
                             type="text"
                             placeholder="Type here"
-                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            class="input input-bordered bg-inherit w-full"
                             v-model="form.phone"
                         />
                         <InputError class="mt-2" :message="form.errors.phone" />
                     </label>
                 </div>
 
-                <div class="grid grid-cols-3">
-                    <label class="form-control w-full max-w-xs">
-                        <div class="label">
-                            <span class="label-text">Endereço</span>
-                        </div>
-                        <input
-                            type="text"
-                            placeholder="Type here"
-                            class="input input-bordered bg-inherit w-full max-w-xs"
-                            v-model="form.address"
-                        />
-                        <InputError
-                            class="mt-2"
-                            :message="form.errors.address"
-                        />
-                    </label>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="flex gap-3">
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text">Endereço</span>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Type here"
+                                class="input input-bordered bg-inherit w-full"
+                                v-model="form.address"
+                            />
+                            <InputError
+                                class="mt-2"
+                                :message="form.errors.address"
+                            />
+                        </label>
 
-                    <label class="form-control w-full max-w-xs">
-                        <div class="label">
-                            <span class="label-text">Nº</span>
-                        </div>
-                        <input
-                            type="text"
-                            placeholder="Type here"
-                            class="input input-bordered bg-inherit w-full max-w-xs"
-                            v-model="form.address_number"
-                        />
-                        <InputError
-                            class="mt-2"
-                            :message="form.errors.address_number"
-                        />
-                    </label>
+                        <label class="form-control w-24">
+                            <div class="label">
+                                <span class="label-text">Nº</span>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder="Type here"
+                                class="input input-bordered bg-inherit w-24"
+                                v-model="form.address_number"
+                            />
+                            <InputError
+                                class="mt-2"
+                                :message="form.errors.address_number"
+                            />
+                        </label>
+                    </div>
 
-                    <label class="form-control w-full max-w-xs">
+                    <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Complemento</span>
                         </div>
                         <input
                             type="text"
                             placeholder="Type here"
-                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            class="input input-bordered bg-inherit w-full"
                             v-model="form.address_complement"
                         />
                     </label>
                 </div>
 
-                <div class="grid grid-cols-3">
-                    <label class="form-control w-full max-w-xs">
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">Bairro</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full"
+                            v-model="form.neighborhood"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.neighborhood"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.neighborhood"
+                        />
+                    </label>
+
+                    <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">CEP</span>
                         </div>
                         <input
                             type="text"
                             placeholder="Type here"
-                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            class="input input-bordered bg-inherit w-full"
                             v-model="form.zip_code"
                         />
                         <InputError
@@ -142,30 +178,58 @@ const submit = () => {
                         />
                     </label>
 
-                    <label class="form-control w-full max-w-xs">
+                    <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Cidade</span>
                         </div>
                         <input
                             type="text"
                             placeholder="Type here"
-                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            class="input input-bordered bg-inherit w-full"
                             v-model="form.city"
                         />
                         <InputError class="mt-2" :message="form.errors.city" />
                     </label>
 
-                    <label class="form-control w-full max-w-xs">
+                    <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Estado</span>
                         </div>
                         <input
                             type="text"
                             placeholder="Type here"
-                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            class="input input-bordered bg-inherit w-full"
                             v-model="form.state"
                         />
                         <InputError class="mt-2" :message="form.errors.state" />
+                    </label>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">Chave Pix</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full"
+                            v-model="form.pix_key"
+                        />
+                    </label>
+
+                    <label class="form-control w-full">
+                        <div class="label">
+                            <span class="label-text">Logo</span>
+                        </div>
+
+                        <input
+                            type="file"
+                            class="file-input w-full bg-inherit"
+                            @change="form.logo = $event.target.files[0]"
+                        />
+
+                        <InputError class="mt-2" :message="form.errors.logo" />
                     </label>
                 </div>
 
@@ -176,7 +240,7 @@ const submit = () => {
                         :disabled="form.processing"
                         type="submit"
                     >
-                        Criar
+                        Editar
                     </button>
                     <Link
                         :href="route('company.index')"

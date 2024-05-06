@@ -27,14 +27,18 @@ class UpdateCompanyRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'min:15'],
+            'cnpj' => ['nullable', 'string', 'min:14', 'max:18'],
+            'email' => ['nullable', 'string', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'min:11', 'max:14'],
             'address' => ['required', 'string', 'max:255'],
             'address_number' => ['required', 'string', 'max:255'],
-            'address_complement' => ['required', 'string', 'max:255'],
+            'address_complement' => ['nullable', 'string', 'max:255'],
             'neighborhood' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
             'state' => ['required', 'string', 'max:255'],
-            'zip_code' => ['required', 'string', 'max:9'],
+            'zip_code' => ['required', 'string', 'min:8'],
+            'pix_key' => ['nullable', 'string', 'max:255'],
+            'logo' => ['nullable'],
         ];
     }
 }
