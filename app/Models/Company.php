@@ -45,4 +45,9 @@ class Company extends Model
     {
         return $this->hasMany(Cashier::class);
     }
+
+    public function paymentTypes()
+    {
+        return $this->belongsToMany(PaymentType::class, 'company_payment_type');
+    }
 }

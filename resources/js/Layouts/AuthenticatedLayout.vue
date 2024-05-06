@@ -32,32 +32,32 @@ const showingNavigationDropdown = ref(false);
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
+                                    :href="route('sells.create')"
+                                    :active="route().current('sells.create')"
                                 >
-                                    Dashboard
+                                    Registro de Venda
                                 </NavLink>
                                 <NavLink
                                     :href="route('products.index')"
-                                    :active="route().current('products')"
+                                    :active="route().current('products.index')"
                                 >
                                     Produtos
                                 </NavLink>
                                 <NavLink
                                     :href="route('sells.index')"
-                                    :active="route().current('sells')"
+                                    :active="route().current('sells.index')"
                                 >
                                     Vendas
                                 </NavLink>
                                 <NavLink
                                     :href="route('cashiers.index')"
-                                    :active="route().current('cashiers')"
+                                    :active="route().current('cashiers.index')"
                                 >
                                     Caixas
                                 </NavLink>
                                 <NavLink
                                     :href="route('company.index')"
-                                    :active="route().current('company')"
+                                    :active="route().current('company.index')"
                                 >
                                     Empresa
                                 </NavLink>

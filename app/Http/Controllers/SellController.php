@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSellRequest;
 use App\Http\Requests\UpdateSellRequest;
+use App\Models\Product;
 use App\Models\Sell;
 
 class SellController extends Controller
@@ -23,7 +24,12 @@ class SellController extends Controller
      */
     public function create()
     {
-        //
+        $user_company = auth()->user()->company;
+
+        return inertia('Sells/Create', [
+            'products' => Product::where('company_id', $user_company->id)->get(),
+            'paymentMethods' => $user_company->paymentTypes,
+        ]);
     }
 
     /**
