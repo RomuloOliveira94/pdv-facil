@@ -1,15 +1,32 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
+import InputError from "@/Components/InputError.vue";
 import { Link, useForm } from "@inertiajs/vue3";
 
-defineProps({
+const props = defineProps({
     company: Object,
 });
 
 const form = useForm({
-    name: company.name,
+    name: props.company.name,
+    cnpj: props.company.cnpj,
+    phone: props.company.phone,
+    address: props.company.address,
+    address_number: props.company.address_number,
+    address_complement: props.company.address_complement,
+    neighborhood: props.company.neighborhood,
+    zip_code: props.company.zip_code,
+    city: props.company.city,
+    state: props.company.state,
+    email: props.company.email,
+    logo: props.company.logo,
+    pix_key: props.company.pix_key,
 });
+
+const submit = () => {
+    form.put(route("company.update", props.company));
+};
 </script>
 
 <template>
@@ -21,17 +38,153 @@ const form = useForm({
         </template>
         <SectionContainer>
             <form @submit.prevent="submit">
-                <label class="form-control w-full max-w-xs">
-                    <div class="label">
-                        <span class="label-text">Nome</span>
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="Type here"
-                        class="input input-bordered bg-inherit w-full max-w-xs"
-                        v-model="form.name"
-                    />
-                </label>
+                <div class="grid grid-cols-3">
+                    <label class="form-control w-full max-w-xs">
+                        <div class="label">
+                            <span class="label-text">Nome</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            v-model="form.name"
+                        />
+
+                        <InputError class="mt-2" :message="form.errors.name" />
+                    </label>
+
+                    <label class="form-control w-full max-w-xs">
+                        <div class="label">
+                            <span class="label-text">Cnpj</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            v-model="form.cnpj"
+                        />
+                    </label>
+
+                    <label class="form-control w-full max-w-xs">
+                        <div class="label">
+                            <span class="label-text">Telefone</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            v-model="form.phone"
+                        />
+                        <InputError class="mt-2" :message="form.errors.phone" />
+                    </label>
+                </div>
+
+                <div class="grid grid-cols-3">
+                    <label class="form-control w-full max-w-xs">
+                        <div class="label">
+                            <span class="label-text">Endereço</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            v-model="form.address"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.address"
+                        />
+                    </label>
+
+                    <label class="form-control w-full max-w-xs">
+                        <div class="label">
+                            <span class="label-text">Nº</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            v-model="form.address_number"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.address_number"
+                        />
+                    </label>
+
+                    <label class="form-control w-full max-w-xs">
+                        <div class="label">
+                            <span class="label-text">Complemento</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            v-model="form.address_complement"
+                        />
+                    </label>
+                </div>
+
+                <div class="grid grid-cols-3">
+                    <label class="form-control w-full max-w-xs">
+                        <div class="label">
+                            <span class="label-text">CEP</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            v-model="form.zip_code"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.zip_code"
+                        />
+                    </label>
+
+                    <label class="form-control w-full max-w-xs">
+                        <div class="label">
+                            <span class="label-text">Cidade</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            v-model="form.city"
+                        />
+                        <InputError class="mt-2" :message="form.errors.city" />
+                    </label>
+
+                    <label class="form-control w-full max-w-xs">
+                        <div class="label">
+                            <span class="label-text">Estado</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Type here"
+                            class="input input-bordered bg-inherit w-full max-w-xs"
+                            v-model="form.state"
+                        />
+                        <InputError class="mt-2" :message="form.errors.state" />
+                    </label>
+                </div>
+
+                <div class="flex items-center justify-between mt-4 gap-6">
+                    <button
+                        class="btn btn-success"
+                        :class="{ 'opacity-25': form.processing }"
+                        :disabled="form.processing"
+                        type="submit"
+                    >
+                        Criar
+                    </button>
+                    <Link
+                        :href="route('company.index')"
+                        class="btn btn-error text-sm text-gray-600 hover:text-gray-900"
+                    >
+                        Cancelar
+                    </Link>
+                </div>
             </form>
         </SectionContainer>
     </AuthenticatedLayout>

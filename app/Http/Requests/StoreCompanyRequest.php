@@ -12,8 +12,7 @@ class StoreCompanyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if(Auth::user()->role == 'admin')
-        {
+        if (Auth::user()->role == 'admin') {
             return true;
         }
         return false;

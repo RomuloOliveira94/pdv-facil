@@ -34,7 +34,6 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {
-       
     }
 
     /**
@@ -60,7 +59,8 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
-        //
+        $company->update($request->validated());
+        return redirect()->route('company.index');
     }
 
     /**

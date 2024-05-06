@@ -56,8 +56,8 @@ const showingNavigationDropdown = ref(false);
                                     Caixas
                                 </NavLink>
                                 <NavLink
-                                    :href="route('companies.index')"
-                                    :active="route().current('companies')"
+                                    :href="route('company.index')"
+                                    :active="route().current('company')"
                                 >
                                     Empresa
                                 </NavLink>
