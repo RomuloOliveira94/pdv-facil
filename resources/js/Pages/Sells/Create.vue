@@ -5,16 +5,19 @@ import TextInput from "@/Components/TextInput.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { vMaska } from "maska";
 import { Head } from "@inertiajs/vue3";
-import { defineProps, reactive, computed } from "vue";
+import { defineProps, reactive, computed, ref } from "vue";
 
 defineProps({
     products: Object,
     paymentMethods: Object,
 });
 
+const showDiscount = ref(false);
+
 const sell = reactive({
     products: [],
     delivery: "",
+    discount: "",
     paymentMethod: null,
     total: 0,
 });
@@ -30,9 +33,11 @@ const sellSubTotal = computed(() => {
 });
 
 const deliveryTax = computed(() => {
-    return sell.delivery
-        ? parseFloat(sell.delivery.replace(",", "."))
-        : 0;
+    return sell.delivery ? parseFloat(sell.delivery.replace(",", ".")) : 0;
+});
+
+const discount = computed(() => {
+    return sell.discount ? parseFloat(sell.discount.replace(",", ".")) : 0;
 });
 
 const sellTotal = computed(() => {
@@ -42,7 +47,7 @@ const sellTotal = computed(() => {
         0
     );
 
-    const total = subtotal + deliveryTax.value;
+    const total = subtotal + deliveryTax.value - discount.value;
 
     const totalWithPercentage =
         total + total * (paymentMethodTaxIfCredit / 100);
@@ -198,6 +203,13 @@ const removeProduct = (product) => {
                 </ul>
             </div>
             <hr class="my-6" />
+            <button
+                v-if="sell.total > 0"
+                class="btn btn-link"
+                @click="showDiscount = !showDiscount"
+            >
+                {{ !showDiscount ? "Adicionar desconto?" : "Remover desconto." }}
+            </button>
             <div
                 v-if="sell.total > 0"
                 class="flex justify-center gap-3 h-full w-full items-center"
@@ -212,6 +224,23 @@ const removeProduct = (product) => {
                         v-model="sell.delivery"
                         autofocus
                         autocomplete="delivery"
+                        v-maska
+                        data-maska="0.99"
+                        data-maska-tokens="0:\d:multiple|9:\d:optional"
+                        placeholder="R$ 00.00"
+                    />
+                </div>
+
+                <div v-show="showDiscount">
+                    <InputLabel for="discount" value="Desconto" />
+
+                    <TextInput
+                        id="discount"
+                        type="text"
+                        class="block w-full"
+                        v-model="sell.discount"
+                        autofocus
+                        autocomplete="discount"
                         v-maska
                         data-maska="0.99"
                         data-maska-tokens="0:\d:multiple|9:\d:optional"
