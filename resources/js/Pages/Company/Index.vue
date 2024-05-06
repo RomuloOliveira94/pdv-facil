@@ -1,18 +1,39 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
+import { Link } from "@inertiajs/vue3";
 
+defineProps({
+    company: Object,
+});
 </script>
 
 <template>
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Empresa
+                Dados da Empresa: {{ company.name }}
             </h2>
         </template>
         <SectionContainer>
-            <div class="p-6 text-gray-900">Empresas</div>
+            <div class="flex justify-between items-center w-full">
+                <div class="grid gap-1">
+                    <h1>{{ company.name }}</h1>
+                    <h2>{{ company.email }}</h2>
+                    <h2>
+                        {{ company.address }}, {{ company.address_number }} -
+                        {{ company.zip_code }}
+                    </h2>
+                    <h2>{{ company.city }} - {{ company.state }}</h2>
+                    <h2>{{ company.phone }}</h2>
+                </div>
+                <img :src="company.logo" :alt="company.name" />
+            </div>
         </SectionContainer>
+        <Link
+            :href="route('company.edit', company)"
+            class="btn btn-primary w-32 mt-6 self-end"
+            >Editar</Link
+        >
     </AuthenticatedLayout>
 </template>

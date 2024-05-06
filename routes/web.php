@@ -36,6 +36,6 @@ Route::resource('/cashiers', CashierController::class)->middleware('auth');
 
 Route::get('/company', [CompanyController::class, 'index'])->middleware('auth')->name('companies.index');
 
-Route::patch('company/{company}', [CompanyController::class, 'update'])->middleware('auth')->name('company.update');
+Route::get('company/{company}', [CompanyController::class, 'edit'])->middleware('auth')->name('company.edit');
 
 require __DIR__ . '/auth.php';

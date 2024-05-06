@@ -15,9 +15,9 @@ class CompanyController extends Controller
     public function index()
     {
         $user_company = auth()->user()->company;
-       //show only the companies that the user has access to
-        return Inertia::render('Companies/Index', [
-            'company' => Company::where('id', $user_company->id)->get(),
+        //show only the companies that the user has access to
+        return Inertia::render('Company/Index', [
+            'company' => Company::where('id', $user_company->id)->first(),
         ]);
     }
 
@@ -34,7 +34,7 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {
-        //
+       
     }
 
     /**
@@ -50,7 +50,9 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
-        //
+        return Inertia::render('Company/Edit', [
+            'company' => $company,
+        ]);
     }
 
     /**

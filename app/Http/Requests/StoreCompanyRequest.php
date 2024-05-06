@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreCompanyRequest extends FormRequest
 {
@@ -11,6 +12,10 @@ class StoreCompanyRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        if(Auth::user()->role == 'admin')
+        {
+            return true;
+        }
         return false;
     }
 
@@ -22,7 +27,15 @@ class StoreCompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'min:15'],
+            'address' => ['required', 'string', 'max:255'],
+            'address_number' => ['required', 'string', 'max:255'],
+            'address_complement' => ['required', 'string', 'max:255'],
+            'neighborhood' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'state' => ['required', 'string', 'max:255'],
+            'zip_code' => ['required', 'string', 'max:9'],
         ];
     }
 }
