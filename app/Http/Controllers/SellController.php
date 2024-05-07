@@ -47,14 +47,8 @@ class SellController extends Controller
         $request->merge([
             'company_id' => $company_id,
             'cashier_id' => Auth::id(),
-            'payment_type_id' => $request->payment_type_id ?? '1',
-            'delivery_tax' => $request->delivery_tax ?? 0,
-            'discount' => $request->discount ?? 0,
-            'subtotal' => $request->subtotal ?? 0,
-            'total' => $request->total ?? 0,
         ]);
-
-        dd($request->all());
+        
         $sell = Sell::create($request->all());
 
         foreach ($request->products as $product) {

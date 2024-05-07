@@ -29,6 +29,12 @@ class StoreSellRequest extends FormRequest
 
     public function rules(): array
     {
-        return [];
+        return [
+            'payment_type_id' => 'required|exists:payment_types,id',
+            'delivery_tax' => 'nullable|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0',
+            'subtotal' => 'required|numeric|min:0',
+            'total' => 'required|numeric|min:0',
+        ];
     }
 }
