@@ -6,7 +6,6 @@ use App\Http\Requests\StoreSellRequest;
 use App\Http\Requests\UpdateSellRequest;
 use App\Models\Product;
 use App\Models\Sell;
-use Illuminate\Support\Facades\Auth;
 
 class SellController extends Controller
 {
@@ -26,10 +25,12 @@ class SellController extends Controller
     public function create()
     {
         $user_company = auth()->user()->company;
+        $today_cashier = $user_company->cashiers()->whereDate('created_at', now())->first();
 
         return inertia('Sells/Create', [
             'products' => Product::where('company_id', $user_company->id)->get(),
             'paymentMethods' => $user_company->paymentTypes,
+            'cashier' => $today_cashier,
         ]);
     }
 
@@ -46,9 +47,8 @@ class SellController extends Controller
 
         $request->merge([
             'company_id' => $company_id,
-            'cashier_id' => Auth::id(),
         ]);
-        
+
         $sell = Sell::create($request->all());
 
         foreach ($request->products as $product) {
@@ -56,7 +56,7 @@ class SellController extends Controller
                 'quantity' => $product['quantity'],
             ]);
         }
-        return redirect()->route('sells.index');
+        return redirect()->route('sells.create');
     }
 
     /**

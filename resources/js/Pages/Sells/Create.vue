@@ -3,16 +3,21 @@ import InputLabel from "@/Components/InputLabel.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import TextInput from "@/Components/TextInput.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import ToastSuccess from "@/Components/ToastSuccess.vue";
+import ToastError from "@/Components/ToastError.vue";
 import { vMaska } from "maska";
 import { Head, router } from "@inertiajs/vue3";
 import { defineProps, reactive, computed, ref } from "vue";
 
-defineProps({
+const props = defineProps({
     products: Object,
     paymentMethods: Object,
+    cashier: Object,
 });
 
 const showDiscount = ref(false);
+const showSuccessToast = ref(false);
+const showErrorToast = ref(false);
 
 const sell = reactive({
     products: [],
@@ -102,6 +107,7 @@ const createSell = () => {
             id: product.id,
             quantity: product.quantity,
         })),
+        cashier_id: props.cashier.id,
         delivery_tax: deliveryTax.value,
         discount: discount.value,
         payment_type_id: sell.paymentMethod,
@@ -109,7 +115,32 @@ const createSell = () => {
         total: sell.total + deliveryTax.value - discount.value,
     };
 
+    //clear sell
+    sell.products = [];
+    sell.delivery = "";
+    sell.discount = "";
+    sell.paymentMethod = null;
+    sell.total = 0;
+
     router.post(route("sells.store"), data);
+
+    router.on("success", () => {
+        showSuccessToast.value = true;
+        setTimeout(() => {
+            showSuccessToast.value = false;
+        }, 4000);
+    });
+
+    router.on("error", () => {
+        showErrorToast.value = true;
+        setTimeout(() => {
+            showErrorToast.value = false;
+        }, 4000);
+    });
+};
+
+const openCashier = () => {
+    router.post(route("cashiers.store"));
 };
 </script>
 
@@ -167,7 +198,15 @@ const createSell = () => {
             </div>
         </div>
 
-        <SectionContainer class="min-h-[20vh] flex flex-col">
+        <button
+            v-if="!cashier"
+            class="btn btn-primary btn-lg w-full"
+            @click="openCashier"
+        >
+            Abrir Caixa
+        </button>
+
+        <SectionContainer class="min-h-[20vh] flex flex-col" v-if="cashier">
             <h1 class="text-xl font-semibold mb-6">Venda</h1>
             <div class="">
                 <ul>
@@ -298,5 +337,10 @@ const createSell = () => {
                 Criar venda
             </button>
         </SectionContainer>
+        <ToastSuccess v-if="showSuccessToast">
+            Venda criada com sucesso!
+        </ToastSuccess>
+
+        <ToastError v-if="showErrorToast"> Erro ao criar venda! </ToastError>
     </AuthenticatedLayout>
 </template>
