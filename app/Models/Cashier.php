@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Cashier extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'company_id',
+        'total',
+    ];
 }
