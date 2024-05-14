@@ -43,7 +43,7 @@ const destroy = (company_id) => {
                             />
                         </figure>
                         <div class="flex justify-between w-full items-center">
-                            <div class="w-48">
+                            <div class="w-36">
                                 <h2
                                     class="text-wrap truncate ... font-semibold text-lg"
                                 >

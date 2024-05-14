@@ -106,6 +106,7 @@ const createSell = () => {
         products: sell.products.map((product) => ({
             id: product.id,
             quantity: product.quantity,
+            price: product.quantity * product.price,
         })),
         cashier_id: props.cashier.id,
         delivery_tax: deliveryTax.value,

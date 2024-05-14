@@ -21,6 +21,21 @@ class Sell extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_sell');
+        return $this->belongsToMany(Product::class, 'product_sell')->withPivot('quantity', 'price');
+    }
+
+    public function cashier()
+    {
+        return $this->belongsTo(Cashier::class);
+    }
+
+    public function paymentType()
+    {
+        return $this->belongsTo(PaymentType::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 }

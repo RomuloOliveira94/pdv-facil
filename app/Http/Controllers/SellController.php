@@ -14,8 +14,10 @@ class SellController extends Controller
      */
     public function index()
     {
+        $sells = Sell::with('products', 'paymentType')->paginate(10);
+
         return inertia('Sells/Index', [
-            'sells' => Sell::with('product')->get()
+            'sells' => $sells,
         ]);
     }
 
@@ -54,6 +56,7 @@ class SellController extends Controller
         foreach ($request->products as $product) {
             $sell->products()->attach($product['id'], [
                 'quantity' => $product['quantity'],
+                'price' => $product['price'],
             ]);
         }
         return redirect()->route('sells.create');
