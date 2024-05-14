@@ -157,13 +157,13 @@ const openCashier = () => {
             <h1 class="text-xl font-bold mb-2 text-gray-800 text-center">
                 Produtos
             </h1>
-            <div class="grid grid-cols-4 w-full gap-3 text-gray-800">
+            <div class="grid grid-cols-4 gap-3 text-gray-800 w-fit">
                 <div
                     v-for="(product, index) in products"
                     :key="index"
-                    class="card card-side border border-slate-100 items-center"
+                    class="card card-side border border-slate-50 items-center shadow-sm"
                 >
-                    <div class="p-2 w-full grid gap-3">
+                    <div class="p-2 grid gap-3 w-full">
                         <figure v-show="product.imageUrl" class="w-full h-32">
                             <img
                                 :src="product.imageUrl"
@@ -171,9 +171,9 @@ const openCashier = () => {
                                 class="object-cover w-full h-full rounded-lg"
                             />
                         </figure>
-                        <div class="flex justify-between w-full items-center">
-                            <div>
-                                <h2 class="card-title">{{ product.name }}</h2>
+                        <div class="flex justify-between items-center">
+                            <div class="w-48">
+                                <h2 class="text-wrap truncate ... font-semibold text-lg">{{ product.name }}</h2>
                                 <p>
                                     {{
                                         product.price.toLocaleString("pt-BR", {

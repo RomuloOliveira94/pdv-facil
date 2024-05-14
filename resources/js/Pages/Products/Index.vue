@@ -32,19 +32,23 @@ const destroy = (company_id) => {
                 <div
                     v-for="(product, index) in products"
                     :key="index"
-                    class="card card-side border border-slate-100 items-center"
+                    class="card card-side border border-slate-100 items-center shadow-sm"
                 >
                     <div class="p-2 w-full grid gap-3">
-                        <figure v-show="product.imageUrl" class="w-full h-32">
+                        <figure v-show="product.imageUrl" class="w-full">
                             <img
                                 :src="product.imageUrl"
                                 :alt="product.name"
-                                class="object-cover w-full h-full rounded-lg"
+                                class="object-cover w-full rounded-lg"
                             />
                         </figure>
                         <div class="flex justify-between w-full items-center">
-                            <div>
-                                <h2 class="card-title">{{ product.name }}</h2>
+                            <div class="w-48">
+                                <h2
+                                    class="text-wrap truncate ... font-semibold text-lg"
+                                >
+                                    {{ product.name }}
+                                </h2>
                                 <p>
                                     {{
                                         product.price.toLocaleString("pt-BR", {
