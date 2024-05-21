@@ -3,11 +3,9 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SellProductsModal from "@/Components/SellProductsModal.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import Pagination from "@/Components/Pagination.vue";
-import Modal from "@/Components/Modal.vue";
 import { Head, Link } from "@inertiajs/vue3";
-import { defineProps, computed, ref } from "vue";
+import { defineProps, ref } from "vue";
 
-const productsModal = ref(false);
 const selectedProduct = ref([]);
 const props = defineProps({
     sells: Object,
@@ -50,7 +48,7 @@ const openProductsModal = (id) => {
                         </thead>
                         <tbody class="text-gray-700 font-bold text-md">
                             <tr
-                                v-for="(sell, index) in sells.data"
+                                v-for="(sell) in sells.data"
                                 :key="sell.id"
                             >
                                 <td>{{ formatDate(sell.created_at) }}</td>
