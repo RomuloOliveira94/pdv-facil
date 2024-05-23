@@ -38,4 +38,9 @@ class Sell extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function scopeSelectedByDate($query, $date)
+    {
+        return $query->whereDate('created_at', $date);
+    }
 }

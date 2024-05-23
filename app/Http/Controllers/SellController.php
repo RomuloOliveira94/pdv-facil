@@ -3,18 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSellRequest;
-use App\Http\Requests\UpdateSellRequest;
 use App\Models\Product;
 use App\Models\Sell;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class SellController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sells = Sell::with('products', 'paymentType')->paginate(10);
+        $query = $request->query('date');
+
+        if ($query) {
+            $date = Carbon::parse($query)->toDateString();
+            $sells = Sell::selectedByDate($date)
+                ->with('products', 'paymentType')->paginate(10);
+        } else {
+            $sells = Sell::with('products', 'paymentType')->paginate(10);
+        }
 
         return inertia('Sells/Index', [
             'sells' => $sells,
@@ -66,22 +75,6 @@ class SellController extends Controller
      * Display the specified resource.
      */
     public function show(Sell $sell)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Sell $sell)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateSellRequest $request, Sell $sell)
     {
         //
     }
