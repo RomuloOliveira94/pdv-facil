@@ -27,6 +27,7 @@ class SellController extends Controller
 
         return inertia('Sells/Index', [
             'sells' => $sells,
+            'user' => auth()->user(),
         ]);
     }
 
@@ -72,18 +73,16 @@ class SellController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Sell $sell)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(Sell $sell)
     {
-        //
+        if (auth()->user()->company_id !== $sell->company_id || auth()->user()->role === 'cashier') {
+            return redirect()->route('sells.index');
+        }
+
+        $sell->products()->detach();
+        $sell->delete();
+        return redirect()->route('sells.index');
     }
 }

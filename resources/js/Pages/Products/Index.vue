@@ -1,6 +1,7 @@
 <script setup>
 import SectionContainer from "@/Components/SectionContainer.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { formatMoneyToBRL } from "@/utils";
 import { Head, Link, router } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -50,13 +51,7 @@ const destroy = (company_id) => {
                                     {{ product.name }}
                                 </h2>
                                 <p>
-                                    {{
-                                        product.price.toLocaleString("pt-BR", {
-                                            minimumFractionDigits: 2,
-                                            style: "currency",
-                                            currency: "BRL",
-                                        })
-                                    }}
+                                    {{ formatMoneyToBRL(product.price) }}
                                 </p>
                             </div>
                             <div class="card-actions justify-end flex-col">

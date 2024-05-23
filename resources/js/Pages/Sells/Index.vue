@@ -3,13 +3,14 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SellProductsModal from "@/Components/SellProductsModal.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import Pagination from "@/Components/Pagination.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { formatDate, formatMoneyToBRL } from "@/utils";
 
 const selectedProduct = ref([]);
 const props = defineProps({
     sells: Object,
+    user: Object,
 });
 
 const openProductsModal = (id) => {
@@ -17,6 +18,12 @@ const openProductsModal = (id) => {
     selectedProduct.value = props.sells.data.find(
         (sell) => sell.id === id
     ).products;
+};
+
+const destroy = (id) => {
+    if (confirm("Tem certeza que quer cancelar essa venda?")) {
+        router.delete(route("sells.destroy", id));
+    }
 };
 </script>
 
@@ -42,6 +49,7 @@ const openProductsModal = (id) => {
                                 <th>Valor</th>
                                 <th>Forma de Pagamento</th>
                                 <th>Produtos</th>
+                                <th v-if="user.role !== 'cashier'">Cancelar</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-700 font-bold text-md">
@@ -58,6 +66,14 @@ const openProductsModal = (id) => {
                                         @click="openProductsModal(sell.id)"
                                     >
                                         Ver Produtos
+                                    </button>
+                                </td>
+                                <td v-if="user.role !== 'cashier'">
+                                    <button
+                                        class="btn btn-error btn-sm rounded-full"
+                                        @click="destroy(sell.id)"
+                                    >
+                                        X
                                     </button>
                                 </td>
                             </tr>
