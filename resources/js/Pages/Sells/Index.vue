@@ -5,20 +5,18 @@ import SectionContainer from "@/Components/SectionContainer.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { Head, Link } from "@inertiajs/vue3";
 import { ref } from "vue";
+import { formatDate, formatMoneyToBRL } from "@/utils";
 
 const selectedProduct = ref([]);
 const props = defineProps({
     sells: Object,
 });
 
-const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-};
-
 const openProductsModal = (id) => {
     document.getElementById("productModal").showModal();
-    selectedProduct.value = props.sells.data.find((sell) => sell.id === id).products;
+    selectedProduct.value = props.sells.data.find(
+        (sell) => sell.id === id
+    ).products;
 };
 </script>
 
@@ -47,19 +45,11 @@ const openProductsModal = (id) => {
                             </tr>
                         </thead>
                         <tbody class="text-gray-700 font-bold text-md">
-                            <tr
-                                v-for="(sell) in sells.data"
-                                :key="sell.id"
-                            >
+                            <tr v-for="sell in sells.data" :key="sell.id">
                                 <td>{{ formatDate(sell.created_at) }}</td>
                                 <td>{{ sell.delivery_tax }}</td>
                                 <td>
-                                    {{
-                                        sell.total.toLocaleString("pt-BR", {
-                                            currency: "BRL",
-                                            style: "currency",
-                                        })
-                                    }}
+                                    {{ formatMoneyToBRL(sell.total) }}
                                 </td>
                                 <td>{{ sell.payment_type.name }}</td>
                                 <td>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { formatMoneyToBRL } from "@/utils";
 
 const props = defineProps({
     products: Object,
@@ -27,34 +27,18 @@ const props = defineProps({
                             </tr>
                         </thead>
                         <tbody>
-                            <tr
-                                v-for="(product, index) in products"
-                                :key="product.id"
-                            >
+                            <tr v-for="product in products" :key="product.id">
                                 <td>
                                     <p class="w-36 truncate ...">
                                         {{ product.name }}
                                     </p>
                                 </td>
                                 <td>
-                                    {{
-                                        product.price.toLocaleString("pt-BR", {
-                                            currency: "BRL",
-                                            style: "currency",
-                                        })
-                                    }}
+                                    {{ formatMoneyToBRL(product.price) }}
                                 </td>
                                 <td>{{ product.pivot.quantity }}</td>
                                 <td>
-                                    {{
-                                        product.pivot.price.toLocaleString(
-                                            "pt-BR",
-                                            {
-                                                currency: "BRL",
-                                                style: "currency",
-                                            }
-                                        )
-                                    }}
+                                    {{ formatMoneyToBRL(product.pivot.price) }}
                                 </td>
                             </tr>
                         </tbody>

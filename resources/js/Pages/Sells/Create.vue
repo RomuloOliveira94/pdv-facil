@@ -8,6 +8,7 @@ import ToastError from "@/Components/ToastError.vue";
 import { vMaska } from "maska";
 import { Head, router } from "@inertiajs/vue3";
 import { reactive, computed, ref } from "vue";
+import { formatMoneyToBRL } from "@/utils";
 
 const props = defineProps({
     products: Object,
@@ -28,13 +29,12 @@ const sell = reactive({
 });
 
 const sellSubTotal = computed(() => {
-    return sell.products
-        .reduce((acc, product) => acc + product.price * product.quantity, 0)
-        .toLocaleString("pt-BR", {
-            minimumFractionDigits: 2,
-            style: "currency",
-            currency: "BRL",
-        });
+    return formatMoneyToBRL(
+        sell.products.reduce(
+            (acc, product) => acc + product.price * product.quantity,
+            0
+        )
+    );
 });
 
 const deliveryTax = computed(() => {
@@ -57,11 +57,7 @@ const sellTotal = computed(() => {
     const totalWithPercentage =
         total + total * (paymentMethodTaxIfCredit / 100);
 
-    return totalWithPercentage.toLocaleString("pt-BR", {
-        minimumFractionDigits: 2,
-        style: "currency",
-        currency: "BRL",
-    });
+    return formatMoneyToBRL(totalWithPercentage);
 });
 
 const addProduct = (product) => {
@@ -174,15 +170,13 @@ const openCashier = () => {
                         </figure>
                         <div class="flex justify-between items-center">
                             <div class="w-48">
-                                <h2 class="text-wrap truncate ... font-semibold text-lg">{{ product.name }}</h2>
+                                <h2
+                                    class="text-wrap truncate ... font-semibold text-lg"
+                                >
+                                    {{ product.name }}
+                                </h2>
                                 <p>
-                                    {{
-                                        product.price.toLocaleString("pt-BR", {
-                                            minimumFractionDigits: 2,
-                                            style: "currency",
-                                            currency: "BRL",
-                                        })
-                                    }}
+                                    {{ formatMoneyToBRL(product.price) }}
                                 </p>
                             </div>
                             <div class="card-actions justify-end flex-col">
@@ -224,24 +218,14 @@ const openCashier = () => {
                         <div class="grid grid-cols-5">
                             <span>{{ product.name }}</span>
                             <span>
-                                {{
-                                    product.price.toLocaleString("pt-BR", {
-                                        minimumFractionDigits: 2,
-                                        style: "currency",
-                                        currency: "BRL",
-                                    })
-                                }}
+                                {{ formatMoneyToBRL(product.price) }}
                             </span>
                             <span class="ml-10">{{ product.quantity }}</span>
                             <span>
                                 {{
-                                    (
+                                    formatMoneyToBRL(
                                         product.price * product.quantity
-                                    ).toLocaleString("pt-BR", {
-                                        minimumFractionDigits: 2,
-                                        style: "currency",
-                                        currency: "BRL",
-                                    })
+                                    )
                                 }}
                             </span>
                             <div
