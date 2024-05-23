@@ -12,7 +12,7 @@ class CashierController extends Controller
         return Inertia::render(
             'Cashiers/Index',
             [
-                'cashiers' => Cashier::with('sells', 'company')
+                'cashiers' => Cashier::with('sells', 'company', 'user')
                     ->where('company_id', auth()->user()->company_id)
                     ->orderBy('created_at', 'desc')
                     ->get(),

@@ -24,15 +24,18 @@ defineProps({
                         <tr>
                             <th></th>
                             <th>Empresa</th>
+                            <th>Responsável</th>
                             <th>Data</th>
                             <th>Total</th>
                             <th>Vendas</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="cashier in cashiers" :key="cashier.id">
                             <th>{{ cashier.id }}</th>
                             <td>{{ cashier.company.name }}</td>
+                            <td>{{ cashier.user.name }}</td>
                             <td>{{ formatDate(cashier.created_at) }}</td>
                             <td>{{ cashier.total }}</td>
                             <td>
@@ -46,6 +49,7 @@ defineProps({
                                     >Vendas</Link
                                 >
                             </td>
+                            <td>{{ cashier.active ? "Aberto" : "Fechado" }}</td>
                         </tr>
                     </tbody>
                     <tfoot>
