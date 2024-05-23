@@ -4,7 +4,7 @@ import SellProductsModal from "@/Components/SellProductsModal.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import Pagination from "@/Components/Pagination.vue";
 import { Head, Link } from "@inertiajs/vue3";
-import { defineProps, ref } from "vue";
+import { ref } from "vue";
 
 const selectedProduct = ref([]);
 const props = defineProps({

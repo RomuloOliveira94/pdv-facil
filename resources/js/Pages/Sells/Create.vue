@@ -7,7 +7,7 @@ import ToastSuccess from "@/Components/ToastSuccess.vue";
 import ToastError from "@/Components/ToastError.vue";
 import { vMaska } from "maska";
 import { Head, router } from "@inertiajs/vue3";
-import { defineProps, reactive, computed, ref } from "vue";
+import { reactive, computed, ref } from "vue";
 
 const props = defineProps({
     products: Object,

@@ -13,4 +13,14 @@ class Cashier extends Model
         'company_id',
         'total',
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function sells()
+    {
+        return $this->hasMany(Sell::class);
+    }
 }
