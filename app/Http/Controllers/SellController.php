@@ -84,6 +84,9 @@ class SellController extends Controller
             return redirect()->route('sells.index');
         }
 
+        $sell->cashier->update([
+            'total' => $sell->cashier->total - $sell->total,
+        ]);
         $sell->products()->detach();
         $sell->delete();
     }
