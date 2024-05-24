@@ -48,8 +48,10 @@ const destroy = (id) => {
                             <tr>
                                 <th>Data</th>
                                 <th>Entrega</th>
-                                <th>Valor</th>
                                 <th>Forma de Pagamento</th>
+                                <th>Desconto</th>
+                                <th>Subtotal</th>
+                                <th>Total</th>
                                 <th>Produtos</th>
                                 <th v-if="user.role !== 'cashier'">Cancelar</th>
                             </tr>
@@ -57,11 +59,23 @@ const destroy = (id) => {
                         <tbody class="text-gray-700 font-bold text-md">
                             <tr v-for="sell in sells.data" :key="sell.id">
                                 <td>{{ formatDate(sell.created_at) }}</td>
-                                <td>{{ formatMoneyToBRL(sell.delivery_tax) }}</td>
+                                <td>
+                                    {{ formatMoneyToBRL(sell.delivery_tax) }}
+                                </td>
+                                <td>{{ sell.payment_type.name }}</td>
+                                <td>
+                                    {{
+                                        sell.discount
+                                            ? formatMoneyToBRL(sell.discount)
+                                            : "-"
+                                    }}
+                                </td>
+                                <td>
+                                    {{ formatMoneyToBRL(sell.subtotal) }}
+                                </td>
                                 <td>
                                     {{ formatMoneyToBRL(sell.total) }}
                                 </td>
-                                <td>{{ sell.payment_type.name }}</td>
                                 <td>
                                     <button
                                         class="btn btn-primary"

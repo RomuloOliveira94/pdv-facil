@@ -32,11 +32,9 @@ const sell = reactive({
 });
 
 const sellSubTotal = computed(() => {
-    return formatMoneyToBRL(
-        sell.products.reduce(
-            (acc, product) => acc + product.price * product.quantity,
-            0
-        )
+    return sell.products.reduce(
+        (acc, product) => acc + product.price * product.quantity,
+        0
     );
 });
 
@@ -60,7 +58,7 @@ const sellTotal = computed(() => {
     const totalWithPercentage =
         total + total * (paymentMethodTaxIfCredit / 100);
 
-    return formatMoneyToBRL(totalWithPercentage);
+    return totalWithPercentage;
 });
 
 const addProduct = (product) => {
@@ -77,10 +75,7 @@ const addProduct = (product) => {
         sell.products[productIndex].quantity++;
     }
 
-    sell.total = sell.products.reduce(
-        (acc, product) => acc + product.price * product.quantity,
-        0
-    );
+    sell.total = sellTotal.value;
 };
 
 const removeProduct = (product) => {
@@ -93,11 +88,6 @@ const removeProduct = (product) => {
             sell.products.splice(productIndex, 1);
         }
     }
-
-    sell.total = sell.products.reduce(
-        (acc, product) => acc + product.price * product.quantity,
-        0
-    );
 };
 
 const createSell = () => {
@@ -111,8 +101,8 @@ const createSell = () => {
         delivery_tax: deliveryTax.value,
         discount: discount.value,
         payment_type_id: sell.paymentMethod,
-        subtotal: sell.total,
-        total: sell.total + deliveryTax.value - discount.value,
+        subtotal: sellSubTotal.value,
+        total: sellTotal.value,
     };
 
     //clear sell
@@ -316,12 +306,12 @@ const closeCashier = (id) => {
                 </select>
                 <div class="self-end">
                     <h2 class="font-semibold text-lg text-gray-800">
-                        Subtotal: {{ sellSubTotal }}
+                        Subtotal: {{ formatMoneyToBRL(sellSubTotal) }}
                     </h2>
 
                     <h2 class="font-semibold text-lg text-gray-800">
                         Total:
-                        {{ sellTotal }}
+                        {{ formatMoneyToBRL(sellTotal) }}
                     </h2>
                 </div>
             </div>
