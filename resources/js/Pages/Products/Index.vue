@@ -1,18 +1,36 @@
 <script setup>
 import SectionContainer from "@/Components/SectionContainer.vue";
+import ToastError from "@/Components/ToastError.vue";
+import ToastSuccess from "@/Components/ToastSuccess.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { formatMoneyToBRL } from "@/utils";
 import { Head, Link, router } from "@inertiajs/vue3";
-
+import { ref, watch } from "vue";
 const props = defineProps({
     products: Object,
 });
 
+const showToast = ref(false);
+
 const destroy = (company_id) => {
+    showToast.value = true;
+
     if (confirm("Tem certeza que quer deletar esse produto?")) {
         router.delete(route("products.destroy", company_id));
     }
 };
+
+watch(
+    showToast,
+    (value) => {
+        if (value) {
+            setTimeout(() => {
+                showToast.value = false;
+            }, 4000);
+        }
+    },
+    { immediate: true }
+);
 </script>
 
 <template>
@@ -46,7 +64,7 @@ const destroy = (company_id) => {
                         <div class="flex justify-between w-full items-center">
                             <div class="w-36">
                                 <h2
-                                class="text-wrap truncate ... font-semibold text-lg"
+                                    class="text-wrap truncate ... font-semibold text-lg"
                                 >
                                     {{ product.name }}
                                 </h2>
@@ -72,5 +90,12 @@ const destroy = (company_id) => {
                 </div>
             </div>
         </SectionContainer>
+        <ToastSuccess v-if="$page.props.flash.success && showToast">
+            {{ $page.props.flash.success }}
+        </ToastSuccess>
+
+        <ToastError v-if="$page.props.flash.error && showToast">
+            {{ $page.props.flash.error }}
+        </ToastError>
     </AuthenticatedLayout>
 </template>

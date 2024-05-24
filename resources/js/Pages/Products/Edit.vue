@@ -16,10 +16,18 @@ const form = useForm({
     price: String(props.product.price),
     category: props.product.category,
     image: "",
+    imageUrl: props.product.imageUrl,
 });
 
 const submit = () => {
-    form.put(route("products.update", props.product.id), form);
+    router.post(route("products.update", props.product.id), {
+        _method: "put",
+        name: form.name,
+        price: form.price,
+        category: form.category,
+        image: form.image,
+        imageUrl: form.imageUrl,
+    });
 };
 </script>
 <template>

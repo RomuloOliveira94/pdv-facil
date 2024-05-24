@@ -61,10 +61,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-
         $product->update($request->all());
-
-        //Storage::delete('public/' . $product->imageUrl);
 
         return redirect()->route('products.index');
     }
@@ -74,10 +71,14 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        Storage::delete('public/' . $product->imageUrl);
+        if ($product->sells()->exists()) {
+            return redirect()->route('products.index')->with('error', 'O Produto não pode ser excluído pois está vinculado a uma venda.');
+        }
 
         $product->delete();
 
-        return redirect()->route('products.index');
+        Storage::delete('public/' . $product->imageUrl);
+
+        return redirect()->route('products.index')->with('success', 'Produto excluído com sucesso.');
     }
 }
