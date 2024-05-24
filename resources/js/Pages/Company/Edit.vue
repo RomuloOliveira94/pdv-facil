@@ -2,7 +2,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import InputError from "@/Components/InputError.vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, router, useForm } from "@inertiajs/vue3";
 import { vMaska } from "maska";
 
 const props = defineProps({
@@ -23,10 +23,27 @@ const form = useForm({
     email: props.company.email,
     logo: props.company.logo,
     pix_key: props.company.pix_key,
+    image: "",
 });
 
 const submit = () => {
-    form.put(route("company.update", props.company), form);
+    router.post(route("company.update", props.company.id), {
+        _method: "put",
+        name: form.name,
+        cnpj: form.cnpj,
+        phone: form.phone,
+        address: form.address,
+        address_number: form.address_number,
+        address_complement: form.address_complement,
+        neighborhood: form.neighborhood,
+        zip_code: form.zip_code,
+        city: form.city,
+        state: form.state,
+        email: form.email,
+        logo: form.logo,
+        pix_key: form.pix_key,
+        image: form.image,
+    });
 };
 </script>
 
@@ -239,8 +256,8 @@ const submit = () => {
 
                         <input
                             type="file"
-                            class="file-input w-full bg-inherit"
-                            @change="form.logo = $event.target.files[0]"
+                            class="file-input w-full bg-inherit mt-1 block"
+                            @input="form.image = $event.target.files[0]"
                         />
 
                         <InputError class="mt-2" :message="form.errors.logo" />

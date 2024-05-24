@@ -36,14 +36,14 @@ const submit = () => {
         <template #header>
             <div class="flex items-center justify-between">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    Criar novo produto
+                    Editar produto
                 </h2>
             </div>
         </template>
         <SectionContainer>
             <form @submit.prevent="submit">
                 <div>
-                    <InputLabel for="name" value="Name" />
+                    <InputLabel for="name" value="Nome" />
 
                     <TextInput
                         id="name"
@@ -58,7 +58,7 @@ const submit = () => {
                 </div>
 
                 <div class="mt-4">
-                    <InputLabel for="price" value="Price" />
+                    <InputLabel for="price" value="Preço" />
 
                     <TextInput
                         id="price"
@@ -76,7 +76,7 @@ const submit = () => {
                 </div>
 
                 <div class="mt-4">
-                    <InputLabel for="category" value="Category" />
+                    <InputLabel for="category" value="Categoria" />
 
                     <TextInput
                         id="category"

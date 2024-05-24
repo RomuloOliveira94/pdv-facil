@@ -18,7 +18,7 @@ defineProps({
             </h2>
         </template>
         <SectionContainer>
-            <div class="flex justify-between items-center w-full">
+            <div class="flex gap-3 justify-between items-center w-full">
                 <div class="grid gap-1">
                     <h1>{{ company.name }}</h1>
                     <h2>{{ company.email }}</h2>
@@ -29,7 +29,11 @@ defineProps({
                     <h2>{{ company.city }} - {{ company.state }}</h2>
                     <h2>{{ company.phone }}</h2>
                 </div>
-                <img :src="company.logo" :alt="company.name" />
+                <img
+                    :src="'/storage/' + company.logo"
+                    :alt="company.name"
+                    class="w-40 h-40 object-cover rounded-lg"
+                />
             </div>
         </SectionContainer>
         <Link

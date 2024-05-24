@@ -59,7 +59,7 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
-        $company->update($request->validated());
+        $company->update($request->all());
         return redirect()->route('company.index');
     }
 

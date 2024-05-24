@@ -168,7 +168,7 @@ const closeCashier = (id) => {
                     <div class="p-2 grid gap-3 w-full">
                         <figure v-show="product.imageUrl" class="w-full h-32">
                             <img
-                                :src="product.imageUrl"
+                                :src="'/storage/' + product.imageUrl"
                                 :alt="product.name"
                                 class="object-cover w-full h-full rounded-lg"
                             />
