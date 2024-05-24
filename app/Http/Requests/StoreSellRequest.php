@@ -20,6 +20,7 @@ class StoreSellRequest extends FormRequest
     public function prepareForValidation()
     {
         $this->merge([
+            'company_id' => auth()->user()->company_id,
             'delivery_tax' => floatval(str_replace('R$', '', str_replace(',', '.', $this->delivery_tax))),
             'discount' => floatval(str_replace('R$', '', str_replace(',', '.', $this->discount))),
             'subtotal' => floatval(str_replace('R$', '', str_replace(',', '.', $this->subtotal))),
@@ -36,6 +37,13 @@ class StoreSellRequest extends FormRequest
             'discount' => 'nullable|numeric|min:0',
             'subtotal' => 'required|numeric|min:0',
             'total' => 'required|numeric|min:0',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'cashier_id' => 'Cashier',
         ];
     }
 }

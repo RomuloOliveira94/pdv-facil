@@ -57,7 +57,7 @@ const destroy = (id) => {
                         <tbody class="text-gray-700 font-bold text-md">
                             <tr v-for="sell in sells.data" :key="sell.id">
                                 <td>{{ formatDate(sell.created_at) }}</td>
-                                <td>{{ sell.delivery_tax }}</td>
+                                <td>{{ formatMoneyToBRL(sell.delivery_tax) }}</td>
                                 <td>
                                     {{ formatMoneyToBRL(sell.total) }}
                                 </td>

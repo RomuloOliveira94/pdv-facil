@@ -1,7 +1,7 @@
 <script setup>
 import SectionContainer from "@/Components/SectionContainer.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { formatDate } from "@/utils";
+import { formatDate, formatMoneyToBRL } from "@/utils";
 import { Head, Link } from "@inertiajs/vue3";
 
 defineProps({
@@ -37,7 +37,7 @@ defineProps({
                             <td>{{ cashier.company.name }}</td>
                             <td>{{ cashier.user.name }}</td>
                             <td>{{ formatDate(cashier.created_at) }}</td>
-                            <td>{{ cashier.total }}</td>
+                            <td>{{ formatMoneyToBRL(cashier.total) }}</td>
                             <td>
                                 <Link
                                     :href="

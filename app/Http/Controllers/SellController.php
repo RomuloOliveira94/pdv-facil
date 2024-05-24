@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSellRequest;
+use App\Models\Cashier;
 use App\Models\Product;
 use App\Models\Sell;
 use Carbon\Carbon;
@@ -51,15 +52,12 @@ class SellController extends Controller
      */
     public function store(StoreSellRequest $request)
     {
+        $cashier = Cashier::find($request->cashier_id);
         $company_id = auth()->user()->company_id;
 
-        if (!$company_id) {
+        if (!$company_id || $company_id !== $request->company_id || !$cashier) {
             return redirect()->route('sells.index');
         }
-
-        $request->merge([
-            'company_id' => $company_id,
-        ]);
 
         $sell = Sell::create($request->all());
 
@@ -69,6 +67,11 @@ class SellController extends Controller
                 'price' => $product['price'],
             ]);
         }
+
+        $cashier->update([
+            'total' => $cashier->total + $request->total,
+        ]);
+
         return redirect()->route('sells.create');
     }
 
@@ -83,6 +86,5 @@ class SellController extends Controller
 
         $sell->products()->detach();
         $sell->delete();
-        return redirect()->route('sells.index');
     }
 }
