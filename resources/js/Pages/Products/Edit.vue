@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { Head, Link, router, useForm } from "@inertiajs/vue3";
 import { vMaska } from "maska";
 import SectionContainer from "@/Components/SectionContainer.vue";
@@ -6,16 +6,17 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import { Product } from "./types";
 
-const props = defineProps({
-    product: Object,
-});
+const props = defineProps<{
+    product: Product;
+}>();
 
 const form = useForm({
     name: props.product.name,
     price: String(props.product.price),
     category: props.product.category,
-    image: "",
+    image: null,
     imageUrl: props.product.imageUrl,
 });
 
@@ -95,7 +96,11 @@ const submit = () => {
                     <input
                         type="file"
                         class="file-input w-full bg-inherit mt-1 block"
-                        @input="form.image = $event.target.files[0]"
+                        @input="
+                            form.image = (
+                                $event.target as HTMLInputElement
+                            ).files[0]
+                        "
                     />
 
                     <progress

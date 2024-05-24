@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import InputLabel from "@/Components/InputLabel.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import TextInput from "@/Components/TextInput.vue";
@@ -9,12 +9,15 @@ import { vMaska } from "maska";
 import { Head, router } from "@inertiajs/vue3";
 import { reactive, computed, ref } from "vue";
 import { formatMoneyToBRL } from "@/utils";
+import { Cashier } from "../Cashiers/types";
+import { Product } from "../Products/types";
+import { PaymentMethods } from "./types";
 
-const props = defineProps({
-    products: Object,
-    paymentMethods: Object,
-    cashier: Object,
-});
+const props = defineProps<{
+    cashier: Cashier;
+    products: Product[];
+    paymentMethods: PaymentMethods[];
+}>();
 
 const showDiscount = ref(false);
 const showSuccessToast = ref(false);
@@ -142,7 +145,7 @@ const openCashier = () => {
 
 const closeCashier = (id) => {
     confirm("Deseja realmente fechar o caixa?") &&
-        router.put(route("cashiers.update", props.cashier));
+        router.put(route("cashiers.update", props.cashier.id));
 };
 </script>
 
@@ -300,7 +303,6 @@ const closeCashier = (id) => {
 
                 <select
                     class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm self-end"
-                    @input="teste"
                     v-model="sell.paymentMethod"
                 >
                     <option disabled selected>Pagamento</option>

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import SectionContainer from "@/Components/SectionContainer.vue";
 import ToastError from "@/Components/ToastError.vue";
 import ToastSuccess from "@/Components/ToastSuccess.vue";
@@ -6,9 +6,13 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { formatMoneyToBRL } from "@/utils";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
-const props = defineProps({
-    products: Object,
-});
+import { Product } from "./types";
+import { Flash } from "@/types";
+
+const props = defineProps<{
+    products: Product[];
+    flash: Flash;
+}>();
 
 const showToast = ref(false);
 
@@ -90,12 +94,12 @@ watch(
                 </div>
             </div>
         </SectionContainer>
-        <ToastSuccess v-if="$page.props.flash.success && showToast">
-            {{ $page.props.flash.success }}
+        <ToastSuccess v-if="props.flash.success && showToast">
+            {{ props.flash.success }}
         </ToastSuccess>
 
-        <ToastError v-if="$page.props.flash.error && showToast">
-            {{ $page.props.flash.error }}
+        <ToastError v-if="props.flash.error && showToast">
+            {{ props.flash.error }}
         </ToastError>
     </AuthenticatedLayout>
 </template>

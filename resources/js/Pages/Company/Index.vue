@@ -1,11 +1,12 @@
-<script setup>
+<script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import { Link, Head } from "@inertiajs/vue3";
+import { Company } from "./types";
 
-defineProps({
-    company: Object,
-});
+defineProps<{
+    company: Company;
+}>();
 </script>
 
 <template>
@@ -37,7 +38,7 @@ defineProps({
             </div>
         </SectionContainer>
         <Link
-            :href="route('company.edit', company)"
+            :href="route('company.edit', company.id)"
             class="btn btn-primary w-32 mt-6 self-end"
             >Editar</Link
         >

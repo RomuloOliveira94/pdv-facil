@@ -1,13 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import InputError from "@/Components/InputError.vue";
 import { Link, router, useForm } from "@inertiajs/vue3";
 import { vMaska } from "maska";
+import { Company } from "./types";
 
-const props = defineProps({
-    company: Object,
-});
+const props = defineProps<{
+    company: Company;
+}>();
 
 const form = useForm({
     name: props.company.name,
@@ -23,7 +24,7 @@ const form = useForm({
     email: props.company.email,
     logo: props.company.logo,
     pix_key: props.company.pix_key,
-    image: "",
+    image: null,
 });
 
 const submit = () => {
@@ -257,7 +258,11 @@ const submit = () => {
                         <input
                             type="file"
                             class="file-input w-full bg-inherit mt-1 block"
-                            @input="form.image = $event.target.files[0]"
+                            @input="
+                                form.image = (
+                                    $event.target as HTMLInputElement
+                                ).files[0]
+                            "
                         />
 
                         <InputError class="mt-2" :message="form.errors.logo" />

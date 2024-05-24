@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SellProductsModal from "@/Components/SellProductsModal.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
@@ -6,15 +6,17 @@ import Pagination from "@/Components/Pagination.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { formatDate, formatMoneyToBRL } from "@/utils";
+import { SellWithPaginate } from "./types";
+import { User } from "@/types";
 
 const selectedProduct = ref([]);
-const props = defineProps({
-    sells: Object,
-    user: Object,
-});
+const props = defineProps<{
+    sells: SellWithPaginate;
+    user: User;
+}>();
 
 const openProductsModal = (id) => {
-    document.getElementById("productModal").showModal();
+    (document.getElementById("productModal") as HTMLDialogElement).showModal();
     selectedProduct.value = props.sells.data.find(
         (sell) => sell.id === id
     ).products;
