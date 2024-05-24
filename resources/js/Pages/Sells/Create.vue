@@ -139,6 +139,11 @@ const createSell = () => {
 const openCashier = () => {
     router.post(route("cashiers.store"));
 };
+
+const closeCashier = (id) => {
+    confirm("Deseja realmente fechar o caixa?") &&
+        router.put(route("cashiers.update", props.cashier));
+};
 </script>
 
 <template>
@@ -194,14 +199,17 @@ const openCashier = () => {
         </div>
 
         <button
-            v-if="!cashier"
+            v-if="!cashier || !cashier?.active"
             class="btn btn-primary btn-lg w-full"
             @click="openCashier"
         >
             Abrir Caixa
         </button>
 
-        <SectionContainer class="min-h-[20vh] flex flex-col" v-if="cashier">
+        <SectionContainer
+            class="min-h-[20vh] flex flex-col"
+            v-if="cashier && cashier?.active"
+        >
             <h1 class="text-xl font-semibold mb-6">Venda</h1>
             <div class="">
                 <ul>
@@ -322,6 +330,14 @@ const openCashier = () => {
                 Criar venda
             </button>
         </SectionContainer>
+
+        <button
+            v-if="cashier && cashier?.active"
+            class="btn btn-error btn-lg w-full mt-6"
+            @click="closeCashier"
+        >
+            Fechar Caixa
+        </button>
         <ToastSuccess v-if="showSuccessToast">
             Venda criada com sucesso!
         </ToastSuccess>

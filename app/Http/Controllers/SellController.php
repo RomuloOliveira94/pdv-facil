@@ -37,7 +37,7 @@ class SellController extends Controller
     public function create()
     {
         $user_company = auth()->user()->company;
-        $today_cashier = $user_company->cashiers()->whereDate('created_at', now())->first();
+        $today_cashier = $user_company->cashiers()->whereDate('created_at', today())->first();
 
         return inertia('Sells/Create', [
             'products' => Product::where('company_id', $user_company->id)->get(),

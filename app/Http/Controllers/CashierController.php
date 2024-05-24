@@ -22,18 +22,33 @@ class CashierController extends Controller
 
     public function store()
     {
-        $cashiers = Cashier::where('company_id', auth()->user()->company_id)
-            ->whereDate('created_at', now())
-            ->get();
+        $cashier = Cashier::where('company_id', auth()->user()->company_id)
+            ->whereDate('created_at', today())
+            ->first();
 
-        if ($cashiers->count() > 0) {
+        if ($cashier->count() > 0) {
+
+            $cashier->update([
+                'active' => true,
+            ]);
+            
             return redirect()->route('sells.create');
         }
 
         Cashier::create([
             'company_id' => auth()->user()->company_id,
+            'user_id' => auth()->user()->id,
         ]);
 
         return redirect()->route('sells.create');
+    }
+
+    public function update(Cashier $cashier)
+    {
+        $cashier->update([
+            'active' => !$cashier->active,
+        ]);
+
+        return redirect()->route('cashiers.index');
     }
 }
