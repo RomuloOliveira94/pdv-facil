@@ -11,6 +11,7 @@ const form = useForm({
     name: "",
     price: "",
     category: "",
+    image: "",
 });
 
 const submit = () => {
@@ -74,6 +75,27 @@ const submit = () => {
                     />
 
                     <InputError class="mt-2" :message="form.errors.category" />
+                </div>
+
+                <div class="mt-4">
+                    <InputLabel for="image" value="Imagem" />
+
+                    <input
+                        type="file"
+                        class="file-input w-full bg-inherit mt-1 block"
+                        @input="form.image = $event.target.files[0]"
+                    />
+
+                    <progress
+                        v-if="form.progress"
+                        class="progress w-56"
+                        :value="form.progress.percentage"
+                        max="100"
+                    >
+                        {{ form.progress.percentage }}%
+                    </progress>
+
+                    <InputError class="mt-2" :message="form.errors.image" />
                 </div>
 
                 <div class="flex items-center justify-between mt-4 gap-6">

@@ -29,7 +29,7 @@ const destroy = (company_id) => {
             >
         </div>
         <SectionContainer>
-            <div class="grid grid-cols-4 w-full gap-3">
+            <div class="grid md:grid-cols-4 w-full gap-3">
                 <div
                     v-for="(product, index) in products"
                     :key="index"
@@ -38,15 +38,15 @@ const destroy = (company_id) => {
                     <div class="p-2 w-full grid gap-3">
                         <figure v-show="product.imageUrl" class="w-full">
                             <img
-                                :src="product.imageUrl"
+                                :src="'/storage/' + product.imageUrl"
                                 :alt="product.name"
-                                class="object-cover w-full rounded-lg"
+                                class="object-cover w-full h-36 rounded-lg"
                             />
                         </figure>
                         <div class="flex justify-between w-full items-center">
                             <div class="w-36">
                                 <h2
-                                    class="text-wrap truncate ... font-semibold text-lg"
+                                class="text-wrap truncate ... font-semibold text-lg"
                                 >
                                     {{ product.name }}
                                 </h2>

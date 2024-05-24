@@ -159,7 +159,7 @@ const closeCashier = (id) => {
             <h1 class="text-xl font-bold mb-2 text-gray-800 text-center">
                 Produtos
             </h1>
-            <div class="grid grid-cols-4 gap-3 text-gray-800 w-fit">
+            <div class="grid md:grid-cols-4 mx-auto gap-3 text-gray-800 w-fit">
                 <div
                     v-for="(product, index) in products"
                     :key="index"

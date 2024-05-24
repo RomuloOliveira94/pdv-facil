@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, useForm } from "@inertiajs/vue3";
+import { Head, Link, router, useForm } from "@inertiajs/vue3";
 import { vMaska } from "maska";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
@@ -15,6 +15,7 @@ const form = useForm({
     name: props.product.name,
     price: String(props.product.price),
     category: props.product.category,
+    image: "",
 });
 
 const submit = () => {
@@ -78,6 +79,27 @@ const submit = () => {
                     />
 
                     <InputError class="mt-2" :message="form.errors.category" />
+                </div>
+
+                <div class="mt-4">
+                    <InputLabel for="image" value="Imagem" />
+
+                    <input
+                        type="file"
+                        class="file-input w-full bg-inherit mt-1 block"
+                        @input="form.image = $event.target.files[0]"
+                    />
+
+                    <progress
+                        v-if="form.progress"
+                        class="progress w-56"
+                        :value="form.progress.percentage"
+                        max="100"
+                    >
+                        {{ form.progress.percentage }}%
+                    </progress>
+
+                    <InputError class="mt-2" :message="form.errors.image" />
                 </div>
 
                 <div class="flex items-center justify-between mt-4 gap-6">

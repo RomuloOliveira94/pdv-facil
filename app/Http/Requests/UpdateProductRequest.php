@@ -18,17 +18,28 @@ class UpdateProductRequest extends FormRequest
 
     public function prepareForValidation()
     {
+
         $this->merge([
-            'price' => str_replace('R$', '', $this->price)
+            'price' => str_replace('R$', '', $this->price),
         ]);
     }
+
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'category' => ['required', 'string', 'max:255'],
+            'name' => ['nullable', 'string', 'max:255'],
+            'price' => ['nullable', 'numeric', 'min:0'],
+            'category' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'max:2048'],
             'imageUrl' => ['nullable', 'string', 'max:255'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'image.image' => 'The image must be a file of type: jpeg, png, jpg, gif, svg.',
+            'image.max' => 'The image must not be greater than 2MB.',
         ];
     }
 }
