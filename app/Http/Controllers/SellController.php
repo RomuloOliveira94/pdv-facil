@@ -19,7 +19,7 @@ class SellController extends Controller
         $query = $request->query('date');
 
         if ($query) {
-            $date = Carbon::parse($query)->toDateString();
+            $date = Carbon::parse($query)->setTimezone('America/Sao_Paulo')->toDateString();
             $sells = Sell::selectedByDate($date)
                 ->with('products', 'paymentType')->paginate(10);
         } else {
