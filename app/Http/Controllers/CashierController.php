@@ -26,12 +26,12 @@ class CashierController extends Controller
             ->whereDate('created_at', today())
             ->first();
 
-        if ($cashier->count() > 0) {
+        if ($cashier) {
 
             $cashier->update([
                 'active' => true,
             ]);
-            
+
             return redirect()->route('sells.create');
         }
 
