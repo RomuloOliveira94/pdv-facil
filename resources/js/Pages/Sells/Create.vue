@@ -203,124 +203,141 @@ const closeCashier = (id) => {
             class="min-h-[20vh] flex flex-col"
             v-if="cashier && cashier?.active"
         >
-            <h1 class="text-xl font-semibold mb-6">Venda</h1>
-            <div class="">
-                <ul>
-                    <li>
-                        <div class="grid grid-cols-5">
-                            <span class="font-semibold">Produto</span>
-                            <span class="font-semibold">Preço</span>
-                            <span class="font-semibold">Quantidade</span>
-                            <span class="font-semibold">Total</span>
-                            <span class="text-end font-semibold">Remover</span>
-                        </div>
-                    </li>
-                    <li v-for="(product, index) in sell.products" :key="index">
-                        <div class="grid grid-cols-5">
-                            <span>{{ product.name }}</span>
-                            <span>
-                                {{ formatMoneyToBRL(product.price) }}
-                            </span>
-                            <span class="ml-10">{{ product.quantity }}</span>
-                            <span>
-                                {{
-                                    formatMoneyToBRL(
-                                        product.price * product.quantity
-                                    )
-                                }}
-                            </span>
-                            <div
-                                class="flex items-center justify-end w-full h-full"
-                            >
-                                <button
-                                    @click="removeProduct(product)"
-                                    class="font-semibold bg-error rounded-full h-6 w-6 my-0.5 text-white cursor-pointer hover:bg-red-600 text-center"
-                                >
-                                    X
-                                </button>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <hr class="my-6" />
-            <button
-                v-if="sell.total > 0"
-                class="btn btn-link"
-                @click="showDiscount = !showDiscount"
-            >
-                {{
-                    !showDiscount ? "Adicionar desconto?" : "Remover desconto."
-                }}
-            </button>
-            <div
-                v-if="sell.total > 0"
-                class="flex justify-center gap-3 h-full w-full items-center"
-            >
-                <div>
-                    <InputLabel for="delivery" value="Taxa de entrega" />
-
-                    <TextInput
-                        id="delivery"
-                        type="text"
-                        class="block w-full"
-                        v-model="sell.delivery"
-                        autofocus
-                        autocomplete="delivery"
-                        v-maska
-                        data-maska="0.99"
-                        data-maska-tokens="0:\d:multiple|9:\d:optional"
-                        placeholder="R$ 00.00"
-                    />
-                </div>
-
-                <div v-show="showDiscount">
-                    <InputLabel for="discount" value="Desconto" />
-
-                    <TextInput
-                        id="discount"
-                        type="text"
-                        class="block w-full"
-                        v-model="sell.discount"
-                        autofocus
-                        autocomplete="discount"
-                        v-maska
-                        data-maska="0.99"
-                        data-maska-tokens="0:\d:multiple|9:\d:optional"
-                        placeholder="R$ 00.00"
-                    />
-                </div>
-
-                <select
-                    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm self-end"
-                    v-model="sell.paymentMethod"
-                >
-                    <option disabled selected>Pagamento</option>
-                    <option
-                        v-for="(payment, index) in paymentMethods"
-                        :key="index"
-                        :value="payment.id"
+            <div class="grid">
+                <h1 class="text-xl font-semibold mb-6">Venda</h1>
+                <div class="overflow-x-auto">
+                    <ul
+                        class="overflow-x-auto flex justify-between md:grid md:grid-cols-1 min-w-full gap-12 md:gap-2"
                     >
-                        {{ payment.name }}
-                    </option>
-                </select>
-                <div class="self-end">
-                    <h2 class="font-semibold text-lg text-gray-800">
-                        Subtotal: {{ formatMoneyToBRL(sellSubTotal) }}
-                    </h2>
-
-                    <h2 class="font-semibold text-lg text-gray-800">
-                        Total:
-                        {{ formatMoneyToBRL(sellTotal) }}
-                    </h2>
+                        <li>
+                            <div class="grid md:grid-cols-5 gap-1">
+                                <span class="font-semibold">Produto</span>
+                                <span class="font-semibold">Preço</span>
+                                <span class="font-semibold">Quantidade</span>
+                                <span class="font-semibold">Total</span>
+                                <span class="md:text-end font-semibold"
+                                    >Remover</span
+                                >
+                            </div>
+                        </li>
+                        <li
+                            v-for="(product, index) in sell.products"
+                            :key="index"
+                        >
+                            <div
+                                class="grid md:grid-cols-5 text-end md:text-start min-w-full gap-1"
+                            >
+                                <p class="block w-full whitespace-nowrap">
+                                    {{ product.name }}
+                                </p>
+                                <span>
+                                    {{ formatMoneyToBRL(product.price) }}
+                                </span>
+                                <span class="ml-10">{{
+                                    product.quantity
+                                }}</span>
+                                <span>
+                                    {{
+                                        formatMoneyToBRL(
+                                            product.price * product.quantity
+                                        )
+                                    }}
+                                </span>
+                                <div
+                                    class="flex items-center justify-end w-full h-full"
+                                >
+                                    <button
+                                        @click="removeProduct(product)"
+                                        class="font-semibold bg-error rounded-full h-6 w-6 my-0.5 text-white cursor-pointer hover:bg-red-600 text-center"
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
+                <hr class="my-6" />
+                <button
+                    v-if="sell.total > 0"
+                    class="btn btn-link mt-6 w-full self-center"
+                    @click="showDiscount = !showDiscount"
+                >
+                    {{
+                        !showDiscount
+                            ? "Adicionar desconto?"
+                            : "Remover desconto."
+                    }}
+                </button>
+                <div
+                    v-if="sell.total > 0"
+                    class="flex justify-center gap-3 items-center flex-col md:flex-row"
+                >
+                    <div>
+                        <InputLabel for="delivery" value="Taxa de entrega" />
+
+                        <TextInput
+                            id="delivery"
+                            type="text"
+                            class="block w-full"
+                            v-model="sell.delivery"
+                            autofocus
+                            autocomplete="delivery"
+                            v-maska
+                            data-maska="0.99"
+                            data-maska-tokens="0:\d:multiple|9:\d:optional"
+                            placeholder="R$ 00.00"
+                        />
+                    </div>
+
+                    <div v-show="showDiscount">
+                        <InputLabel for="discount" value="Desconto" />
+
+                        <TextInput
+                            id="discount"
+                            type="text"
+                            class="block w-full"
+                            v-model="sell.discount"
+                            autofocus
+                            autocomplete="discount"
+                            v-maska
+                            data-maska="0.99"
+                            data-maska-tokens="0:\d:multiple|9:\d:optional"
+                            placeholder="R$ 00.00"
+                        />
+                    </div>
+
+                    <select
+                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm md:self-end"
+                        v-model="sell.paymentMethod"
+                    >
+                        <option disabled selected>Pagamento</option>
+                        <option
+                            v-for="(payment, index) in paymentMethods"
+                            :key="index"
+                            :value="payment.id"
+                        >
+                            {{ payment.name }}
+                        </option>
+                    </select>
+                    <div class="md:self-end">
+                        <h2 class="font-semibold text-lg text-gray-800">
+                            Subtotal: {{ formatMoneyToBRL(sellSubTotal) }}
+                        </h2>
+
+                        <h2 class="font-semibold text-lg text-gray-800">
+                            Total:
+                            {{ formatMoneyToBRL(sellTotal) }}
+                        </h2>
+                    </div>
+                </div>
+                <button
+                    @click="createSell"
+                    class="btn btn-primary mt-6 w-full text-xl"
+                >
+                    Criar venda
+                </button>
             </div>
-            <button
-                @click="createSell"
-                class="btn btn-primary self-center mt-6 w-1/2 text-xl"
-            >
-                Criar venda
-            </button>
         </SectionContainer>
 
         <button
