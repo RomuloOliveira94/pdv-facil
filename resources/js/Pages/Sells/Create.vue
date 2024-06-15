@@ -10,12 +10,12 @@ import { Head, router } from "@inertiajs/vue3";
 import { reactive, computed, ref } from "vue";
 import { formatMoneyToBRL } from "@/utils";
 import { Cashier } from "../Cashiers/types";
-import { Product } from "../Products/types";
-import { PaymentMethods } from "./types";
+import Pagination from "@/Components/Pagination.vue";
+import { PaymentMethods, ProductWithPaginate } from "./types";
 
 const props = defineProps<{
     cashier: Cashier;
-    products: Product[];
+    products: ProductWithPaginate;
     paymentMethods: PaymentMethods[];
 }>();
 
@@ -62,6 +62,11 @@ const sellTotal = computed(() => {
 });
 
 const addProduct = (product) => {
+    if(!props.cashier.active) {
+        alert("Caixa fechado, abra o caixa para realizar vendas.");
+        return;
+    }
+
     const productIndex = sell.products.findIndex((p) => p.id === product.id);
 
     if (productIndex === -1) {
@@ -154,14 +159,27 @@ const closeCashier = (id) => {
             </h1>
             <div class="grid md:grid-cols-4 mx-auto gap-3 text-gray-800 w-fit">
                 <div
-                    v-for="(product, index) in products"
+                    v-for="(product, index) in products.data"
                     :key="index"
                     class="card card-side border border-slate-50 items-center shadow-sm"
                 >
                     <div class="p-2 grid gap-3 w-full">
-                        <figure v-show="product.imageUrl" class="w-full h-32">
+                        <figure v-show="product" class="w-full h-32 relative">
+                            <span
+                                v-show="!product.imageUrl"
+                                class="text-2xl text-white font-bold absolute top-12 text-center z-10"
+                                >{{ product.name }}</span
+                            >
+                            <div
+                                v-show="!product.imageUrl"
+                                class="absolute bg-black opacity-80 rounded-lg"
+                            ></div>
                             <img
-                                :src="'/storage/' + product.imageUrl"
+                                :src="
+                                    product.imageUrl
+                                        ? '/storage/' + product.imageUrl
+                                        : '/storage/logos/pdvfacil.png'
+                                "
                                 :alt="product.name"
                                 class="object-cover w-full h-full rounded-lg"
                             />
@@ -189,6 +207,7 @@ const closeCashier = (id) => {
                     </div>
                 </div>
             </div>
+            <pagination class="mt-6" :links="products.links" />
         </div>
 
         <button

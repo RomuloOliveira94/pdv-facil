@@ -41,7 +41,7 @@ class SellController extends Controller
         $today_cashier = $user_company->cashiers()->whereDate('created_at', today())->first();
 
         return inertia('Sells/Create', [
-            'products' => Product::where('company_id', $user_company->id)->get(),
+            'products' => Product::where('company_id', $user_company->id)->paginate(8),
             'paymentMethods' => $user_company->paymentTypes,
             'cashier' => $today_cashier,
         ]);

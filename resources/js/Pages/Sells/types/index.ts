@@ -22,6 +22,11 @@ export interface SellWithPaginate {
     links: any;
 }
 
+export interface ProductWithPaginate {
+    data: Product[];
+    links: any;
+}
+
 export interface PaymentMethods {
     id: number;
     name: string;
