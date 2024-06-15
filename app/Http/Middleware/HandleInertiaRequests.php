@@ -35,7 +35,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'logo' => [
-                'url' => fn () => $request->user()->company->logo,
+                'url' => fn () => $request->user()?->company?->logo,
             ],
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),
