@@ -8,7 +8,7 @@ import ToastError from "@/Components/ToastError.vue";
 import { vMaska } from "maska";
 import { Head, router } from "@inertiajs/vue3";
 import { reactive, computed, ref } from "vue";
-import { formatMoneyToBRL } from "@/utils";
+import { formatMoneyToBRL, formatRoles } from "@/utils";
 import { Cashier } from "../Cashiers/types";
 import Pagination from "@/Components/Pagination.vue";
 import { PaymentMethods, ProductWithPaginate } from "./types";
@@ -62,7 +62,7 @@ const sellTotal = computed(() => {
 });
 
 const addProduct = (product) => {
-    if(!props.cashier.active) {
+    if (!props.cashier.active) {
         alert("Caixa fechado, abra o caixa para realizar vendas.");
         return;
     }
@@ -149,9 +149,16 @@ const closeCashier = (id) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Registar Venda
-            </h2>
+            <div class="flex gap-2 items-center">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    Registar Venda
+                </h2>
+                <span class="text-gray-800">|</span>
+                <h3 class="text-lg font-bold text-gray-800">
+                    Caixa: {{ $page.props.auth.user.name }} -
+                    {{ formatRoles(($page.props.auth.user as any).role) }}
+                </h3>
+            </div>
         </template>
         <div class="mb-6">
             <h1 class="text-xl font-bold mb-2 text-gray-800 text-center">

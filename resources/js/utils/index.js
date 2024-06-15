@@ -10,3 +10,17 @@ export const formatMoneyToBRL = (value) => {
         maximumFractionDigits: 2,
     });
 };
+
+
+export const formatRoles = (roles) => {
+    switch (roles) {
+        case "admin":
+            return "Administrador";
+        case "cashier":
+            return "Caixa";
+        case "manager":
+            return "Gerente";
+        default:
+            return "Não definido";
+    }
+}

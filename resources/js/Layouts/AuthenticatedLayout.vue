@@ -6,6 +6,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 import { Link } from "@inertiajs/vue3";
+import { formatRoles } from "@/utils";
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -89,6 +90,18 @@ const showingNavigationDropdown = ref(false);
                                                     />
                                                 </svg>
                                             </button>
+                                        </span>
+                                        <span class="text-gray-800">|</span>
+                                        <span class="text-gray-800">
+                                            Cargo:
+                                            {{
+                                                formatRoles(
+                                                    (
+                                                        $page.props.auth
+                                                            .user as any
+                                                    ).role
+                                                )
+                                            }}
                                         </span>
                                     </template>
 
