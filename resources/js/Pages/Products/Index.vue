@@ -3,14 +3,15 @@ import SectionContainer from "@/Components/SectionContainer.vue";
 import ToastError from "@/Components/ToastError.vue";
 import ToastSuccess from "@/Components/ToastSuccess.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import Pagination from "@/Components/Pagination.vue";
 import { formatMoneyToBRL } from "@/utils";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
-import { Product } from "./types";
+import { ProductWithPaginate } from "./types";
 import { Flash } from "@/types";
 
 const props = defineProps<{
-    products: Product[];
+    products: ProductWithPaginate;
     flash: Flash;
 }>();
 
@@ -53,16 +54,29 @@ watch(
         <SectionContainer>
             <div class="grid md:grid-cols-4 w-full gap-3">
                 <div
-                    v-for="(product, index) in products"
+                    v-for="(product, index) in products.data"
                     :key="index"
                     class="card card-side border border-slate-100 items-center shadow-sm"
                 >
                     <div class="p-2 w-full grid gap-3">
-                        <figure v-show="product.imageUrl" class="w-full">
+                        <figure v-show="product" class="w-full h-32 relative">
+                            <span
+                                v-show="!product.imageUrl"
+                                class="text-2xl text-white font-bold absolute top-12 text-center z-10"
+                                >{{ product.name }}</span
+                            >
+                            <div
+                                v-show="!product.imageUrl"
+                                class="absolute bg-black opacity-80 rounded-lg"
+                            ></div>
                             <img
-                                :src="'/storage/' + product.imageUrl"
+                                :src="
+                                    product.imageUrl
+                                        ? '/storage/' + product.imageUrl
+                                        : '/storage/logos/pdvfacil.png'
+                                "
                                 :alt="product.name"
-                                class="object-cover w-full h-36 rounded-lg"
+                                class="object-cover w-full h-full rounded-lg"
                             />
                         </figure>
                         <div class="flex justify-between w-full items-center">
@@ -93,6 +107,7 @@ watch(
                     </div>
                 </div>
             </div>
+            <pagination class="mt-6" :links="products.links" />
         </SectionContainer>
         <ToastSuccess v-if="props.flash.success && showToast">
             {{ props.flash.success }}
