@@ -21,9 +21,9 @@ class SellController extends Controller
         if ($query) {
             $date = Carbon::parse($query)->setTimezone('America/Sao_Paulo')->toDateString();
             $sells = Sell::selectedByDate($date)
-                ->with('products', 'paymentType')->paginate(10);
+                ->with('products', 'paymentType', 'cashier')->paginate(10);
         } else {
-            $sells = Sell::with('products', 'paymentType')->paginate(10);
+            $sells = Sell::with('products', 'paymentType', 'cashier')->paginate(10);
         }
 
         return inertia('Sells/Index', [

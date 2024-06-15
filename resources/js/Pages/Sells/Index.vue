@@ -3,6 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SellProductsModal from "@/Components/SellProductsModal.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import Pagination from "@/Components/Pagination.vue";
+import { sameDay } from "@formkit/tempo";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { formatDate, formatMoneyToBRL } from "@/utils";
@@ -84,7 +85,15 @@ const destroy = (id) => {
                                         Ver Produtos
                                     </button>
                                 </td>
-                                <td v-if="user.role !== 'cashier'">
+                                <td
+                                    v-if="
+                                        user.role !== 'cashier' &&
+                                        sameDay(
+                                            sell.cashier.created_at,
+                                            new Date()
+                                        )
+                                    "
+                                >
                                     <button
                                         class="btn btn-error btn-sm rounded-full"
                                         @click="destroy(sell.id)"

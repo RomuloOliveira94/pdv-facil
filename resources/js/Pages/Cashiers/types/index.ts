@@ -9,4 +9,5 @@ export interface Cashier {
     company: Company;
     total: number;
     active: boolean;
+    created_at: string;
 }
