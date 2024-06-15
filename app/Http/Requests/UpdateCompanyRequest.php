@@ -55,6 +55,7 @@ class UpdateCompanyRequest extends FormRequest
             'pix_key' => ['nullable', 'string', 'max:255'],
             'logo' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'max:2048'],
+            'payment_types' => 'array',
         ];
     }
 

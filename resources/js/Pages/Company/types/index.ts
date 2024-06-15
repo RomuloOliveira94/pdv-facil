@@ -13,4 +13,11 @@ export interface Company {
     state: string;
     zip_code: string;
     pix_key: string;
+    payment_types: PaymentTypes[];
+}
+
+export interface PaymentTypes {
+    id: number;
+    name: string;
+    code: string;
 }

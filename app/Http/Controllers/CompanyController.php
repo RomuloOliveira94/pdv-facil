@@ -49,8 +49,9 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
+
         return Inertia::render('Company/Edit', [
-            'company' => $company,
+            'company' => $company->load('paymentTypes'),
         ]);
     }
 
@@ -59,6 +60,9 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
+        $clear_payment_types = array_filter($request->payment_types);
+
+        $company->paymentTypes()->sync($clear_payment_types);
         $company->update($request->all());
         return redirect()->route('company.index');
     }

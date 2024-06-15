@@ -24,6 +24,14 @@ const form = useForm({
     email: props.company.email,
     logo: props.company.logo,
     pix_key: props.company.pix_key,
+    credit_cart: props.company.payment_types.some(
+        (payment) => payment.code == "1"
+    ),
+    debit_cart: props.company.payment_types.some(
+        (payment) => payment.code == "2"
+    ),
+    money: props.company.payment_types.some((payment) => payment.code == "3"),
+    pix: props.company.payment_types.some((payment) => payment.code == "4"),
     image: null,
 });
 
@@ -44,6 +52,12 @@ const submit = () => {
         logo: form.logo,
         pix_key: form.pix_key,
         image: form.image,
+        payment_types: [
+            form.credit_cart ? "1" : "",
+            form.debit_cart ? "2" : "",
+            form.money ? "3" : "",
+            form.pix ? "4" : "",
+        ],
     });
 };
 </script>
@@ -56,6 +70,7 @@ const submit = () => {
             </h2>
         </template>
         <SectionContainer>
+            {{ form.credit_cart }}
             <form @submit.prevent="submit">
                 <div class="grid grid-cols-2 gap-3">
                     <label class="form-control w-full">
@@ -267,6 +282,65 @@ const submit = () => {
 
                         <InputError class="mt-2" :message="form.errors.logo" />
                     </label>
+                </div>
+
+                <div>
+                    <h1>Formas de Pagamento</h1>
+                    <div class="flex justify-between items-center">
+                        <label
+                            class="label cursor-pointer flex justify-center gap-4"
+                        >
+                            <span class="label-text text-gray-700"
+                                >Cartão de Crédito</span
+                            >
+                            <input
+                                type="checkbox"
+                                :checked="form.credit_cart"
+                                class="checkbox"
+                                @change="form.credit_cart = !form.credit_cart"
+                            />
+                        </label>
+
+                        <label
+                            class="label cursor-pointer flex justify-center gap-4"
+                        >
+                            <span class="label-text text-gray-700"
+                                >Cartão de Débito</span
+                            >
+                            <input
+                                type="checkbox"
+                                :checked="form.debit_cart"
+                                class="checkbox"
+                                @change="form.debit_cart = !form.debit_cart"
+                            />
+                        </label>
+
+                        <label
+                            class="label cursor-pointer flex justify-center gap-4"
+                        >
+                            <span class="label-text text-gray-700"
+                                >Dinheiro</span
+                            >
+                            <input
+                                type="checkbox"
+                                :checked="form.money"
+                                class="checkbox"
+                                @change="form.money = !form.money"
+                            />
+                        </label>
+
+                        <label
+                            class="label cursor-pointer flex justify-center gap-4"
+                        >
+                            <span class="label-text text-gray-700">Pix</span>
+                            <input
+                                type="checkbox"
+                                class="checkbox"
+                                :checked="form.pix"
+                                @change="form.pix = !form.pix"
+                            />
+                        </label>
+                    </div>
                 </div>
 
                 <div class="flex items-center justify-between mt-4 gap-6">
