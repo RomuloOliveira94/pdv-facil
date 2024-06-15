@@ -72,7 +72,7 @@ const submit = () => {
         <SectionContainer>
             {{ form.credit_cart }}
             <form @submit.prevent="submit">
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid lg:grid-cols-2 gap-3">
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Nome</span>
@@ -136,7 +136,7 @@ const submit = () => {
                     </label>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid lg:grid-cols-2 gap-3">
                     <div class="flex gap-3">
                         <label class="form-control w-full">
                             <div class="label">
@@ -186,7 +186,7 @@ const submit = () => {
                     </label>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid lg:grid-cols-2 gap-3">
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Bairro</span>
@@ -252,7 +252,7 @@ const submit = () => {
                     </label>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid lg:grid-cols-2 gap-3">
                     <label class="form-control w-full">
                         <div class="label">
                             <span class="label-text">Chave Pix</span>
@@ -284,11 +284,11 @@ const submit = () => {
                     </label>
                 </div>
 
-                <div>
+                <div class="mt-4">
                     <h1>Formas de Pagamento</h1>
                     <div class="flex justify-between items-center">
                         <label
-                            class="label cursor-pointer flex justify-center gap-4"
+                            class="label cursor-pointer flex justify-center gap-2 lg:gap-4"
                         >
                             <span class="label-text text-gray-700"
                                 >Cartão de Crédito</span

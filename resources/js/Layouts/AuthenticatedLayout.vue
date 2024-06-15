@@ -13,7 +13,7 @@ const showingNavigationDropdown = ref(false);
 <template>
     <div>
         <div class="min-h-screen bg-gray-100">
-            <nav class="bg-[#FFF6E6] border-b border-gray-100 ">
+            <nav class="bg-[#FFF6E6] border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -96,14 +96,14 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink
                                             :href="route('profile.edit')"
                                         >
-                                            Profile
+                                            Perfil
                                         </DropdownLink>
                                         <DropdownLink
                                             :href="route('logout')"
                                             method="post"
                                             as="button"
                                         >
-                                            Log Out
+                                            Sair
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
@@ -163,10 +163,34 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
+                            :href="route('sells.create')"
+                            :active="route().current('sells.create')"
                         >
-                            Dashboard
+                            Registro de Venda
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('products.index')"
+                            :active="route().current('products.index')"
+                        >
+                            Produtos
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('sells.index')"
+                            :active="route().current('sells.index')"
+                        >
+                            Vendas
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('cashiers.index')"
+                            :active="route().current('cashiers.index')"
+                        >
+                            Caixas
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('company.index')"
+                            :active="route().current('company.index')"
+                        >
+                            Empresa
                         </ResponsiveNavLink>
                     </div>
 
@@ -183,14 +207,14 @@ const showingNavigationDropdown = ref(false);
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.edit')">
-                                Profile
+                                Perfil
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 :href="route('logout')"
                                 method="post"
                                 as="button"
                             >
-                                Log Out
+                                Sair
                             </ResponsiveNavLink>
                         </div>
                     </div>
