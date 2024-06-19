@@ -160,18 +160,18 @@ const closeCashier = (id) => {
                 </h3>
             </div>
         </template>
-        <div class="mb-6">
+        <div class="mb-6 bg-white p-6 rounded-md">
             <h1 class="text-xl font-bold mb-2 text-gray-800 text-center">
                 Produtos
             </h1>
-            <div class="grid lg:grid-cols-4 mx-auto gap-3 text-gray-800 w-fit">
+            <div class="grid lg:grid-cols-4 mx-auto gap-3 text-gray-800 w-full">
                 <div
                     v-for="(product, index) in products.data"
                     :key="index"
                     class="card card-side border border-slate-50 items-center shadow-sm"
                 >
-                    <div class="p-2 grid gap-3 w-full">
-                        <figure v-show="product" class="w-full h-32 relative">
+                    <div class="grid p-2 gap-3 w-full">
+                        <figure v-show="product" class="h-32 relative">
                             <span
                                 v-show="!product.imageUrl"
                                 class="text-2xl text-white font-bold absolute top-12 text-center z-10"
@@ -179,7 +179,7 @@ const closeCashier = (id) => {
                             >
                             <div
                                 v-show="!product.imageUrl"
-                                class="absolute bg-black opacity-80 rounded-lg"
+                                class="absolute bg-black opacity-80 rounded-lg w-full"
                             ></div>
                             <img
                                 :src="
@@ -191,8 +191,8 @@ const closeCashier = (id) => {
                                 class="object-cover w-full h-full rounded-lg"
                             />
                         </figure>
-                        <div class="flex justify-between items-center">
-                            <div class="w-48">
+                        <div class="flex justify-between items-center w-full">
+                            <div>
                                 <h2
                                     class="text-wrap truncate ... font-semibold text-lg"
                                 >
