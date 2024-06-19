@@ -5,6 +5,7 @@ import TextInput from "@/Components/TextInput.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ToastSuccess from "@/Components/ToastSuccess.vue";
 import ToastError from "@/Components/ToastError.vue";
+import SearchInput from "@/Components/SearchInput.vue";
 import { vMaska } from "maska";
 import { Head, router } from "@inertiajs/vue3";
 import { reactive, computed, ref } from "vue";
@@ -18,6 +19,8 @@ const props = defineProps<{
     products: ProductWithPaginate;
     paymentMethods: PaymentMethods[];
 }>();
+
+const productsData = ref(props.products.data);
 
 const showDiscount = ref(false);
 const showSuccessToast = ref(false);
@@ -142,6 +145,16 @@ const closeCashier = (id) => {
     confirm("Deseja realmente fechar o caixa?") &&
         router.put(route("cashiers.update", props.cashier.id));
 };
+
+const searchProducts = (search) => {
+    if (search) {
+        productsData.value = props.products.data.filter((product) =>
+            product.name.toLowerCase().includes(search.toLowerCase())
+        );
+    } else {
+        productsData.value = props.products.data;
+    }
+};
 </script>
 
 <template>
@@ -160,63 +173,6 @@ const closeCashier = (id) => {
                 </h3>
             </div>
         </template>
-        <div class="mb-6 bg-white p-6 rounded-md">
-            <h1 class="text-xl font-bold mb-2 text-gray-800 text-center">
-                Produtos
-            </h1>
-            <div class="grid lg:grid-cols-4 mx-auto gap-3 text-gray-800 w-full">
-                <div
-                    v-for="(product, index) in products.data"
-                    :key="index"
-                    class="card card-side border border-slate-50 items-center shadow-sm"
-                >
-                    <div class="grid p-2 gap-3 w-full">
-                        <figure v-show="product" class="h-32 relative">
-                            <span
-                                v-show="!product.imageUrl"
-                                class="text-2xl text-white font-bold absolute top-12 text-center z-10"
-                                >{{ product.name }}</span
-                            >
-                            <div
-                                v-show="!product.imageUrl"
-                                class="absolute bg-black opacity-80 rounded-lg w-full"
-                            ></div>
-                            <img
-                                :src="
-                                    product.imageUrl
-                                        ? '/storage/' + product.imageUrl
-                                        : '/storage/logos/pdvfacil.png'
-                                "
-                                :alt="product.name"
-                                class="object-cover w-full h-full rounded-lg"
-                            />
-                        </figure>
-                        <div class="flex justify-between items-center w-full">
-                            <div>
-                                <h2
-                                    class="text-wrap truncate ... font-semibold text-lg"
-                                >
-                                    {{ product.name }}
-                                </h2>
-                                <p>
-                                    {{ formatMoneyToBRL(product.price) }}
-                                </p>
-                            </div>
-                            <div class="card-actions justify-end flex-col">
-                                <button
-                                    @click="addProduct(product)"
-                                    class="btn btn-info btn-sm w-full"
-                                >
-                                    Adicionar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <pagination class="mt-6" :links="products.links" />
-        </div>
-
         <button
             v-if="!cashier || !cashier?.active"
             class="btn btn-primary btn-lg w-full"
@@ -286,7 +242,7 @@ const closeCashier = (id) => {
                 <hr class="my-6" />
                 <button
                     v-if="sell.total > 0"
-                    class="btn btn-link mt-6 w-full self-center"
+                    class="link mt-6 w-full self-center"
                     @click="showDiscount = !showDiscount"
                 >
                     {{
@@ -373,6 +329,69 @@ const closeCashier = (id) => {
         >
             Fechar Caixa
         </button>
+
+        <div class="mt-6 bg-white p-6 rounded-md">
+            <h1 class="text-xl font-bold mb-2 text-gray-800 text-center">
+                Produtos
+            </h1>
+            <SearchInput
+                class="my-4"
+                placeholder="Pesquisar produtos"
+                @search="searchProducts"
+            />
+            <div class="grid lg:grid-cols-4 mx-auto gap-3 text-gray-800 w-full">
+                <div
+                    v-for="(product, index) in productsData"
+                    :key="index"
+                    class="card card-side border border-slate-50 items-center shadow-sm"
+                >
+                    <div class="grid p-2 gap-3 w-full">
+                        <figure v-show="product" class="h-32 relative">
+                            <span
+                                v-show="!product.imageUrl"
+                                class="text-2xl text-white font-bold absolute top-12 text-center z-10"
+                                >{{ product.name }}</span
+                            >
+                            <div
+                                v-show="!product.imageUrl"
+                                class="absolute bg-black opacity-80 rounded-lg w-full"
+                            ></div>
+                            <img
+                                :src="
+                                    product.imageUrl
+                                        ? '/storage/' + product.imageUrl
+                                        : '/storage/logos/pdvfacil.png'
+                                "
+                                :alt="product.name"
+                                class="object-cover w-full h-full rounded-lg"
+                            />
+                        </figure>
+                        <div class="flex justify-between items-center w-full">
+                            <div>
+                                <h2
+                                    class="text-wrap truncate ... font-semibold text-lg"
+                                >
+                                    {{ product.name }}
+                                </h2>
+                                <p>
+                                    {{ formatMoneyToBRL(product.price) }}
+                                </p>
+                            </div>
+                            <div class="card-actions justify-end flex-col">
+                                <button
+                                    @click="addProduct(product)"
+                                    class="btn btn-info btn-sm w-full"
+                                >
+                                    Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <pagination class="mt-6" :links="products.links" />
+        </div>
+
         <ToastSuccess v-if="showSuccessToast">
             Venda criada com sucesso!
         </ToastSuccess>

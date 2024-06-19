@@ -47,6 +47,17 @@ class SellController extends Controller
         ]);
     }
 
+    public function search ()
+    {
+        $products = Product::where('company_id', auth()->user()->company_id)
+            ->where('name', 'like', '%' . request('search') . '%')
+            ->paginate(12);
+
+        return inertia('Sells/Create', [
+            'products' => $products,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
