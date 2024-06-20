@@ -4,6 +4,7 @@ import ToastError from "@/Components/ToastError.vue";
 import ToastSuccess from "@/Components/ToastSuccess.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Pagination from "@/Components/Pagination.vue";
+import SearchInput from "@/Components/SearchInput.vue";
 import { formatMoneyToBRL } from "@/utils";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { ref, watch } from "vue";
@@ -14,6 +15,8 @@ const props = defineProps<{
     products: ProductWithPaginate;
     flash: Flash;
 }>();
+
+const productsData = ref(props.products.data);
 
 const showToast = ref(false);
 
@@ -36,6 +39,16 @@ watch(
     },
     { immediate: true }
 );
+
+const searchProducts = (search) => {
+    if (search) {
+        productsData.value = props.products.data.filter((product) =>
+            product.name.toLowerCase().includes(search.toLowerCase())
+        );
+    } else {
+        productsData.value = props.products.data;
+    }
+};
 </script>
 
 <template>
@@ -47,11 +60,21 @@ watch(
             </h2>
         </template>
         <div class="mb-3">
-            <Link :href="route('products.create')" class="btn btn-primary"
+            <Link
+                :href="route('products.create')"
+                class="btn btn-primary w-full text-lg mb-2"
                 >Criar Novo Produto</Link
             >
         </div>
         <SectionContainer>
+            <h1 class="text-xl font-bold mb-2 text-gray-800 text-center">
+                Produtos
+            </h1>
+            <SearchInput
+                class="my-4"
+                placeholder="Pesquisar produtos"
+                @search="searchProducts"
+            />
             <div class="grid md:grid-cols-4 w-full gap-3">
                 <div
                     v-for="(product, index) in products.data"
@@ -93,7 +116,7 @@ watch(
                             <div class="card-actions justify-end flex-col">
                                 <Link
                                     :href="route('products.edit', product.id)"
-                                    class="btn btn-info btn-sm w-full"
+                                    class="btn btn-primary btn-sm w-full"
                                     >Editar</Link
                                 >
                                 <button
