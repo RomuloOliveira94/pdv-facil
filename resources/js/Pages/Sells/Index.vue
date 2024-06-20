@@ -7,7 +7,7 @@ import DateInput from "@/Components/DateInput.vue";
 import SearchInput from "@/Components/SearchInput.vue";
 import { sameDay } from "@formkit/tempo";
 import { Head, Link, router } from "@inertiajs/vue3";
-import { ref, reactive } from "vue";
+import { ref, reactive, computed } from "vue";
 import { formatDate, formatMoneyToBRL } from "@/utils";
 import { SellWithPaginate } from "./types";
 import { User } from "@/types";
@@ -16,13 +16,33 @@ const selectedProduct = ref([]);
 const props = defineProps<{
     sells: SellWithPaginate;
     user: User;
+    search: {
+        start_date: string;
+        end_date: string;
+        product: string;
+        date: string;
+    };
 }>();
 
 const query = reactive({
-    start_date: "",
-    end_date: "",
-    product: "",
-    date: "",
+    page: 1,
+    start_date: props.search.start_date ?? "",
+    end_date: props.search.end_date ?? "",
+    product: props.search.product ?? "",
+    date: props.search.date ?? "",
+});
+
+const linksWithSearch = computed(() => {
+    return props.sells.links.map((link) => {
+        if (link.url === null) {
+            return link;
+        }
+
+        return {
+            ...link,
+            url: `${link.url}&start_date=${query.start_date}&end_date=${query.end_date}&product=${query.product}&date=${query.date}`,
+        };
+    });
 });
 
 const openProductsModal = (id) => {
@@ -102,13 +122,19 @@ const searchSellsByPeriodTo = (date) => {
                             Pesquisa por Produto
                         </h3>
                         <div class="flex items-center gap-4">
-                            <SearchInput @search="searchSellsByProducts" />
+                            <SearchInput
+                                @search="searchSellsByProducts"
+                                :q="search.product"
+                            />
                         </div>
                     </div>
                     <div class="grid gap-2 my-2">
                         <h3 class="text-lx font-semibold">Pesquisa por Data</h3>
                         <div class="flex items-center gap-4">
-                            <DateInput @searchDate="searchSellsByDate" />
+                            <DateInput
+                                @searchDate="searchSellsByDate"
+                                :d="search.date"
+                            />
                         </div>
                     </div>
 
@@ -117,9 +143,15 @@ const searchSellsByPeriodTo = (date) => {
                             Pesquisa por Período
                         </h3>
                         <div class="flex items-center gap-4">
-                            <DateInput @searchDate="searchSellsByPeriodFrom" />
+                            <DateInput
+                                @searchDate="searchSellsByPeriodFrom"
+                                :d="search.start_date"
+                            />
                             até
-                            <DateInput @searchDate="searchSellsByPeriodTo" />
+                            <DateInput
+                                @searchDate="searchSellsByPeriodTo"
+                                :d="search.end_date"
+                            />
                         </div>
                     </div>
                 </div>
@@ -197,7 +229,7 @@ const searchSellsByPeriodTo = (date) => {
                 </div>
             </div>
             <SellProductsModal :products="selectedProduct" />
-            <pagination class="mt-6" :links="sells.links" />
+            <pagination class="mt-6" :links="linksWithSearch" />
         </SectionContainer>
     </AuthenticatedLayout>
 </template>

@@ -11,7 +11,12 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-const date = ref("");
+
+const props = defineProps({
+    d: String,
+});
+
+const date = ref(props.d);
 const emit = defineEmits(["searchDate"]);
 
 const updateSearch = () => {

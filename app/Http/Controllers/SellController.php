@@ -29,6 +29,12 @@ class SellController extends Controller
         return inertia('Sells/Index', [
             'sells' => $sells,
             'user' => auth()->user(),
+            'search' => [
+                'date' => $date,
+                'product' => $product,
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+            ],
         ]);
     }
 

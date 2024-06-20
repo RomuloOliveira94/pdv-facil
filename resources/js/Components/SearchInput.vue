@@ -24,7 +24,12 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-const query = ref("");
+
+const props = defineProps({
+    q: String,
+});
+
+const query = ref(props.q);
 const emit = defineEmits(["search"]);
 
 const updateSearch = () => {
