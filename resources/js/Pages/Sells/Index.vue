@@ -3,9 +3,11 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import SellProductsModal from "@/Components/SellProductsModal.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import Pagination from "@/Components/Pagination.vue";
+import DateInput from "@/Components/DateInput.vue";
+import SearchInput from "@/Components/SearchInput.vue";
 import { sameDay } from "@formkit/tempo";
 import { Head, Link, router } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { formatDate, formatMoneyToBRL } from "@/utils";
 import { SellWithPaginate } from "./types";
 import { User } from "@/types";
@@ -15,6 +17,13 @@ const props = defineProps<{
     sells: SellWithPaginate;
     user: User;
 }>();
+
+const query = reactive({
+    start_date: "",
+    end_date: "",
+    product: "",
+    date: "",
+});
 
 const openProductsModal = (id) => {
     (document.getElementById("productModal") as HTMLDialogElement).showModal();
@@ -27,6 +36,49 @@ const destroy = (id) => {
     if (confirm("Tem certeza que quer cancelar essa venda?")) {
         router.delete(route("sells.destroy", id));
     }
+};
+
+const handleSearch = () =>
+    router.get(
+        route("sells.index", { ...query }),
+        {},
+        {
+            preserveState: true,
+        }
+    );
+
+const searchSellsByDate = (date) => {
+    query.date = date;
+    router.get(
+        route("sells.index", { ...query }),
+        {},
+        {
+            preserveState: true,
+        }
+    );
+};
+
+const clearSearch = () => {
+    router.get(route("sells.index"));
+};
+
+const searchSellsByProducts = (search) => {
+    query.product = search;
+    router.get(
+        route("sells.index", { ...query }),
+        {},
+        {
+            preserveState: true,
+        }
+    );
+};
+
+const searchSellsByPeriodFrom = (date) => {
+    query.start_date = date;
+};
+
+const searchSellsByPeriodTo = (date) => {
+    query.end_date = date;
 };
 </script>
 
@@ -42,6 +94,44 @@ const destroy = (id) => {
             >Criar Nova Venda</Link
         >
         <SectionContainer>
+            <div class="grid gap-2 w-full">
+                <h2 class="text-xl font-bold text-center">Pesquisas</h2>
+                <div class="flex gap-6 items-center justify-center">
+                    <div class="grid gap-2 my-2">
+                        <h3 class="text-lx font-semibold">
+                            Pesquisa por Produto
+                        </h3>
+                        <div class="flex items-center gap-4">
+                            <SearchInput @search="searchSellsByProducts" />
+                        </div>
+                    </div>
+                    <div class="grid gap-2 my-2">
+                        <h3 class="text-lx font-semibold">Pesquisa por Data</h3>
+                        <div class="flex items-center gap-4">
+                            <DateInput @searchDate="searchSellsByDate" />
+                        </div>
+                    </div>
+
+                    <div class="grid gap-2 my-2">
+                        <h3 class="text-lx font-semibold">
+                            Pesquisa por Período
+                        </h3>
+                        <div class="flex items-center gap-4">
+                            <DateInput @searchDate="searchSellsByPeriodFrom" />
+                            até
+                            <DateInput @searchDate="searchSellsByPeriodTo" />
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center gap-6">
+                    <button class="btn btn-primary w-48" @click="handleSearch">
+                        Pesquisar
+                    </button>
+                    <button class="btn btn-primary w-32" @click="clearSearch">
+                        Limpar
+                    </button>
+                </div>
+            </div>
             <div class="min-h-[20vh] flex flex-col">
                 <div class="overflow-x-auto">
                     <table class="table">

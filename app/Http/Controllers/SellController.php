@@ -16,15 +16,15 @@ class SellController extends Controller
      */
     public function index(Request $request)
     {
-        $query = $request->query('date');
+        $date = $request->query('date');
+        $product = $request->query('product');
+        $start_date = $request->query('start_date');
+        $end_date = $request->query('end_date');
 
-        if ($query) {
-            $date = Carbon::parse($query)->setTimezone('America/Sao_Paulo')->toDateString();
-            $sells = Sell::selectedByDate($date)
-                ->with('products', 'paymentType', 'cashier')->paginate(10);
-        } else {
-            $sells = Sell::with('products', 'paymentType', 'cashier')->paginate(10);
-        }
+        $sells = Sell::selectedByDate($date)
+            ->selectedByProduct($product)
+            ->selectedByPeriod($start_date, $end_date)
+            ->with('products', 'paymentType', 'cashier')->orderBy('created_at', 'desc')->paginate(10);
 
         return inertia('Sells/Index', [
             'sells' => $sells,
@@ -47,7 +47,7 @@ class SellController extends Controller
         ]);
     }
 
-    public function search ()
+    public function search()
     {
         $products = Product::where('company_id', auth()->user()->company_id)
             ->where('name', 'like', '%' . request('search') . '%')
