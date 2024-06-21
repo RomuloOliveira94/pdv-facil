@@ -18,9 +18,27 @@ const props = defineProps<{
     cashier: Cashier;
     products: ProductWithPaginate;
     paymentMethods: PaymentMethods[];
+    search: string;
 }>();
 
-const productsData = ref(props.products.data);
+const query = ref(props.search);
+
+const linksWithSearch = computed(() => {
+    return props.products.links.map((link) => {
+        if (link.url === null) return link;
+
+        let url = new URL(link.url);
+
+        if (query.value) {
+            url.searchParams.set("product", query.value);
+        }
+
+        return {
+            ...link,
+            url: `${url}`,
+        };
+    });
+});
 
 const showDiscount = ref(false);
 const showSuccessToast = ref(false);
@@ -147,13 +165,12 @@ const closeCashier = (id) => {
 };
 
 const searchProducts = (search) => {
-    if (search) {
-        productsData.value = props.products.data.filter((product) =>
-            product.name.toLowerCase().includes(search.toLowerCase())
-        );
-    } else {
-        productsData.value = props.products.data;
-    }
+    query.value = search;
+    router.get(
+        route("sells.create", { product: query.value }),
+        {},
+        { preserveState: true, preserveScroll: true }
+    );
 };
 </script>
 
@@ -338,10 +355,11 @@ const searchProducts = (search) => {
                 class="my-4"
                 placeholder="Pesquisar produtos"
                 @search="searchProducts"
+                :q="query"
             />
             <div class="grid lg:grid-cols-4 mx-auto gap-3 text-gray-800 w-full">
                 <div
-                    v-for="(product, index) in productsData"
+                    v-for="(product, index) in products.data"
                     :key="index"
                     class="card card-side border border-slate-50 items-center shadow-sm"
                 >
@@ -389,7 +407,7 @@ const searchProducts = (search) => {
                     </div>
                 </div>
             </div>
-            <pagination class="mt-6" :links="products.links" />
+            <pagination class="mt-6" :links="linksWithSearch" />
         </div>
 
         <ToastSuccess v-if="showSuccessToast">

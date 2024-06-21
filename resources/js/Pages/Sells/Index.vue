@@ -8,7 +8,7 @@ import SearchInput from "@/Components/SearchInput.vue";
 import { sameDay } from "@formkit/tempo";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { ref, reactive, computed } from "vue";
-import { formatDate, formatMoneyToBRL } from "@/utils";
+import { formatDate, formatMoneyToBRL, clearEmptyQuery } from "@/utils";
 import { SellWithPaginate } from "./types";
 import { User } from "@/types";
 
@@ -32,17 +32,9 @@ const query = reactive({
     date: props.search.date ?? "",
 });
 
-const clearEmptyQuery = () => {
-    for (const key in query) {
-        if (query[key] === "") {
-            delete query[key];
-        }
-    }
-};
-
 const linksWithSearch = computed(() => {
     return props.sells.links.map((link) => {
-        if (link.url === null) return link
+        if (link.url === null) return link;
 
         let url = new URL(link.url);
 
@@ -121,7 +113,9 @@ const searchSellsByPeriodTo = (date) => {
         <SectionContainer>
             <div class="grid gap-2 justify-center items-center">
                 <h2 class="text-xl font-bold text-center">Pesquisas</h2>
-                <div class="flex gap-6 flex-col lg:items-center lg:justify-center lg:flex-row">
+                <div
+                    class="flex gap-6 flex-col lg:items-center lg:justify-center lg:flex-row"
+                >
                     <div class="grid gap-2 my-2">
                         <h3 class="text-lx font-semibold">
                             Pesquisa por Produto
@@ -147,7 +141,9 @@ const searchSellsByPeriodTo = (date) => {
                         <h3 class="text-lx font-semibold">
                             Pesquisa por Período
                         </h3>
-                        <div class="flex lg:items-center flex-col lg:flex-row gap-4">
+                        <div
+                            class="flex lg:items-center flex-col lg:flex-row gap-4"
+                        >
                             <DateInput
                                 @searchDate="searchSellsByPeriodFrom"
                                 :d="search.start_date"
@@ -161,7 +157,10 @@ const searchSellsByPeriodTo = (date) => {
                     </div>
                 </div>
                 <div class="grid lg:grid-cols-3 gap-6">
-                    <button class="btn btn-primary lg:col-span-2" @click="handleSearch">
+                    <button
+                        class="btn btn-primary lg:col-span-2"
+                        @click="handleSearch"
+                    >
                         Pesquisar
                     </button>
                     <button class="btn btn-secondary" @click="clearSearch">

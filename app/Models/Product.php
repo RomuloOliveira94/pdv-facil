@@ -20,4 +20,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Sell::class, 'product_sell');
     }
+
+    public function scopeSelectedByName($query, $name)
+    {
+        return $query->where('name', 'like', "%$name%");
+    }
 }

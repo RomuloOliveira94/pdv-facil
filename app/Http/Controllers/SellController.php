@@ -24,7 +24,7 @@ class SellController extends Controller
         $sells = Sell::selectedByDate($date)
             ->selectedByProduct($product)
             ->selectedByPeriod($start_date, $end_date)
-            ->with('products', 'paymentType', 'cashier')->orderBy('created_at', 'desc')->paginate(4);
+            ->with('products', 'paymentType', 'cashier')->orderBy('created_at', 'desc')->paginate(10);
 
         return inertia('Sells/Index', [
             'sells' => $sells,
@@ -41,32 +41,22 @@ class SellController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        $name = $request->query('product');
+
         $user_company = auth()->user()->company;
         $today_cashier = $user_company->cashiers()->whereDate('created_at', today())->first();
-
-        return inertia('Sells/Create', [
-            'products' => Product::where('company_id', $user_company->id)->paginate(8),
-            'paymentMethods' => $user_company->paymentTypes,
-            'cashier' => $today_cashier,
-        ]);
-    }
-
-    public function search()
-    {
-        $products = Product::where('company_id', auth()->user()->company_id)
-            ->where('name', 'like', '%' . request('search') . '%')
-            ->paginate(12);
+        $products = Product::selectedByName($name)->where('company_id', $user_company->id)->paginate(8);
 
         return inertia('Sells/Create', [
             'products' => $products,
+            'paymentMethods' => $user_company->paymentTypes,
+            'cashier' => $today_cashier,
+            'search' => $name,
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreSellRequest $request)
     {
         $cashier = Cashier::find($request->cashier_id);

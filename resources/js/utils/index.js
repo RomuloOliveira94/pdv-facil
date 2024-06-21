@@ -24,3 +24,12 @@ export const formatRoles = (roles) => {
             return "Não definido";
     }
 }
+
+
+export const clearEmptyQuery = () => {
+    for (const key in query) {
+        if (query[key] === "") {
+            delete query[key];
+        }
+    }
+};
