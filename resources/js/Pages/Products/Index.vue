@@ -7,16 +7,34 @@ import Pagination from "@/Components/Pagination.vue";
 import SearchInput from "@/Components/SearchInput.vue";
 import { formatMoneyToBRL } from "@/utils";
 import { Head, Link, router } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { ProductWithPaginate } from "./types";
 import { Flash } from "@/types";
 
 const props = defineProps<{
     products: ProductWithPaginate;
     flash: Flash;
+    search: string;
 }>();
 
-const productsData = ref(props.products.data);
+const query = ref(props.search);
+
+const linksWithSearch = computed(() => {
+    return props.products.links.map((link) => {
+        if (link.url === null) return link;
+
+        let url = new URL(link.url);
+
+        if (query.value) {
+            url.searchParams.set("product", query.value);
+        }
+
+        return {
+            ...link,
+            url: `${url}`,
+        };
+    });
+});
 
 const showToast = ref(false);
 
@@ -41,13 +59,12 @@ watch(
 );
 
 const searchProducts = (search) => {
-    if (search) {
-        productsData.value = props.products.data.filter((product) =>
-            product.name.toLowerCase().includes(search.toLowerCase())
-        );
-    } else {
-        productsData.value = props.products.data;
-    }
+    query.value = search;
+    router.get(
+        route("products.index", { product: query.value }),
+        {},
+        { preserveState: true, preserveScroll: true }
+    );
 };
 </script>
 
@@ -74,6 +91,7 @@ const searchProducts = (search) => {
                 class="my-4"
                 placeholder="Pesquisar produtos"
                 @search="searchProducts"
+                :q="query"
             />
             <div class="grid md:grid-cols-4 w-full gap-3">
                 <div
@@ -130,7 +148,7 @@ const searchProducts = (search) => {
                     </div>
                 </div>
             </div>
-            <pagination class="mt-6" :links="products.links" />
+            <pagination class="mt-6" :links="linksWithSearch" />
         </SectionContainer>
         <ToastSuccess v-if="props.flash.success && showToast">
             {{ props.flash.success }}

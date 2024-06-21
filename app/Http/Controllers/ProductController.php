@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -12,10 +13,14 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $product = $request->query('product');
+        $products = Product::selectedByName($product)->where('company_id', auth()->user()->company_id)->paginate(8);
+
         return inertia('Products/Index', [
-            'products' => Product::where('company_id', auth()->user()->company_id)->paginate(12),
+            'products' => $products,
+            'search' => $product,
         ]);
     }
 
