@@ -14,7 +14,7 @@ import { Flash } from "@/types";
 const props = defineProps<{
     products: ProductWithPaginate;
     flash: Flash;
-    search: string;
+    search?: string;
 }>();
 
 const query = ref(props.search);

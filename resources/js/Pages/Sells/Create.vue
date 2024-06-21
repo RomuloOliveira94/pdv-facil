@@ -18,7 +18,7 @@ const props = defineProps<{
     cashier: Cashier;
     products: ProductWithPaginate;
     paymentMethods: PaymentMethods[];
-    search: string;
+    search?: string;
 }>();
 
 const query = ref(props.search);

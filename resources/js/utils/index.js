@@ -11,7 +11,6 @@ export const formatMoneyToBRL = (value) => {
     });
 };
 
-
 export const formatRoles = (roles) => {
     switch (roles) {
         case "admin":
@@ -23,10 +22,9 @@ export const formatRoles = (roles) => {
         default:
             return "Não definido";
     }
-}
+};
 
-
-export const clearEmptyQuery = () => {
+export const clearEmptyQuery = (query) => {
     for (const key in query) {
         if (query[key] === "") {
             delete query[key];

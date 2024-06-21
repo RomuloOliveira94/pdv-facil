@@ -65,13 +65,13 @@ const destroy = (id) => {
 };
 
 const handleSearch = () => {
-    clearEmptyQuery();
-
+    clearEmptyQuery(query);
     router.get(
         route("sells.index", { ...query }),
         {},
         {
             preserveState: true,
+            preserveScroll: true,
         }
     );
 };
@@ -82,7 +82,11 @@ const searchSellsByDate = (date) => {
 };
 
 const clearSearch = () => {
-    router.get(route("sells.index"));
+    query.start_date = "";
+    query.end_date = "";
+    query.product = "";
+    query.date = "";
+    router.get(route("sells.index"), {}, { preserveScroll: true });
 };
 
 const searchSellsByProducts = (search) => {
@@ -123,7 +127,7 @@ const searchSellsByPeriodTo = (date) => {
                         <div class="flex items-center gap-4">
                             <SearchInput
                                 @search="searchSellsByProducts"
-                                :q="search.product"
+                                :q="query.product"
                             />
                         </div>
                     </div>
@@ -132,7 +136,7 @@ const searchSellsByPeriodTo = (date) => {
                         <div class="flex items-center gap-4">
                             <DateInput
                                 @searchDate="searchSellsByDate"
-                                :d="search.date"
+                                :d="query.date"
                             />
                         </div>
                     </div>
@@ -146,24 +150,29 @@ const searchSellsByPeriodTo = (date) => {
                         >
                             <DateInput
                                 @searchDate="searchSellsByPeriodFrom"
-                                :d="search.start_date"
+                                :d="query.start_date"
                             />
                             até
                             <DateInput
                                 @searchDate="searchSellsByPeriodTo"
-                                :d="search.end_date"
+                                :d="query.end_date"
                             />
                         </div>
                     </div>
                 </div>
                 <div class="grid lg:grid-cols-3 gap-6">
                     <button
+                        type="button"
                         class="btn btn-primary lg:col-span-2"
-                        @click="handleSearch"
+                        @click.prevent="handleSearch"
                     >
                         Pesquisar
                     </button>
-                    <button class="btn btn-secondary" @click="clearSearch">
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        @click.prevent="clearSearch"
+                    >
                         Limpar
                     </button>
                 </div>
