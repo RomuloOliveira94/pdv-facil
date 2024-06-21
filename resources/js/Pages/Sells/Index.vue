@@ -32,15 +32,29 @@ const query = reactive({
     date: props.search.date ?? "",
 });
 
+const clearEmptyQuery = () => {
+    for (const key in query) {
+        if (query[key] === "") {
+            delete query[key];
+        }
+    }
+};
+
 const linksWithSearch = computed(() => {
     return props.sells.links.map((link) => {
-        if (link.url === null) {
-            return link;
+        if (link.url === null) return link
+
+        let url = new URL(link.url);
+
+        for (const key in query) {
+            if (key === "page") continue;
+            if (query[key] === "") continue;
+            url.searchParams.set(key, query[key]);
         }
 
         return {
             ...link,
-            url: `${link.url}&start_date=${query.start_date}&end_date=${query.end_date}&product=${query.product}&date=${query.date}`,
+            url: `${url}`,
         };
     });
 });
@@ -58,7 +72,9 @@ const destroy = (id) => {
     }
 };
 
-const handleSearch = () =>
+const handleSearch = () => {
+    clearEmptyQuery();
+
     router.get(
         route("sells.index", { ...query }),
         {},
@@ -66,16 +82,11 @@ const handleSearch = () =>
             preserveState: true,
         }
     );
+};
 
 const searchSellsByDate = (date) => {
     query.date = date;
-    router.get(
-        route("sells.index", { ...query }),
-        {},
-        {
-            preserveState: true,
-        }
-    );
+    handleSearch();
 };
 
 const clearSearch = () => {
@@ -84,13 +95,7 @@ const clearSearch = () => {
 
 const searchSellsByProducts = (search) => {
     query.product = search;
-    router.get(
-        route("sells.index", { ...query }),
-        {},
-        {
-            preserveState: true,
-        }
-    );
+    handleSearch();
 };
 
 const searchSellsByPeriodFrom = (date) => {
@@ -114,9 +119,9 @@ const searchSellsByPeriodTo = (date) => {
             >Criar Nova Venda</Link
         >
         <SectionContainer>
-            <div class="grid gap-2 w-full">
+            <div class="grid gap-2 justify-center items-center">
                 <h2 class="text-xl font-bold text-center">Pesquisas</h2>
-                <div class="flex gap-6 items-center justify-center">
+                <div class="flex gap-6 flex-col lg:items-center lg:justify-center lg:flex-row">
                     <div class="grid gap-2 my-2">
                         <h3 class="text-lx font-semibold">
                             Pesquisa por Produto
@@ -142,7 +147,7 @@ const searchSellsByPeriodTo = (date) => {
                         <h3 class="text-lx font-semibold">
                             Pesquisa por Período
                         </h3>
-                        <div class="flex items-center gap-4">
+                        <div class="flex lg:items-center flex-col lg:flex-row gap-4">
                             <DateInput
                                 @searchDate="searchSellsByPeriodFrom"
                                 :d="search.start_date"
@@ -155,16 +160,16 @@ const searchSellsByPeriodTo = (date) => {
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-center gap-6">
-                    <button class="btn btn-primary w-48" @click="handleSearch">
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <button class="btn btn-primary lg:col-span-2" @click="handleSearch">
                         Pesquisar
                     </button>
-                    <button class="btn btn-primary w-32" @click="clearSearch">
+                    <button class="btn btn-secondary" @click="clearSearch">
                         Limpar
                     </button>
                 </div>
             </div>
-            <div class="min-h-[20vh] flex flex-col">
+            <div class="min-h-[20vh] flex flex-col mt-6">
                 <div class="overflow-x-auto">
                     <table class="table">
                         <thead class="text-black font-bold text-lg">

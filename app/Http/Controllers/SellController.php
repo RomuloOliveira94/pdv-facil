@@ -24,7 +24,7 @@ class SellController extends Controller
         $sells = Sell::selectedByDate($date)
             ->selectedByProduct($product)
             ->selectedByPeriod($start_date, $end_date)
-            ->with('products', 'paymentType', 'cashier')->orderBy('created_at', 'desc')->paginate(10);
+            ->with('products', 'paymentType', 'cashier')->orderBy('created_at', 'desc')->paginate(4);
 
         return inertia('Sells/Index', [
             'sells' => $sells,
