@@ -243,7 +243,7 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Content -->
             <main>
-                <div class="py-12 px-4 bg-[#FFF6E6]">
+                <div class="py-4 px-2 bg-[#FFF6E6]">
                     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 min-h-screen">
                         <slot />
                     </div>

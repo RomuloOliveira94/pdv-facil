@@ -179,15 +179,19 @@ const searchProducts = (search) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex gap-2 items-center">
+            <div class="flex gap-6 items-center justify-center">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     Registar Venda
                 </h2>
                 <span class="text-gray-800">|</span>
-                <h3 class="text-lg font-bold text-gray-800">
-                    Caixa: {{ $page.props.auth.user.name }} -
-                    {{ formatRoles(($page.props.auth.user as any).role) }}
-                </h3>
+                <div class="flex items-center flex-col md:flex-row md:gap-2">
+                    <h3 class="text-lg font-bold text-gray-800">
+                        Caixa: {{ $page.props.auth.user.name }}
+                    </h3>
+                    <small class="font-semibold text-xs pt-0.5">
+                        ({{ formatRoles(($page.props.auth.user as any).role) }})
+                    </small>
+                </div>
             </div>
         </template>
         <button
