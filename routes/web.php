@@ -9,7 +9,9 @@ use App\Http\Controllers\SellController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', [SellController::class, 'create'])->middleware('auth');
+Route::get('/', function () {
+    return Inertia::render('Index');
+})->name('inicio')->middleware('auth');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
