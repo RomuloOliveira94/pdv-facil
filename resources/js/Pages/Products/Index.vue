@@ -93,7 +93,15 @@ const searchProducts = (search) => {
                 @search="searchProducts"
                 :q="query"
             />
-            <div class="grid md:grid-cols-4 w-full gap-3">
+            <div v-if="!products.data.length" class="text-center">
+                <h1 class="text-2xl font-bold py-16">
+                    Nenhum produto encontrado.
+                </h1>
+            </div>
+            <div
+                class="grid md:grid-cols-4 w-full gap-3"
+                v-if="products.data.length"
+            >
                 <div
                     v-for="(product, index) in products.data"
                     :key="index"

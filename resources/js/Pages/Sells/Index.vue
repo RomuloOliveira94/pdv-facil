@@ -75,18 +75,17 @@ const handleSearch = () => {
         }
     );
 };
-
-const searchSellsByDate = (date) => {
-    query.date = date;
-    handleSearch();
-};
-
 const clearSearch = () => {
     query.start_date = "";
     query.end_date = "";
     query.product = "";
     query.date = "";
     router.get(route("sells.index"), {}, { preserveScroll: true });
+};
+
+const searchSellsByDate = (date) => {
+    query.date = date;
+    handleSearch();
 };
 
 const searchSellsByProducts = (search) => {
@@ -151,11 +150,13 @@ const searchSellsByPeriodTo = (date) => {
                             <DateInput
                                 @searchDate="searchSellsByPeriodFrom"
                                 :d="query.start_date"
+                                @keyup.enter="handleSearch"
                             />
                             até
                             <DateInput
                                 @searchDate="searchSellsByPeriodTo"
                                 :d="query.end_date"
+                                @keyup.enter="handleSearch"
                             />
                         </div>
                     </div>
@@ -177,7 +178,15 @@ const searchSellsByPeriodTo = (date) => {
                     </button>
                 </div>
             </div>
-            <div class="min-h-[20vh] flex flex-col mt-6">
+            <div v-if="!sells.data.length" class="text-center">
+                <h1 class="text-2xl font-bold py-16">
+                    Nenhuma venda encontrado.
+                </h1>
+            </div>
+            <div
+                class="min-h-[20vh] flex flex-col mt-6"
+                v-if="sells.data.length"
+            >
                 <div class="overflow-x-auto">
                     <table class="table">
                         <thead class="text-black font-bold text-lg">

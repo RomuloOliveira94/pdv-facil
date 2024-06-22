@@ -11,3 +11,8 @@ export interface Cashier {
     active: boolean;
     created_at: string;
 }
+
+export interface CashierWithPagination {
+    data: Cashier[];
+    links: any;
+}
