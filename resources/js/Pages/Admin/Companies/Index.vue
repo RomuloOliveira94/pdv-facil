@@ -3,7 +3,10 @@ import AdminLayout from "@/Layouts/AdminLayout.vue";
 </script>
 <template>
     <AdminLayout>
-        <h1>Pegou as companies</h1>
+        <Head title="Empresas" />
+        <div class="container mx-auto px-6 py-8">
+            <h1>Pegou as companies</h1>
+        </div>
     </AdminLayout>
 </template>
 

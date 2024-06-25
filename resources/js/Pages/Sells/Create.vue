@@ -352,7 +352,7 @@ const searchProducts = (search) => {
         </button>
 
         <div class="mt-6 bg-white p-6 rounded-md">
-            <h1 class="text-xl font-bold mb-2 text-gray-800 text-center">
+            <h1 class="text-3xl font-bold mb-2 text-gray-800 text-center">
                 Produtos
             </h1>
             <SearchInput

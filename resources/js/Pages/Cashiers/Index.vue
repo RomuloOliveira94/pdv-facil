@@ -97,8 +97,8 @@ const handleCloseCashier = (cashier) => {
             </h2>
         </template>
         <SectionContainer>
-            <div class="grid gap-2 justify-center items-center my-8">
-                <h2 class="text-xl font-bold text-center">Pesquisas</h2>
+            <div class="grid gap-2 justify-center items-center">
+                <h2 class="text-3xl font-bold text-center">Pesquisas</h2>
                 <div
                     class="flex gap-6 flex-col lg:items-center lg:justify-center lg:flex-row"
                 >

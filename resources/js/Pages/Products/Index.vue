@@ -72,7 +72,7 @@ const searchProducts = (search) => {
     <AuthenticatedLayout>
         <Head title="Produtos" />
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-3xl text-gray-800 leading-tight">
                 Produtos
             </h2>
         </template>
@@ -84,7 +84,7 @@ const searchProducts = (search) => {
             >
         </div>
         <SectionContainer>
-            <h1 class="text-xl font-bold mb-2 text-gray-800 text-center">
+            <h1 class="text-3xl font-bold mb-2 text-gray-800 text-center">
                 Produtos
             </h1>
             <SearchInput
