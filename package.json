@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "@formkit/tempo": "^0.1.1",
-        "maska": "^2.1.11"
+        "maska": "^2.1.11",
+        "print-js": "^1.6.0"
     }
 }

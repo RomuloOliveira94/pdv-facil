@@ -1,15 +1,23 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import printJS from 'print-js'
+
+const print = () => {
+    printJS({
+        printable: 'print',
+        type: 'html',
+        targetStyles: ['*'],
+    })
+}
+</script>
 <template>
-    <div class="toast toast-center">
-        <div class="modal-box min-w-[500px] bg-white h-full">
-            <button
-                class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-                ✕
-            </button>
+    <dialog id="receipt" class="modal h-full">
+        <div class="modal-box bg-white w-full">
+            <form method="dialog">
+                <button class="btn btn-md btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>
             <h3 class="text-2xl font-bold text-center">Venda Realizada com sucesso!</h3>
             <p class="text-md text-center">Segue o recibo gerado para a venda.</p>
-            <div class="grid gap-2 border border-gray-400 p-6 rounded-md my-6">
+            <div id="print" class="grid gap-2 border border-gray-400 p-6 rounded-md my-6 max-w-[600px]">
                 <div class="flex items-center justify-between">
                     <h3>
                         <span class="font-bold">Venda:</span>
@@ -21,7 +29,7 @@
                     </h3>
                 </div>
                 <h1 class="text-2xl font-bold text-center">RECIBO</h1>
-                <div class="w-fit mx-auto p-4">
+                <div class="p-4">
                     <h2 class="text-xl font-semibold text-center">
                         Venda do fuleko
                     </h2>
@@ -33,7 +41,7 @@
                 </div>
                 <ul>
                     <li class="flex justify-between items-center gap-2">
-                        <p class="text-wrap">Bolo de Fubá</p>
+                        <p class="text-wrap w-2/3">Bolo de Fubá</p>
                         <div class="flex items-center gap-2">
                             <span class="font-bold">1x</span>
                             <span>R$ 50,00</span>
@@ -41,7 +49,7 @@
                     </li>
                     <hr class="my-2">
                     <li class="flex justify-between items-center gap-2">
-                        <p class="text-wrap">Bolo de Fubá</p>
+                        <p class="text-wrap w-2/3">Bolo de Fubá</p>
                         <div class="flex items-center gap-2">
                             <span class="font-bold">1x</span>
                             <span>R$ 50,00</span>
@@ -49,15 +57,15 @@
                     </li>
                     <hr class="my-2">
                     <li class="flex justify-between items-center gap-2">
-                        <p class="text-wrap">CARFA DE CHIBATAd  asda dasdas das dasd as</p>
+                        <p class="text-wrap w-2/3">CARFA DE CHIBATAd  asda dasdas das dasd </p>
                         <div class="flex items-center gap-2">
                             <span class="font-bold">1x</span>
-                            <span>R$ 50,00</span>
+                            <span>R$ 5022,433</span>
                         </div>
                     </li>
                     <hr class="my-2">
                     <li class="flex justify-between items-center gap-2">
-                        <p class="text-wrap">Ajuste4 de tela</p>
+                        <p class="text-wrap w-2/3">Ajuste4 de tela</p>
                         <div class="flex items-center gap-2">
                             <span class="font-bold">1x</span>
                             <span>R$ 50,00</span>
@@ -66,24 +74,26 @@
                     <hr class="my-2">
                 </ul>
                 <p class="flex justify-between items-center">
-                    <span class="font-bold">Total:</span>
-                    <span class="text-end">R$ 200,00</span>
+                    <span class="font-bold text-lg">Total:</span>
+                    <span class="text-end text-lg font-semibold">R$ 200,00</span>
                 </p>
                 <p class="flex justify-between items-center">
                     <span class="font-bold">Forma de Pagamento:</span>
                     <span class="text-end">Dinheiro</span>
                 </p>
-                <p>
+                <p class="mt-2">
                     <span class="font-bold">Observações:</span>
                     <p>Garantia de 30 dias.</p>
                 </p>
             </div>
             <div class="grid gap-6">
-                <button class="btn btn-primary">Imprimir</button>
-                <button class="btn btn-secondary">Enviar por e-mail</button>
+                <button class="btn btn-primary" @click="print">Imprimir</button>
                 <button class="btn btn-info">Baixar PDF</button>
                 <button class="btn btn-success">Enviar via WhatsApp</button>
+                <form method="dialog" class="grid">
+                    <button class="btn btn-ghost w-full text-lg">Fechar</button>
+                </form>
             </div>
         </div>
-    </div>
+    </dialog>
 </template>

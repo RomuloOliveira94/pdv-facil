@@ -23,7 +23,6 @@ const props = defineProps<{
 }>();
 
 const query = ref(props.search);
-const showSellConfirmation = ref(true);
 
 const linksWithSearch = computed(() => {
     return props.products.links.map((link) => {
@@ -119,10 +118,6 @@ const removeProduct = (product) => {
 };
 
 const createSell = () => {
-    if (sell.products.length === 0) {
-        alert("Adicione produtos para realizar a venda.");
-        return;
-    }
     const data = {
         products: sell.products.map((product) => ({
             id: product.id,
@@ -143,12 +138,12 @@ const createSell = () => {
     sell.discount = "";
     sell.paymentMethod = null;
     sell.total = 0;
-
+    receipt.showModal();
     router.post(route("sells.store"), data);
 
     router.on("success", () => {
         showSuccessToast.value = true;
-        showSellConfirmation.value = true;
+        receipt.showModal(); //erro impossivel de desativar ò.ó
         setTimeout(() => {
             showSuccessToast.value = false;
         }, 4000);
@@ -426,6 +421,6 @@ const searchProducts = (search) => {
         </ToastSuccess>
 
         <ToastError v-if="showErrorToast"> Erro ao criar venda! </ToastError>
-        <PrintReceiptModal v-if="showSellConfirmation" />
+        <PrintReceiptModal />
     </AuthenticatedLayout>
 </template>
