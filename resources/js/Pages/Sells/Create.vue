@@ -13,6 +13,7 @@ import { formatMoneyToBRL, formatRoles } from "@/utils";
 import { Cashier } from "../Cashiers/types";
 import Pagination from "@/Components/Pagination.vue";
 import { PaymentMethods, ProductWithPaginate } from "./types";
+import PrintReceiptModal from "./Components/PrintReceiptModal.vue";
 
 const props = defineProps<{
     cashier: Cashier;
@@ -22,6 +23,7 @@ const props = defineProps<{
 }>();
 
 const query = ref(props.search);
+const showSellConfirmation = ref(true);
 
 const linksWithSearch = computed(() => {
     return props.products.links.map((link) => {
@@ -117,6 +119,10 @@ const removeProduct = (product) => {
 };
 
 const createSell = () => {
+    if (sell.products.length === 0) {
+        alert("Adicione produtos para realizar a venda.");
+        return;
+    }
     const data = {
         products: sell.products.map((product) => ({
             id: product.id,
@@ -142,6 +148,7 @@ const createSell = () => {
 
     router.on("success", () => {
         showSuccessToast.value = true;
+        showSellConfirmation.value = true;
         setTimeout(() => {
             showSuccessToast.value = false;
         }, 4000);
@@ -419,5 +426,6 @@ const searchProducts = (search) => {
         </ToastSuccess>
 
         <ToastError v-if="showErrorToast"> Erro ao criar venda! </ToastError>
+        <PrintReceiptModal v-if="showSellConfirmation" />
     </AuthenticatedLayout>
 </template>
