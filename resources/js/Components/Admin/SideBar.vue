@@ -47,8 +47,8 @@ defineProps<{
             </AdminSideBarNavLink>
 
             <AdminSideBarNavLink
-                :active="route().current('dashboard')"
-                :href="'/'"
+                :active="route().current('admin.users.index')"
+                :href="route('admin.users.index')"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -65,8 +65,8 @@ defineProps<{
             </AdminSideBarNavLink>
 
             <AdminSideBarNavLink
-                :active="route().current('dashboard')"
-                :href="'/'"
+                :active="route().current('admin.companies.index')"
+                :href="route('admin.companies.index')"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"

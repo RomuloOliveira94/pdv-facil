@@ -1,9 +1,10 @@
+<script setup lang="ts">
+import AdminLayout from "@/Layouts/AdminLayout.vue";
+</script>
 <template>
-    <div>
+    <AdminLayout>
         <h1>Pegou as companies</h1>
-    </div>
+    </AdminLayout>
 </template>
-
-<script setup lang="ts"></script>
 
 <style scoped></style>
