@@ -84,7 +84,7 @@ const sellTotal = computed(() => {
 });
 
 const addProduct = (product) => {
-    if (!props.cashier.active) {
+    if (!props.cashier || props.cashier.active === false) {
         alert("Caixa fechado, abra o caixa para realizar vendas.");
         return;
     }
@@ -118,6 +118,12 @@ const removeProduct = (product) => {
 };
 
 const createSell = () => {
+
+    if (sell.products.length === 0) {
+        alert("Adicione produtos para realizar a venda.");
+        return;
+    }
+
     const data = {
         products: sell.products.map((product) => ({
             id: product.id,
