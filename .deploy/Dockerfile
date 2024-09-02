@@ -1,13 +1,22 @@
 ARG PHP_VERSION=${PHP_VERSION:-8.2}
-
 FROM php:${PHP_VERSION}-fpm-alpine AS php-system-setup
 
 # Install system dependencies
-RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git nodejs
+RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git
 
-# Verify Node.js and npm installation
-RUN node --version
-RUN npm --version
+# Install NVM
+ENV NVM_DIR /root/.nvm
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | ash
+
+# Load NVM and install Node.js
+RUN . "$NVM_DIR/nvm.sh" \
+    && nvm install 20.0.0 \
+    && nvm use 20.0.0 \
+    && nvm alias default 20.0.0
+
+# Verify installation
+RUN node -v
+RUN npm -v
 
 # Install PHP extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
