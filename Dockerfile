@@ -37,7 +37,6 @@ RUN npm install && npm run build
 
 # Expose ports for both PHP and npm servers
 EXPOSE 9000
-EXPOSE 5173
 
 # Set up command to run both services
-CMD php artisan serve --host=0.0.0.0 --port=9000 & npm run dev --host 0.0.0.0 --port 5173
+CMD php artisan serve --host=0.0.0.0 --port=9000
