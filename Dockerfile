@@ -2,10 +2,6 @@ FROM php:8.2-cli
 
 WORKDIR /var/www/html
 
-ENV APP_ENV=production \
-    APP_NAME=Pdv-Fácil \
-    APP_TIMEZONE=America/Sao_Paulo
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
@@ -46,7 +42,6 @@ EXPOSE 9000
 RUN php artisan storage:link
 RUN php artisan config:cache
 RUN php artisan route:cache
-RUN php artisan view:cache
 RUN php artisan optimize
 RUN php artisan migrate --force
 
