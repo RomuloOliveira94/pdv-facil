@@ -2,9 +2,9 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "heroku-postbuild": "npm run build",
         "dev": "vite",
-        "build": "vite build && vite build --ssr"
+        "build": "vite build",
+        "heroku-postbuild": "npm run build"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^1.0.0",

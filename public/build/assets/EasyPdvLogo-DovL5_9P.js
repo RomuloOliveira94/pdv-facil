@@ -1,0 +1,1 @@
+import{_ as o}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{o as c,e}from"./app-Bq8-TzmE.js";const r={},s={src:"/storage/logos/pdvfacil.png",alt:"pdv-fácil",class:"w-20 h-20 rounded-full object-cover"};function t(n,a){return c(),e("img",s)}const f=o(r,[["render",t]]);export{f as E};
