@@ -1,7 +1,7 @@
 FROM php:8.3-fpm
 
-ARG user
-ARG uid
+ARG user=www-data
+ARG uid=1000
 
 RUN apt-get update && apt-get install -y \
     git \
