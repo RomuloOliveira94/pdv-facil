@@ -1,35 +1,17 @@
 FROM php:8.2-fpm-alpine as php-setup
 
-COPY composer.lock composer.json /srv/app/
-
 WORKDIR /srv/app
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
-    git \
-    curl \
-    libonig-dev \
-    libzip-dev \
-    libgd-dev
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+COPY composer.lock composer.json /srv/app/
+# Install system dependencies
+RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git
 
-# Install extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
-RUN docker-php-ext-configure gd --with-external-gd
-RUN docker-php-ext-install gd
+# Install PHP extensions
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+RUN install-php-extensions intl bcmath gd pdo_mysql pdo_pgsql opcache redis uuid exif pcntl zip
 
 # Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer/composer:2 /usr/bin/composer /usr/local/bin/composer
 
 #install node for inertiajs
 FROM alpine:3.20 as install-node
@@ -41,24 +23,29 @@ RUN apk add --no-cache nodejs npm
 COPY --from=php-setup /srv/app /srv/app
 
 RUN npm install
-RUN npm run build
 
 FROM php:8.2-fpm-alpine as php-production
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+# Add non-root user: 'app'
+ARG NON_ROOT_GROUP=${NON_ROOT_GROUP:-app}
+ARG NON_ROOT_USER=${NON_ROOT_USER:-app}
+RUN addgroup -S $NON_ROOT_GROUP && adduser -S $NON_ROOT_USER -G $NON_ROOT_GROUP
+RUN addgroup $NON_ROOT_USER wheel
 
-# Copy existing application directory contents
-COPY . /srv/app
+# Switch to non-root 'app' user & install app dependencies
+COPY composer.json composer.lock ./
+RUN chown -R $NON_ROOT_USER:$NON_ROOT_GROUP /srv/app
+USER $NON_ROOT_USER
+RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
+RUN rm -rf /home/$NON_ROOT_USER/.composer
 
-# Copy existing application directory permissions
-COPY --chown=www:www . /srv/app
-
-# Change current user to www
-USER www
+# Copy app
+COPY --chown=$NON_ROOT_USER:$NON_ROOT_GROUP . /srv/app/
+COPY ./.deploy/config/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 
-CMD ["php-fpm"]
+COPY ./.deploy/entrypoint.sh /
+
+ENTRYPOINT ["sh", "/entrypoint.sh"]
