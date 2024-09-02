@@ -9,7 +9,7 @@ RUN docker-php-ext-install gmp
 RUN docker-php-ext-install zip pdo pdo_mysql bcmath
 RUN apt-get install nano
 # Copiar la configuración de Apache
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY .deploy/000-default.conf /etc/apache2/sites-available/000-default.conf
 # Habilitar mod_rewrite de Apache
 RUN a2enmod rewrite
 
@@ -19,15 +19,6 @@ WORKDIR /var/www/html
 # Copiar los archivos de la aplicación Laravel al contenedor
 COPY . .
 
-#copiar el archivo .env.example a .env
-COPY .env.example .env
-#RUN cp .env.example .env
-
-#copiar .htaccess a la carpeta public
-COPY .htaccess.example /var/www/html/public/.htaccess
-#RUN cp .htaccess.example /var/www/html/public/.htaccess
-
-# Instalar dependencias de Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Instalar dependencias de Laravel
