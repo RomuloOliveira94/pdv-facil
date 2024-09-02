@@ -1,26 +1,9 @@
 ARG PHP_VERSION=${PHP_VERSION:-8.2}
-ARG NODE_VERSION=${NODE_VERSION:-20.17.0}
-ARG NVM_DIR=${NVM_DIR:-/root/.nvm}
 
 FROM php:${PHP_VERSION}-fpm-alpine AS php-system-setup
 
 # Install system dependencies
-RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git
-
-# Install NVM
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | sh
-
-# Set up environment manually
-RUN mkdir -p /root \
-    && echo "export NVM_DIR=\"$NVM_DIR\"" >> /root/.bashrc \
-    && echo "[ -s \"$NVM_DIR/nvm.sh\" ] && \\. \"$NVM_DIR/nvm.sh\"" >> /root/.bashrc \
-    && . /root/.bashrc \
-    && . "$NVM_DIR/nvm.sh" && nvm install $NODE_VERSION \
-    && . "$NVM_DIR/nvm.sh" && nvm use $NODE_VERSION \
-    && . "$NVM_DIR/nvm.sh" && nvm alias default $NODE_VERSION
-
-# Update PATH for Node.js and npm
-ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH"
+RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git nodejs
 
 # Verify Node.js and npm installation
 RUN node --version
