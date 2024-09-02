@@ -2,11 +2,6 @@ FROM php:8.2-cli
 
 WORKDIR /var/www/html
 
-ENV APP_ENV=production \
-    APP_NAME=Pdv-Fácil \
-    APP_DEBUG=false\
-    APP_TIMEZONE=America/Sao_Paulo
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
@@ -44,10 +39,7 @@ RUN npm install && npm run build
 EXPOSE 9000
 
 #deployment commands
-RUN php artisan storage:link
-RUN php artisan route:cache
-RUN php artisan view:cache
-RUN php artisan optimize
+RUN php artisan optimize:clear
 RUN php artisan migrate --force
 
 # Set up command to run
