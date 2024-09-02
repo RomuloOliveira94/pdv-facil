@@ -27,4 +27,4 @@ USER laravel
 
 EXPOSE 80
 
-CMD ["php", "artistan", "server" ]
+CMD ["php", "artisan", "server" ]
