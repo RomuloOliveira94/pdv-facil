@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine as php-setup
+FROM php:fpm-alpine3.20 as php-setup
 
 WORKDIR /srv/app
 
@@ -9,6 +9,7 @@ RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git
 # Install PHP extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 RUN install-php-extensions intl bcmath gd pdo_mysql pdo_pgsql opcache redis uuid exif pcntl zip
+
 # Install composer
 COPY --from=composer/composer:2 /usr/bin/composer /usr/local/bin/composer
 
@@ -34,15 +35,27 @@ FROM alpine:3.20 as install-node
 
 WORKDIR /srv/app
 
-RUN apk add --no-cache nodejs npm
+RUN apk add nodejs npm
 
 COPY --from=php-setup /srv/app /srv/app
 
 RUN npm install && npm run build
 
+RUN rm -rf node_modules
+
 FROM php-setup
 
-# Expose port 9000 and start php-fpm server
+COPY --from=install-node /srv/app /srv/app
+
+# Instale o Caddy
+COPY --from=caddy:2.2.1 /usr/bin/caddy /usr/local/bin/caddy
+
+# Exponha a porta 80
 EXPOSE 80
 
-CMD ["php-fpm"]
+# Copie o arquivo de configuração do Caddy
+COPY ./.docker/config/Caddyfile /etc/caddy/Caddyfile
+
+COPY ./.docker/entrypoint.sh /
+
+ENTRYPOINT ["sh", "/entrypoint.sh"]
