@@ -1,33 +1,60 @@
-FROM php:8.2-apache
+ARG PHP_VERSION=${PHP_VERSION:-7.4}
+FROM php:${PHP_VERSION}-fpm-alpine AS php-system-setup
 
-# Instalar dependencias de PHP
-RUN apt-get update
-RUN apt-get install -y libzip-dev zip unzip git libgmp-dev re2c libmhash-dev libmcrypt-dev file
-RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/
-RUN docker-php-ext-configure gmp
-RUN docker-php-ext-install gmp
-RUN docker-php-ext-install zip pdo pdo_mysql bcmath
-RUN apt-get install nano
-# Copiar la configuración de Apache
-COPY .deploy/000-default.conf /etc/apache2/sites-available/000-default.conf
-# Habilitar mod_rewrite de Apache
-RUN a2enmod rewrite
+# Install system dependencies
+RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git
 
-# Establecer el directorio de trabajo
-WORKDIR /var/www/html
+# Install PHP extensions
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+RUN install-php-extensions intl bcmath gd pdo_mysql pdo_pgsql opcache redis uuid exif pcntl zip
 
-# Copiar los archivos de la aplicación Laravel al contenedor
-COPY . .
+# Install supervisord implementation
+COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/local/bin/supervisord
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install caddy
+COPY --from=caddy:2.2.1 /usr/bin/caddy /usr/local/bin/caddy
+RUN setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
 
-# Instalar dependencias de Laravel
-RUN composer install
+# Install composer
+COPY --from=composer/composer:2 /usr/bin/composer /usr/local/bin/composer
 
-# Establecer los permisos adecuados
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+FROM php-system-setup AS app-setup
 
-# Exponer el puerto 80
+# Set working directory
+ENV LARAVEL_PATH=/srv/app
+WORKDIR $LARAVEL_PATH
+
+# Add non-root user: 'app'
+ARG NON_ROOT_GROUP=${NON_ROOT_GROUP:-app}
+ARG NON_ROOT_USER=${NON_ROOT_USER:-app}
+RUN addgroup -S $NON_ROOT_GROUP && adduser -S $NON_ROOT_USER -G $NON_ROOT_GROUP
+RUN addgroup $NON_ROOT_USER wheel
+
+# Set cron job
+COPY ./.deploy/config/crontab /etc/crontabs/$NON_ROOT_USER
+RUN chmod 777 /usr/sbin/crond
+RUN chown -R $NON_ROOT_USER:$NON_ROOT_GROUP /etc/crontabs/$NON_ROOT_USER && setcap cap_setgid=ep /usr/sbin/crond
+
+# Switch to non-root 'app' user & install app dependencies
+COPY composer.json composer.lock ./
+RUN chown -R $NON_ROOT_USER:$NON_ROOT_GROUP $LARAVEL_PATH
+USER $NON_ROOT_USER
+RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
+RUN rm -rf /home/$NON_ROOT_USER/.composer
+
+# Copy app
+COPY --chown=$NON_ROOT_USER:$NON_ROOT_GROUP . $LARAVEL_PATH/
+COPY ./.deploy/config/php/local.ini /usr/local/etc/php/conf.d/local.ini
+
+# Set any ENVs
+ARG APP_KEY=${APP_KEY}
+ARG APP_NAME=${APP_NAME}
+ARG APP_URL=${APP_URL}
+ARG APP_ENV=${APP_ENV}
+ARG APP_DEBUG=${APP_DEBUG}
+
+# Start app
 EXPOSE 80
+COPY ./.deploy/entrypoint.sh /
 
-
+ENTRYPOINT ["sh", "/entrypoint.sh"]
