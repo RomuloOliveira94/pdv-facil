@@ -1,4 +1,3 @@
-
 FROM php:8.3-fpm
 
 RUN apt-get update && apt-get install -y \
@@ -10,12 +9,22 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip
 
+# Clear cache(optional)
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-COPY . /var/www/html
+# install composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-USER www-data
+RUN useradd -u 1000 -ms /bin/bash -g www-data laravel
 
-CMD ["php-fpm"]
+COPY . /var/www
+
+COPY --chown=$user:www-data . /var/www
+
+USER laravel
 
 EXPOSE 80
+
+CMD ["php-fpm"]
