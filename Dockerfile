@@ -19,9 +19,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN useradd -u 1000 -ms /bin/bash -g www-data laravel
 
-COPY . /var/www
+COPY . /srv/app
 
-COPY --chown=$user:www-data . /var/www
+COPY --chown=$user:www-data . /srv/app
 
 USER laravel
 
