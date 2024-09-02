@@ -4,7 +4,6 @@ WORKDIR /var/www/html
 
 ENV APP_ENV=production \
     APP_NAME=Pdv-Fácil \
-    APP_DEBUG=false\
     APP_TIMEZONE=America/Sao_Paulo
 
 # Install system dependencies
