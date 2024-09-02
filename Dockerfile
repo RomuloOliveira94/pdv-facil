@@ -21,7 +21,7 @@ RUN useradd -u 1000 -ms /bin/bash -g www-data laravel
 
 COPY . /srv/app
 
-COPY --chown=$user:www-data . /srv/app
+COPY --chown=laravel:www-data . /srv/app
 
 USER laravel
 
