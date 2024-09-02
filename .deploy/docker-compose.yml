@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+      #- "443:443"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - laravel_network
+networks:
+  laravel_network:
+
+volumes:
+  dbdata:
