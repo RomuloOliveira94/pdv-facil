@@ -27,7 +27,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        file: .deploy/Dockerfile
+        file: ./Dockerfile
         push: true
         tags: ${{ env.IMAGE_URL }}
 
