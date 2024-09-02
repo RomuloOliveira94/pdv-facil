@@ -6,7 +6,7 @@ FROM php:${PHP_VERSION}-fpm-alpine AS php-system-setup
 
 # Install system dependencies
 RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | ash
 ENV NVM_DIR=/root/.nvm
 RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
 RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
