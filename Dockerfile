@@ -2,6 +2,11 @@ FROM php:8.2-cli
 
 WORKDIR /var/www/html
 
+ENV APP_ENV=production \
+    APP_NAME=Pdv-Fácil \
+    APP_DEBUG=false\
+    APP_TIMEZONE=America/Sao_Paulo
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
@@ -38,5 +43,13 @@ RUN npm install && npm run build
 # Expose ports for both PHP and npm servers
 EXPOSE 9000
 
-# Set up command to run both services
+#deployment commands
+RUN php artisan storage:link
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
+RUN php artisan optimize
+RUN php artisan migrate --force
+
+# Set up command to run
 CMD php artisan serve --host=0.0.0.0 --port=9000
