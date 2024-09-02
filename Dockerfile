@@ -1,29 +1,11 @@
-FROM php:8.3-fpm
+FROM php:8.2-apache
 
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip
+WORKDIR /var/www/html
 
-# Clear cache(optional)
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install pdo pdo_mysql mysqli
 
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+COPY . .
 
-# install composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-RUN useradd -u 1000 -ms /bin/bash -g www-data laravel
-
-COPY . /var/www
-
-COPY --chown=laravel:www-data . /var/www
-
-USER laravel
-
-CMD php artisan serve --host=0.0.0.0 --port=80
 EXPOSE 80
+
+CMD ["apache2-foreground"]
