@@ -1,4 +1,4 @@
-ARG PHP_VERSION=${PHP_VERSION:-8.2}
+ARG PHP_VERSION=${PHP_VERSION:-7.4}
 FROM php:${PHP_VERSION}-fpm-alpine AS php-system-setup
 
 # Install system dependencies
@@ -89,3 +89,6 @@ ARG PUSHER_APP_CLUSTER=${PUSHER_APP_CLUSTER}
 
 # Start app
 EXPOSE 80
+COPY ./.deploy/entrypoint.sh /
+
+ENTRYPOINT ["sh", "/entrypoint.sh"]
