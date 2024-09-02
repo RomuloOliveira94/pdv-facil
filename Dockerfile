@@ -39,7 +39,6 @@ RUN npm install && npm run build
 EXPOSE 9000
 
 #deployment commands
-RUN php artisan optimize:clear
 RUN php artisan migrate --force
 
 # Set up command to run
