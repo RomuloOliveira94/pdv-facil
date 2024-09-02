@@ -8,6 +8,7 @@ echo "🎬 artisan commands"
 
 # 💡 Group into a custom command e.g. php artisan app:on-deploy
 php artisan migrate --no-interaction --force
+php artisan optimize
 
 echo "🎬 start supervisord"
 

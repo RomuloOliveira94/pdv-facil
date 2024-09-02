@@ -4,6 +4,9 @@ FROM php:${PHP_VERSION}-fpm-alpine AS php-system-setup
 # Install system dependencies
 RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git
 
+#install nodejs
+RUN apk add --no-cache nodejs npm
+
 # Install PHP extensions
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
 RUN install-php-extensions intl bcmath gd pdo_mysql pdo_pgsql opcache redis uuid exif pcntl zip
@@ -41,6 +44,10 @@ RUN chown -R $NON_ROOT_USER:$NON_ROOT_GROUP $LARAVEL_PATH
 USER $NON_ROOT_USER
 RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
 RUN rm -rf /home/$NON_ROOT_USER/.composer
+
+#install javascript dependencies
+COPY package.json package-lock.json ./
+RUN npm install
 
 # Copy app
 COPY --chown=$NON_ROOT_USER:$NON_ROOT_GROUP . $LARAVEL_PATH/
