@@ -8,7 +8,7 @@ FROM php:${PHP_VERSION}-fpm-alpine AS php-system-setup
 RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git
 
 # Install NVM (using sh instead of ash)
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | sh
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | ash
 
 # Install Node.js using NVM
 RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
