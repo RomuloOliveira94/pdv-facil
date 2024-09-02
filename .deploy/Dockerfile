@@ -35,33 +35,15 @@ COPY ./.deploy/config/crontab /etc/crontabs/$NON_ROOT_USER
 RUN chmod 777 /usr/sbin/crond
 RUN chown -R $NON_ROOT_USER:$NON_ROOT_GROUP /etc/crontabs/$NON_ROOT_USER && setcap cap_setgid=ep /usr/sbin/crond
 
-# # Switch to non-root 'app' user & install app dependencies
-# COPY composer.json composer.lock ./
-# RUN chown -R $NON_ROOT_USER:$NON_ROOT_GROUP $LARAVEL_PATH
-# USER $NON_ROOT_USER
-# RUN composer install --no-dev --optimize-autoloader --no-scripts
-# RUN rm -rf /home/$NON_ROOT_USER/.composer
-
-# # Copy app
-# COPY --chown=$NON_ROOT_USER:$NON_ROOT_GROUP . $LARAVEL_PATH/
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Create system user to run Composer and Artisan Commands
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
-
-WORKDIR /var/www
-
-# If you need to fix ssl
-COPY ./openssl.cnf /etc/ssl/openssl.cnf
-
+# Switch to non-root 'app' user & install app dependencies
 COPY composer.json composer.lock ./
+RUN chown -R $NON_ROOT_USER:$NON_ROOT_GROUP $LARAVEL_PATH
+USER $NON_ROOT_USER
 RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN rm -rf /home/$NON_ROOT_USER/.composer
 
-COPY . .
-
+# Copy app
+COPY --chown=$NON_ROOT_USER:$NON_ROOT_GROUP . $LARAVEL_PATH/
 COPY ./.deploy/config/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
 # Set any ENVs
