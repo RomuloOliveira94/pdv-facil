@@ -27,7 +27,7 @@ RUN rm -rf /home/$NON_ROOT_USER/.composer
 
 # Copy app
 COPY --chown=$NON_ROOT_USER:$NON_ROOT_GROUP . /srv/app/
-COPY ./.deploy/config/php/local.ini /usr/local/etc/php/conf.d/local.ini
+COPY ./.docker/config/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
 #install node for inertiajs
 FROM alpine:3.20 as install-node
@@ -38,13 +38,11 @@ RUN apk add --no-cache nodejs npm
 
 COPY --from=php-setup /srv/app /srv/app
 
-RUN npm install
+RUN npm install && npm run build
 
-FROM php:8.2-fpm-alpine as php-production
+FROM php-setup
 
 # Expose port 9000 and start php-fpm server
-EXPOSE 9000
+EXPOSE 80
 
-COPY ./.deploy/entrypoint.sh /
-
-ENTRYPOINT ["sh", "/entrypoint.sh"]
+CMD ["php-fpm"]
