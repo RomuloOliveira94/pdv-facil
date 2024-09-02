@@ -13,12 +13,15 @@ defineProps<{
     <AuthenticatedLayout>
         <Head title="Empresa" />
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2
+                class="font-semibold text-xl text-gray-800 leading-tight"
+                v-if="company !== null"
+            >
                 Dados da Empresa: {{ company.name }}
                 <span v-show="company.cnpj">- {{ company.cnpj }}</span>
             </h2>
         </template>
-        <SectionContainer>
+        <SectionContainer v-if="company !== null">
             <div class="flex gap-3 justify-between items-center w-full">
                 <div class="grid gap-1">
                     <h1>{{ company.name }}</h1>
@@ -38,9 +41,13 @@ defineProps<{
             </div>
         </SectionContainer>
         <Link
+            v-if="company !== null"
             :href="route('company.edit', company.id)"
             class="btn btn-primary w-32 mt-6 self-end"
             >Editar</Link
         >
+        <div v-else>
+            <p>Empresa não encontrada.</p>
+        </div>
     </AuthenticatedLayout>
 </template>

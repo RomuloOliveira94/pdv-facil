@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Sell;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class SellController extends Controller
 {
@@ -21,7 +22,8 @@ class SellController extends Controller
         $start_date = $request->query('start_date');
         $end_date = $request->query('end_date');
 
-        $sells = Sell::selectedByDate($date)
+        $sells = Sell::where('company_id', auth()->user()->company_id)
+            ->selectedByDate($date)
             ->selectedByProduct($product)
             ->selectedByPeriod($start_date, $end_date)
             ->with('products', 'paymentType', 'cashier')->orderBy('created_at', 'desc')->paginate(10);
@@ -46,8 +48,14 @@ class SellController extends Controller
         $name = $request->query('product');
 
         $user_company = auth()->user()->company;
-        $today_cashier = $user_company->cashiers()->whereDate('created_at', today())->first();
+        $today_cashier = $user_company?->cashiers()?->whereDate('created_at', today())->first();
+
+        if (!$today_cashier) {
+            return redirect()->route('company.index');
+        }
+
         $products = Product::selectedByName($name)->where('company_id', $user_company->id)->paginate(8);
+
 
         return inertia('Sells/Create', [
             'products' => $products,

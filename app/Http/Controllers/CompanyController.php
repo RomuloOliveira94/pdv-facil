@@ -17,7 +17,7 @@ class CompanyController extends Controller
         $user_company = auth()->user()->company;
         //show only the companies that the user has access to
         return Inertia::render('Company/Index', [
-            'company' => Company::where('id', $user_company->id)->first(),
+            'company' => $user_company,
         ]);
     }
 
@@ -26,7 +26,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Company/Create');
     }
 
     /**
