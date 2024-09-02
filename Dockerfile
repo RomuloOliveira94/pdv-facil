@@ -1,8 +1,5 @@
 FROM php:8.3-fpm
 
-ARG user
-ARG uid
-
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -20,13 +17,13 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 # install composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN useradd -u $uid -g www-data $user
+RUN useradd -u 1000 -ms /bin/bash -g www-data laravel
 
 COPY . /var/www
 
-COPY --chown=$user:www-data . /var/www
+COPY --chown=laravel:www-data . /var/www
 
-USER $user
+USER laravel
 
 EXPOSE 80
 
