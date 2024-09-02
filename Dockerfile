@@ -1,7 +1,7 @@
 FROM php:8.3-fpm
 
-ARG user=www-data
-ARG uid=1000
+ARG user
+ARG uid
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -20,7 +20,7 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 # install composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN useradd -u $uid -ms /bin/bash -g www-data $user
+RUN useradd -u $uid -g www-data $user
 
 COPY . /var/www
 
