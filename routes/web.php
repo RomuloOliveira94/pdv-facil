@@ -11,10 +11,10 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Index');
-})->name('inicio')->middleware('auth');
+})->name('inicio')->middleware(['auth', 'verified']);
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
