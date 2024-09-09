@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import TextInput from "@/Components/TextInput.vue";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ToastSuccess from "@/Components/ToastSuccess.vue";
 import ToastError from "@/Components/ToastError.vue";
 import SearchInput from "@/Components/SearchInput.vue";
@@ -182,9 +182,8 @@ const searchProducts = (search) => {
 </script>
 
 <template>
-    <Head title="Venda" />
-
     <AuthenticatedLayout>
+        <Head title="Venda" />
         <template #header>
             <div class="flex gap-6 items-center justify-center">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
