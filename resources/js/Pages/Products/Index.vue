@@ -122,7 +122,7 @@ const searchProducts = (search) => {
                                 :src="
                                     product.imageUrl
                                         ? '/storage/' + product.imageUrl
-                                        : '/storage/logos/pdvfacil.png'
+                                        : '/images/pdvfacil.png'
                                 "
                                 :alt="product.name"
                                 class="object-cover w-full h-full rounded-lg"
