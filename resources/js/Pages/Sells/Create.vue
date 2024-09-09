@@ -14,6 +14,8 @@ import { Cashier } from "../Cashiers/types";
 import Pagination from "@/Components/Pagination.vue";
 import { PaymentMethods, ProductWithPaginate } from "./types";
 import PrintReceiptModal from "./Components/PrintReceiptModal.vue";
+import SelectedProductsDesktop from "./Components/SelectedProductsDesktop.vue";
+import SelectedProductsMobile from "./Components/SelectedProductsMobile.vue";
 
 const props = defineProps<{
     cashier: Cashier;
@@ -224,62 +226,17 @@ const searchProducts = (search) => {
             v-if="cashier && cashier?.active"
         >
             <div class="grid">
-                <h1 class="text-xl font-semibold mb-6">Venda</h1>
-                <div class="overflow-x-auto">
-                    <ul
-                        class="overflow-x-auto flex justify-between md:grid md:grid-cols-1 min-w-full gap-12 md:gap-2"
-                    >
-                        <li>
-                            <div class="grid md:grid-cols-5 gap-1">
-                                <span class="font-semibold">Produto</span>
-                                <span class="font-semibold">Preço</span>
-                                <span class="font-semibold">Quantidade</span>
-                                <span class="font-semibold">Total</span>
-                                <span class="md:text-end font-semibold"
-                                    >Remover</span
-                                >
-                            </div>
-                        </li>
-                        <li
-                            v-for="(product, index) in sell.products"
-                            :key="index"
-                        >
-                            <div
-                                class="grid md:grid-cols-5 text-end md:text-start min-w-full gap-1"
-                            >
-                                <p class="block w-full whitespace-nowrap">
-                                    {{ product.name }}
-                                </p>
-                                <span>
-                                    {{ formatMoneyToBRL(product.price) }}
-                                </span>
-                                <span class="ml-10">{{
-                                    product.quantity
-                                }}</span>
-                                <span>
-                                    {{
-                                        formatMoneyToBRL(
-                                            product.price * product.quantity
-                                        )
-                                    }}
-                                </span>
-                                <div
-                                    class="flex items-center justify-end w-full h-full"
-                                >
-                                    <button
-                                        @click="removeProduct(product)"
-                                        class="font-semibold bg-error rounded-full h-6 w-6 my-0.5 text-white cursor-pointer hover:bg-red-600 text-center"
-                                    >
-                                        X
-                                    </button>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <hr class="my-6" />
+                <h1 class="text-2xl font-semibold mb-6">Venda</h1>
+                <SelectedProductsDesktop
+                    :selectedProducts="sell.products"
+                    @remove-product="removeProduct"
+                />
+                <SelectedProductsMobile
+                    :selectedProducts="sell.products"
+                    @remove-product="removeProduct"
+                />
                 <button
-                    v-if="sell.total > 0"
+                    v-if="sell.products.length > 0"
                     class="link mt-6 mb-2 w-full self-center"
                     @click="showDiscount = !showDiscount"
                 >
@@ -290,7 +247,7 @@ const searchProducts = (search) => {
                     }}
                 </button>
                 <div
-                    v-if="sell.total > 0"
+                    v-if="sell.products.length > 0"
                     class="flex justify-center gap-3 items-center flex-col md:flex-row"
                 >
                     <div class="w-full">
@@ -342,7 +299,10 @@ const searchProducts = (search) => {
                         </select>
                     </div>
                 </div>
-                <div class="flex items-center justify-center mt-6 gap-8">
+                <div
+                    v-if="sell.products.length > 0"
+                    class="flex items-center justify-end mt-6 gap-8"
+                >
                     <h2 class="font-semibold text-xl text-gray-800">
                         Subtotal: {{ formatMoneyToBRL(sellSubTotal) }}
                     </h2>
