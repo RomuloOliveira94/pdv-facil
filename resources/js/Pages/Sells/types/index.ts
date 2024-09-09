@@ -30,5 +30,5 @@ export interface ProductWithPaginate {
 export interface PaymentMethods {
     id: number;
     name: string;
-    code: string;
+    code: number;
 }

@@ -52,4 +52,9 @@ class Cashier extends Model
         $end = Carbon::parse($end)->setTimezone('America/Sao_Paulo')->toDateString();
         return $query->whereBetween('created_at', [$start, $end]);
     }
+
+    public function scopeByCompany($query)
+    {
+        return $query->where('company_id', auth()->user()->company_id);
+    }
 }

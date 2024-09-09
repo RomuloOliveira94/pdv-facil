@@ -97,7 +97,7 @@ const handleCloseCashier = (cashier) => {
             </h2>
         </template>
         <SectionContainer>
-            <div v-if="cashiers.data.length" class="grid gap-2 justify-center items-center">
+            <div v-if="cashiers.data.length" class="grid gap-2 justify-center items-center mb-6">
                 <h2 class="text-3xl font-bold text-center">Pesquisas</h2>
                 <div
                     class="flex gap-6 flex-col lg:items-center lg:justify-center lg:flex-row"

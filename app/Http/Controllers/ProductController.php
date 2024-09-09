@@ -16,7 +16,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $product = $request->query('product');
-        $products = Product::selectedByName($product)->where('company_id', auth()->user()->company_id)->paginate(8);
+        $products = Product::selectedByName($product)->where('company_id', auth()->user()->company_id)->paginate(16);
 
         return inertia('Products/Index', [
             'products' => $products,

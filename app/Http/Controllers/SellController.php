@@ -50,11 +50,11 @@ class SellController extends Controller
         $user_company = auth()->user()->company;
         $today_cashier = $user_company?->cashiers()?->whereDate('created_at', today())->first();
 
-        if (!$today_cashier) {
+        if (!$user_company) {
             return redirect()->route('company.index');
         }
 
-        $products = Product::selectedByName($name)->where('company_id', $user_company->id)->paginate(8);
+        $products = Product::selectedByName($name)->where('company_id', $user_company->id)->paginate(16);
 
 
         return inertia('Sells/Create', [

@@ -49,7 +49,7 @@ const sell = reactive({
     products: [],
     delivery: "",
     discount: "",
-    paymentMethod: null,
+    paymentMethod: 3,
     total: 0,
 });
 
@@ -118,7 +118,6 @@ const removeProduct = (product) => {
 };
 
 const createSell = () => {
-
     if (sell.products.length === 0) {
         alert("Adicione produtos para realizar a venda.");
         return;
@@ -202,13 +201,24 @@ const searchProducts = (search) => {
                 </div>
             </div>
         </template>
-        <button
-            v-if="!cashier || !cashier?.active"
-            class="btn btn-primary btn-lg w-full"
-            @click="openCashier"
-        >
-            Abrir Caixa
-        </button>
+
+        <div class="flex items-center justify-center my-4">
+            <button
+                v-if="!cashier || !cashier?.active"
+                class="btn btn-primary btn-lg w-52"
+                @click="openCashier"
+            >
+                Abrir Caixa 💰
+            </button>
+
+            <button
+                v-if="cashier && cashier?.active"
+                class="btn btn-error btn-lg w-52"
+                @click="closeCashier"
+            >
+                Fechar Caixa 🔐
+            </button>
+        </div>
 
         <SectionContainer
             class="min-h-[20vh] flex flex-col"
@@ -271,7 +281,7 @@ const searchProducts = (search) => {
                 <hr class="my-6" />
                 <button
                     v-if="sell.total > 0"
-                    class="link mt-6 w-full self-center"
+                    class="link mt-6 mb-2 w-full self-center"
                     @click="showDiscount = !showDiscount"
                 >
                     {{
@@ -284,7 +294,7 @@ const searchProducts = (search) => {
                     v-if="sell.total > 0"
                     class="flex justify-center gap-3 items-center flex-col md:flex-row"
                 >
-                    <div>
+                    <div class="w-full">
                         <InputLabel for="delivery" value="Taxa de entrega" />
 
                         <TextInput
@@ -301,7 +311,7 @@ const searchProducts = (search) => {
                         />
                     </div>
 
-                    <div v-show="showDiscount">
+                    <div v-show="showDiscount" class="w-full">
                         <InputLabel for="discount" value="Desconto" />
 
                         <TextInput
@@ -317,47 +327,46 @@ const searchProducts = (search) => {
                             placeholder="R$ 00.00"
                         />
                     </div>
-
-                    <select
-                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm md:self-end"
-                        v-model="sell.paymentMethod"
-                    >
-                        <option disabled selected>Pagamento</option>
-                        <option
-                            v-for="(payment, index) in paymentMethods"
-                            :key="index"
-                            :value="payment.id"
+                    <div class="w-full">
+                        <InputLabel for="discount" value="Forma de pagamento" />
+                        <select
+                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm md:self-end w-full"
+                            v-model="sell.paymentMethod"
                         >
-                            {{ payment.name }}
-                        </option>
-                    </select>
-                    <div class="md:self-end">
-                        <h2 class="font-semibold text-lg text-gray-800">
-                            Subtotal: {{ formatMoneyToBRL(sellSubTotal) }}
-                        </h2>
-
-                        <h2 class="font-semibold text-lg text-gray-800">
-                            Total:
-                            {{ formatMoneyToBRL(sellTotal) }}
-                        </h2>
+                            <option
+                                v-for="(payment, index) in paymentMethods"
+                                :key="index"
+                                :value="payment.id"
+                            >
+                                {{ payment.name }}
+                            </option>
+                        </select>
                     </div>
                 </div>
+                <div class="flex items-center justify-center mt-6 gap-8">
+                    <h2 class="font-semibold text-xl text-gray-800">
+                        Subtotal: {{ formatMoneyToBRL(sellSubTotal) }}
+                    </h2>
+
+                    <h2 class="font-semibold text-2xl text-gray-800">
+                        Total:
+                        {{ formatMoneyToBRL(sellTotal) }}
+                    </h2>
+                </div>
                 <button
+                    v-if="sell.products.length > 0"
                     @click="createSell"
-                    class="btn btn-primary mt-6 w-full text-xl"
+                    class="btn btn-primary mt-6 w-72 text-xl mx-auto"
                 >
                     Criar venda
                 </button>
+                <div class="my-4" v-if="sell.products.length <= 0">
+                    <p class="text-center text-lg font-semibold">
+                        Adicione produtos para realizar a venda. 👇
+                    </p>
+                </div>
             </div>
         </SectionContainer>
-
-        <button
-            v-if="cashier && cashier?.active"
-            class="btn btn-error btn-lg w-full mt-6"
-            @click="closeCashier"
-        >
-            Fechar Caixa
-        </button>
 
         <div class="mt-6 bg-white p-6 rounded-md">
             <h1 class="text-3xl font-bold mb-2 text-gray-800 text-center">

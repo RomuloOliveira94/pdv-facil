@@ -21,6 +21,8 @@ class CashierController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(30);
 
+
+
         return Inertia::render(
             'Cashiers/Index',
             [
@@ -36,7 +38,7 @@ class CashierController extends Controller
 
     public function store()
     {
-        $cashier = Cashier::where('company_id', auth()->user()->company_id)
+        $cashier = Cashier::byCompany()
             ->whereDate('created_at', today())
             ->first();
 
