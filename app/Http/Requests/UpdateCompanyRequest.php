@@ -28,7 +28,7 @@ class UpdateCompanyRequest extends FormRequest
 
             $image = $this->file('image');
             $image_name = time() . '_' . $image->getClientOriginalName();
-            $image_path = $this->image->storeAs('public/logos', $image_name);
+            $image_path = $this->image->storeAs('public/images', $image_name);
             $image_path = str_replace('public/', '', $image_path);
         }
 
