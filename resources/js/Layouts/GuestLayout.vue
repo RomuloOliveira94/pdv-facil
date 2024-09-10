@@ -2,6 +2,13 @@
 import EasyPdvLogo from "@/Components/EasyPdvLogo.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { Link } from "@inertiajs/vue3";
+
+defineProps({
+    size: {
+        type: String,
+        default: "max-w-md",
+    },
+});
 </script>
 
 <template>
@@ -17,7 +24,9 @@ import { Link } from "@inertiajs/vue3";
                     :href="route('login')"
                     class="underline text-lg text-gray-600 hover:text-gray-900"
                 >
-                    <PrimaryButton class="bg-white hover:bg-[#FFF6E6]"> Entrar </PrimaryButton>
+                    <PrimaryButton class="bg-white hover:bg-[#FFF6E6]">
+                        Entrar
+                    </PrimaryButton>
                 </Link>
                 <Link>
                     <Link
@@ -29,6 +38,16 @@ import { Link } from "@inertiajs/vue3";
                         </PrimaryButton>
                     </Link>
                 </Link>
+
+                <Link
+                    v-if="$page.props.auth.user"
+                    :href="route('logout')"
+                    method="post"
+                    as="button"
+                    class="underline text-lg text-gray-600 hover:text-gray-900"
+                >
+                    Sair
+                </Link>
             </nav>
         </header>
         <div>
@@ -38,7 +57,8 @@ import { Link } from "@inertiajs/vue3";
         </div>
 
         <div
-            class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
+            class="w-full mt-6 px-8 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg"
+            :class="size"
         >
             <slot />
         </div>

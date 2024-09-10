@@ -1,44 +1,39 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import InputError from "@/Components/InputError.vue";
 import { Link, router, useForm, Head } from "@inertiajs/vue3";
 import { vMaska } from "maska";
-import { Company } from "./types";
 
 const props = defineProps<{
-    company: Company;
     errors: Record<string, string>;
 }>();
 
 const form = useForm({
-    name: props.company.name,
-    cnpj: props.company.cnpj,
-    phone: props.company.phone,
-    address: props.company.address,
-    address_number: props.company.address_number,
-    address_complement: props.company.address_complement,
-    neighborhood: props.company.neighborhood,
-    zip_code: props.company.zip_code,
-    city: props.company.city,
-    state: props.company.state,
-    email: props.company.email,
-    logo: props.company.logo,
-    pix_key: props.company.pix_key,
-    credit_cart: props.company.payment_types.some(
-        (payment) => payment.code == "1"
-    ),
-    debit_cart: props.company.payment_types.some(
-        (payment) => payment.code == "2"
-    ),
-    money: props.company.payment_types.some((payment) => payment.code == "3"),
-    pix: props.company.payment_types.some((payment) => payment.code == "4"),
+    name: "",
+    cnpj: "",
+    phone: "",
+    address: "",
+    address_number: "",
+    address_complement: "",
+    neighborhood: "",
+    zip_code: "",
+    city: "",
+    state: "",
+    email: "",
+    logo: "",
+    pix_key: "",
+    credit_cart: null,
+    debit_cart: null,
+    money: null,
+    pix: null,
     image: null,
 });
 
 const submit = () => {
-    router.post(route("company.update", props.company.id), {
-        _method: "put",
+    router.post(route("company.store"), {
+        _method: "post",
         name: form.name,
         cnpj: form.cnpj,
         phone: form.phone,
@@ -64,19 +59,29 @@ const submit = () => {
 </script>
 
 <template>
-    <AuthenticatedLayout>
-        <Head title="Editar Empresa" />
+    <GuestLayout size="max-w-5xl">
+        <Head title="Criar Empresa" />
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Editar Empresa: {{ company.name }}
+                Cadastre sua Empresa:
             </h2>
         </template>
         <SectionContainer>
+            <div class="grid gap-2 mb-4">
+                <h1 class="text-2xl font-bold text-center">
+                    Seja vem Vindo(a) ao PDV FÁCIL!
+                </h1>
+                <p class="text-center">
+                    Agora faça o cadastro da sua empresa para utilizar o
+                    sistema.
+                </p>
+                <small>Campos Obrigatórios: *</small>
+            </div>
             <form @submit.prevent="submit">
                 <div class="grid lg:grid-cols-2 gap-3">
                     <label class="form-control w-full">
                         <div class="label">
-                            <span class="label-text">Nome</span>
+                            <span class="label-text">Nome*</span>
                         </div>
                         <input
                             type="text"
@@ -90,11 +95,11 @@ const submit = () => {
 
                     <label class="form-control w-full">
                         <div class="label">
-                            <span class="label-text">Cnpj</span>
+                            <span class="label-text">CNPJ</span>
                         </div>
                         <input
                             type="text"
-                            placeholder="Type here"
+                            placeholder="cnpj"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.cnpj"
                             v-maska
@@ -111,7 +116,7 @@ const submit = () => {
                         </div>
                         <input
                             type="text"
-                            placeholder="Type here"
+                            placeholder="Email"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.email"
                         />
@@ -120,11 +125,11 @@ const submit = () => {
 
                     <label class="form-control w-full">
                         <div class="label">
-                            <span class="label-text">Telefone</span>
+                            <span class="label-text">Telefone*</span>
                         </div>
                         <input
                             type="text"
-                            placeholder="Type here"
+                            placeholder="Phone"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.phone"
                             v-maska
@@ -141,11 +146,11 @@ const submit = () => {
                     <div class="flex gap-3">
                         <label class="form-control w-full">
                             <div class="label">
-                                <span class="label-text">Endereço</span>
+                                <span class="label-text">Endereço*</span>
                             </div>
                             <input
                                 type="text"
-                                placeholder="Type here"
+                                placeholder="Endereço"
                                 class="input input-bordered bg-inherit w-full"
                                 v-model="form.address"
                             />
@@ -157,11 +162,11 @@ const submit = () => {
 
                         <label class="form-control w-24">
                             <div class="label">
-                                <span class="label-text">Nº</span>
+                                <span class="label-text">Nº*</span>
                             </div>
                             <input
                                 type="text"
-                                placeholder="Type here"
+                                placeholder="Número"
                                 class="input input-bordered bg-inherit w-24"
                                 v-model="form.address_number"
                                 v-maska
@@ -180,7 +185,7 @@ const submit = () => {
                         </div>
                         <input
                             type="text"
-                            placeholder="Type here"
+                            placeholder="Complemento"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.address_complement"
                         />
@@ -190,11 +195,11 @@ const submit = () => {
                 <div class="grid lg:grid-cols-2 gap-3">
                     <label class="form-control w-full">
                         <div class="label">
-                            <span class="label-text">Bairro</span>
+                            <span class="label-text">Bairro*</span>
                         </div>
                         <input
                             type="text"
-                            placeholder="Type here"
+                            placeholder="Bairro"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.neighborhood"
                         />
@@ -206,11 +211,11 @@ const submit = () => {
 
                     <label class="form-control w-full">
                         <div class="label">
-                            <span class="label-text">CEP</span>
+                            <span class="label-text">CEP*</span>
                         </div>
                         <input
                             type="text"
-                            placeholder="Type here"
+                            placeholder="00000-000"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.zip_code"
                             v-maska
@@ -221,11 +226,11 @@ const submit = () => {
 
                     <label class="form-control w-full">
                         <div class="label">
-                            <span class="label-text">Cidade</span>
+                            <span class="label-text">Cidade*</span>
                         </div>
                         <input
                             type="text"
-                            placeholder="Type here"
+                            placeholder="Cidade"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.city"
                         />
@@ -234,11 +239,11 @@ const submit = () => {
 
                     <label class="form-control w-full">
                         <div class="label">
-                            <span class="label-text">Estado</span>
+                            <span class="label-text">Estado*</span>
                         </div>
                         <input
                             type="text"
-                            placeholder="Type here"
+                            placeholder="Estado"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.state"
                         />
@@ -253,7 +258,7 @@ const submit = () => {
                         </div>
                         <input
                             type="text"
-                            placeholder="Type here"
+                            placeholder="Chave pix"
                             class="input input-bordered bg-inherit w-full"
                             v-model="form.pix_key"
                         />
@@ -262,13 +267,13 @@ const submit = () => {
                     <label class="form-control w-full flex items-center">
                         <div class="label grid gap-2">
                             <span class="label-text">Logo</span>
-                            <img
-                                :src="'/storage/' + form.logo"
+                            <!-- <img
+                                :src="form.image"
                                 :alt="form.name"
                                 width="100"
                                 height="100"
                                 class="rounded-lg object-cover"
-                            />
+                            /> -->
                         </div>
 
                         <input
@@ -344,23 +349,17 @@ const submit = () => {
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between mt-4 gap-6">
+                <div class="flex items-center justify-center mt-8 gap-6">
                     <button
-                        class="btn btn-success"
+                        class="btn btn-success btn-lg w-72 text-xl"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                         type="submit"
                     >
-                        Editar
+                        Cadastrar
                     </button>
-                    <Link
-                        :href="route('company.index')"
-                        class="btn btn-error text-sm text-gray-600 hover:text-gray-900"
-                    >
-                        Cancelar
-                    </Link>
                 </div>
             </form>
         </SectionContainer>
-    </AuthenticatedLayout>
+    </GuestLayout>
 </template>

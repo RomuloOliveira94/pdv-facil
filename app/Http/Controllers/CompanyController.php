@@ -34,6 +34,11 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {
+        $clear_payment_types = array_filter($request->payment_types);
+
+        $company = Company::create($request->all());
+        $company->paymentTypes()->sync($clear_payment_types);
+        return redirect()->route('company.index');
     }
 
     /**
