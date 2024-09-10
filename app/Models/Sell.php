@@ -39,7 +39,7 @@ class Sell extends Model
     {
         return $this->belongsTo(Company::class);
     }
-
+    
     public function scopeSelectedByDate($query, $date)
     {
         if (!$date) {
