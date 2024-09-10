@@ -1,21 +1,24 @@
-<script setup lang="ts">
+<script setup>
 import { Head, Link, router, useForm } from "@inertiajs/vue3";
 import { vMaska } from "maska";
+import { ref } from "vue";
 import SectionContainer from "@/Components/SectionContainer.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import { Product } from "./types";
 
-const props = defineProps<{
-    product: Product;
-}>();
+const props = defineProps({
+    product: Object,
+    categoryTypes: Array,
+    errors: Object,
+});
 
+const categories = ref(props.product.categories);
 const form = useForm({
     name: props.product.name,
     price: String(props.product.price),
-    category: props.product.category,
+    categories: props.product.categories.map((cat) => cat.id),
     image: null,
     imageUrl: props.product.imageUrl,
 });
@@ -25,10 +28,22 @@ const submit = () => {
         _method: "put",
         name: form.name,
         price: form.price,
-        category: form.category,
+        categories: form.categories,
         image: form.image,
         imageUrl: form.imageUrl,
     });
+};
+
+const handleCategories = (e) => {
+    let cat = JSON.parse(e.target.value);
+    if (form.categories.includes(cat.id)) return;
+    form.categories.push(cat.id);
+    categories.value.push(cat);
+};
+
+const removeCategory = (index) => {
+    form.categories.splice(index, 1);
+    categories.value.splice(index, 1);
 };
 </script>
 <template>
@@ -55,7 +70,7 @@ const submit = () => {
                         autocomplete="name"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.name" />
+                    <InputError class="mt-2" :message="errors.name" />
                 </div>
 
                 <div class="mt-4">
@@ -73,22 +88,37 @@ const submit = () => {
                         placeholder="R$ 00.00"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.price" />
+                    <InputError class="mt-2" :message="errors.price" />
                 </div>
 
                 <div class="mt-4">
                     <InputLabel for="category" value="Categoria" />
 
-                    <TextInput
-                        id="category"
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.category"
-                        autocomplete="new-category"
-                    />
+                    <select
+                        id="type"
+                        class="mt-1 block w-full select input-bordered"
+                        autocomplete="type"
+                        @input="handleCategories"
+                    >
+                        <option value="" selected>Selecione o tipo</option>
+                        <option
+                            v-for="(type, index) in categoryTypes"
+                            :key="index"
+                            :value="JSON.stringify(type)"
+                        >
+                            {{ type.name }}
+                        </option>
+                    </select>
 
-                    <InputError class="mt-2" :message="form.errors.category" />
+                    <InputError class="mt-2" :message="errors.categories" />
                 </div>
+
+                <span
+                    v-for="(item, index) in categories"
+                    :key="index"
+                    @click="removeCategory(index)"
+                    >{{ item.name }}</span
+                >
 
                 <div class="mt-4">
                     <InputLabel for="image" value="Imagem" />
@@ -96,11 +126,7 @@ const submit = () => {
                     <input
                         type="file"
                         class="file-input w-full bg-inherit mt-1 block"
-                        @input="
-                            form.image = (
-                                $event.target as HTMLInputElement
-                            ).files[0]
-                        "
+                        @input="form.image = $event.target.files[0]"
                     />
 
                     <progress
@@ -112,7 +138,7 @@ const submit = () => {
                         {{ form.progress.percentage }}%
                     </progress>
 
-                    <InputError class="mt-2" :message="form.errors.image" />
+                    <InputError class="mt-2" :message="errors.image" />
                 </div>
 
                 <div class="flex items-center justify-between mt-4 gap-6">

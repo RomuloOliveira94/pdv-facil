@@ -6,17 +6,27 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
+import { ref } from "vue";
+
+const categories = ref([]);
 
 defineProps({
     errors: Object,
+    categoryTypes: Array,
 });
 
 const form = useForm({
     name: "",
     price: "",
-    category: "",
+    categories: [],
     image: "",
 });
+
+const handleCategories = (e) => {
+    let cat = JSON.parse(e.target.value);
+    form.categories.push(cat.id);
+    categories.value.push(cat);
+};
 
 const submit = () => {
     form.post("/products", form);
@@ -70,16 +80,28 @@ const submit = () => {
                 <div class="mt-4">
                     <InputLabel for="category" value="Categoria" />
 
-                    <TextInput
-                        id="category"
-                        type="text"
-                        class="mt-1 block w-full"
-                        v-model="form.category"
-                        autocomplete="new-category"
-                    />
+                    <select
+                        id="type"
+                        class="mt-1 block w-full select input-bordered"
+                        autocomplete="type"
+                        @input="handleCategories"
+                    >
+                        <option value="" selected>Selecione o tipo</option>
+                        <option
+                            v-for="(type, index) in categoryTypes"
+                            :key="index"
+                            :value="JSON.stringify(type)"
+                        >
+                            {{ type.name }}
+                        </option>
+                    </select>
 
                     <InputError class="mt-2" :message="errors.category" />
                 </div>
+
+                <span v-for="(item, index) in categories" :key="index">{{
+                    item.name
+                }}</span>
 
                 <div class="mt-4">
                     <InputLabel for="image" value="Imagem" />

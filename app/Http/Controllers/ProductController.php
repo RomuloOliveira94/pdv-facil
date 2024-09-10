@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -29,9 +30,13 @@ class ProductController extends Controller
      */
     public function create()
     {
-        
 
-        return inertia('Products/Create');
+        $company_product_categories = Category::where('company_id', auth()->user()->company_id)
+            ->where('type', 'PRODUCT')->get();
+
+        return inertia('Products/Create', [
+            'categoryTypes' => $company_product_categories,
+        ]);
     }
 
     /**
@@ -39,8 +44,8 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-
-        Product::create($request->all());
+        $newProduct = Product::create($request->all());
+        $newProduct->categories()->sync($request->categories);
 
         return redirect()->route('products.index');
     }
@@ -58,8 +63,13 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        $company_product_categories = Category::where('company_id', auth()->user()->company_id)
+            ->where('type', 'PRODUCT')->get();
+
         return inertia('Products/Edit', [
             'product' => $product,
+            'categoryTypes' => $company_product_categories,
+            'categories' => $product->categories->pluck('id')->toArray(),
         ]);
     }
 
