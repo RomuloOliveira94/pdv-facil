@@ -13,14 +13,17 @@ import { formatMoneyToBRL, formatRoles } from "@/utils";
 import { Cashier } from "../Cashiers/types";
 import Pagination from "@/Components/Pagination.vue";
 import { PaymentMethods, ProductWithPaginate } from "./types";
-import PrintReceiptModal from "./Components/PrintReceiptModal.vue";
+import PrintReceipt from "./Components/PrintReceipt.vue";
 import SelectedProductsDesktop from "./Components/SelectedProductsDesktop.vue";
 import SelectedProductsMobile from "./Components/SelectedProductsMobile.vue";
+import { Flash } from "@/types";
+import Modal from "@/Components/Modal.vue";
 
 const props = defineProps<{
     cashier: Cashier;
     products: ProductWithPaginate;
     paymentMethods: PaymentMethods[];
+    flash: Flash;
     search?: string;
 }>();
 
@@ -46,12 +49,15 @@ const linksWithSearch = computed(() => {
 const showDiscount = ref(false);
 const showSuccessToast = ref(false);
 const showErrorToast = ref(false);
+const showSuccessModal = ref(false);
+const showReceipt = ref(false);
 
 const sell = reactive({
     products: [],
     delivery: "",
     discount: "",
     paymentMethod: 3,
+    subtotal: 0,
     total: 0,
 });
 
@@ -103,7 +109,7 @@ const addProduct = (product) => {
     } else {
         sell.products[productIndex].quantity++;
     }
-
+    sell.subtotal = sellSubTotal.value;
     sell.total = sellTotal.value;
 };
 
@@ -139,21 +145,11 @@ const createSell = () => {
         total: sellTotal.value,
     };
 
-    //clear sell
-    sell.products = [];
-    sell.delivery = "";
-    sell.discount = "";
-    sell.paymentMethod = null;
-    sell.total = 0;
-    receipt.showModal();
     router.post(route("sells.store"), data);
 
-    router.on("success", () => {
-        showSuccessToast.value = true;
-        receipt.showModal(); //erro impossivel de desativar ò.ó
-        setTimeout(() => {
-            showSuccessToast.value = false;
-        }, 4000);
+    router.on("success", (e) => {
+        console.log(e);
+        showSuccessModal.value = true;
     });
 
     router.on("error", () => {
@@ -181,6 +177,19 @@ const searchProducts = (search) => {
         { preserveState: true, preserveScroll: true }
     );
 };
+
+const handleShowReceipt = () => {
+    showSuccessModal.value = false;
+    showReceipt.value = true;
+};
+
+const clearSell = () => {
+    sell.products = [];
+    sell.delivery = "";
+    sell.discount = "";
+    sell.paymentMethod = 3;
+    sell.total = 0;
+};
 </script>
 
 <template>
@@ -202,7 +211,6 @@ const searchProducts = (search) => {
                 </div>
             </div>
         </template>
-
         <div class="flex items-center justify-center my-4">
             <button
                 v-if="!cashier || !cashier?.active"
@@ -261,7 +269,7 @@ const searchProducts = (search) => {
                             autofocus
                             autocomplete="delivery"
                             v-maska
-                            data-maska="0.99"
+                            data-maska="0,99"
                             data-maska-tokens="0:\d:multiple|9:\d:optional"
                             placeholder="R$ 00.00"
                         />
@@ -278,7 +286,7 @@ const searchProducts = (search) => {
                             autofocus
                             autocomplete="discount"
                             v-maska
-                            data-maska="0.99"
+                            data-maska="0,99"
                             data-maska-tokens="0:\d:multiple|9:\d:optional"
                             placeholder="R$ 00.00"
                         />
@@ -390,11 +398,64 @@ const searchProducts = (search) => {
             <pagination class="mt-6" :links="linksWithSearch" />
         </div>
 
+        <Modal
+            :show="showSuccessModal"
+            max-width="sm"
+            :closeable="true"
+            @close="
+                showSuccessModal = false;
+                clearSell();
+            "
+        >
+            <div class="p-6">
+                <h2 class="text-2xl font-semibold text-gray-800">
+                    Venda criada com sucesso!
+                </h2>
+                <p>Deseja imprimir o recibo?</p>
+                <div class="flex justify-between gap-4 mt-6">
+                    <button
+                        type="button"
+                        @click="
+                            showSuccessModal = false;
+                            clearSell();
+                        "
+                        class="btn w-32 btn-error"
+                    >
+                        Não
+                    </button>
+                    <button
+                        type="button"
+                        @click="handleShowReceipt"
+                        class="btn w-32 btn-primary"
+                    >
+                        Sim
+                    </button>
+                </div>
+            </div>
+        </Modal>
+
+        <Modal
+            :show="showReceipt"
+            max-width="lg"
+            :closeable="true"
+            @close="
+                showReceipt = false;
+                clearSell();
+            "
+        >
+            <PrintReceipt
+                :sell="sell"
+                :delivery="deliveryTax"
+                :discount="discount"
+                @close="
+                    showReceipt = false;
+                    clearSell();
+                "
+            />
+        </Modal>
         <ToastSuccess v-if="showSuccessToast">
             Venda criada com sucesso!
         </ToastSuccess>
-
         <ToastError v-if="showErrorToast"> Erro ao criar venda! </ToastError>
-        <PrintReceiptModal />
     </AuthenticatedLayout>
 </template>

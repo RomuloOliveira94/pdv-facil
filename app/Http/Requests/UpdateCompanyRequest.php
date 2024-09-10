@@ -41,7 +41,7 @@ class UpdateCompanyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['sometimes', 'string', 'max:255'],
+            'name' => ['string', 'max:255'],
             'cnpj' => ['nullable', 'string', 'min:18', 'max:18'],
             'email' => ['nullable', 'string', 'email', 'max:255'],
             'phone' => ['sometimes', 'string', 'min:11', 'max:15'],

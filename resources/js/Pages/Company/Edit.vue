@@ -70,7 +70,6 @@ const submit = () => {
             </h2>
         </template>
         <SectionContainer>
-            {{ form.credit_cart }}
             <form @submit.prevent="submit">
                 <div class="grid lg:grid-cols-2 gap-3">
                     <label class="form-control w-full">
