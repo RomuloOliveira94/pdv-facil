@@ -51,14 +51,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Product $product)
@@ -79,6 +71,7 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         $product->update($request->all());
+        $product->categories()->sync($request->categories);
 
         return redirect()->route('products.index');
     }
@@ -92,6 +85,7 @@ class ProductController extends Controller
             return redirect()->route('products.index')->with('error', 'O Produto não pode ser excluído pois está vinculado a uma venda.');
         }
 
+        $product->categories()->detach();
         $product->delete();
 
         Storage::delete('public/' . $product->imageUrl);
