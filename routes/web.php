@@ -35,6 +35,7 @@ Route::middleware('auth', 'company-check')->group(function () {
 
     Route::get('/company/{company}/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/company/{company}/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/company/{company}/categories', [CategoryController::class, 'store'])->name('categories.store');
 });
 
 Route::controller(AdminController::class)->group(function () {

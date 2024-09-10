@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
 use App\Models\Company;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -34,9 +33,9 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request, Company $company)
     {
         Category::create($request->all());
-        return redirect()->route('categories.index');
+        return redirect()->route('categories.index', $company);
     }
 }

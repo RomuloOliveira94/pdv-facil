@@ -6,26 +6,26 @@ import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 
-defineProps({
+const props = defineProps({
     errors: Object,
     company: Object,
-    categoryTypes: Array,
+    categoryTypes: Object,
 });
 
 const form = useForm({
     name: "",
     description: "",
-    category: "",
+    type: "",
 });
 
 const submit = () => {
-    router.post(route("category.update", company.id), {
-        _method: "patch",
+    router.post(route("categories.store", props.company.id), {
+        _method: "post",
         name: form.name,
         description: form.description,
         slug: form.name.toLowerCase().replace(/ /g, "-"),
-        company_id: company.id,
-        category: form.category,
+        company_id: props.company.id,
+        type: form.type,
     });
 };
 </script>
@@ -70,13 +70,13 @@ const submit = () => {
                 </div>
 
                 <div class="mt-4">
-                    <InputLabel for="category" value="Tipo de Categoria" />
+                    <InputLabel for="type" value="Tipo de Categoria" />
 
                     <select
-                        id="category"
+                        id="type"
                         class="mt-1 block w-full select input-bordered"
-                        v-model="form.category"
-                        autocomplete="category"
+                        v-model="form.type"
+                        autocomplete="type"
                     >
                         <option value="" selected>Selecione o tipo</option>
                         <option
@@ -87,8 +87,7 @@ const submit = () => {
                             {{ type }}
                         </option>
                     </select>
-                    {{ form.category }}
-                    <InputError class="mt-2" :message="errors.category" />
+                    <InputError class="mt-2" :message="errors.type" />
                 </div>
 
                 <div class="flex items-center justify-between mt-4 gap-6">
@@ -101,7 +100,7 @@ const submit = () => {
                         Criar
                     </button>
                     <Link
-                        :href="route('products.index')"
+                        :href="route('categories.index', company.id)"
                         class="btn btn-error text-sm text-gray-600 hover:text-gray-900"
                     >
                         Cancelar
