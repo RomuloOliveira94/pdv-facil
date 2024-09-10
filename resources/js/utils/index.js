@@ -51,3 +51,18 @@ export const formatPaymentMethod = (paymentMethod) => {
             return "Não definido";
     }
 };
+
+export const formatCategoryType = (categoryType) => {
+    switch (categoryType) {
+        case "PRODUCT":
+            return "Produto";
+        case "SERVICE":
+            return "Serviço";
+        case "PAY_ACOUNT":
+            return "Conta a pagar";
+        case "RECEIVE_ACOUNT":
+            return "Conta a receber";
+        default:
+            return "Não definido";
+    }
+};

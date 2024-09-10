@@ -36,6 +36,9 @@ Route::middleware('auth', 'company-check')->group(function () {
     Route::get('/company/{company}/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/company/{company}/categories/create', [CategoryController::class, 'create'])->name('categories.create');
     Route::post('/company/{company}/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/company/{company}/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/company/{company}/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/company/{company}/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
 Route::controller(AdminController::class)->group(function () {

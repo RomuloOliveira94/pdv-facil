@@ -14,6 +14,7 @@ class Category extends Model
         'description',
         'slug',
         'company_id',
+        'type'
     ];
 
     const CATEGORY_TYPES = [
