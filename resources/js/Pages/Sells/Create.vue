@@ -54,6 +54,7 @@ const showReceipt = ref(false);
 
 const sell = reactive({
     products: [],
+    observations: "",
     delivery: "",
     discount: "",
     paymentMethod: 3,
@@ -141,6 +142,7 @@ const createSell = () => {
         delivery_tax: deliveryTax.value,
         discount: discount.value,
         payment_type_id: sell.paymentMethod,
+        observations: sell.observations,
         subtotal: sellSubTotal.value,
         total: sellTotal.value,
     };
@@ -306,6 +308,17 @@ const clearSell = () => {
                             </option>
                         </select>
                     </div>
+                </div>
+                <div
+                    v-if="sell.products.length > 0"
+                    class="w-full mt-6 flex justify-end"
+                >
+                    <textarea
+                        class="textarea textarea-bordered w-full"
+                        placeholder="Observações"
+                        v-model="sell.observations"
+                        rows="2"
+                    ></textarea>
                 </div>
                 <div
                     v-if="sell.products.length > 0"

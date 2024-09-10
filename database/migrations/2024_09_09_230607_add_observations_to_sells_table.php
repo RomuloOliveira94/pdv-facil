@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('cashiers', function (Blueprint $table) {
-            $table->foreignId('user_id')->nullable()->constrained();
-            $table->boolean('active')->default(true);
+        Schema::table('sells', function (Blueprint $table) {
+            $table->text('observations')->nullable();
         });
     }
 
@@ -22,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('cashiers', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('active');
+        Schema::table('sells', function (Blueprint $table) {
+            $table->dropColumn('observations');
         });
     }
 };

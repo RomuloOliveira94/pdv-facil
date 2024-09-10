@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { formatMoneyToBRL, formatPaymentMethod, formatDatePure } from "@/utils";
 import printJS from "print-js";
 
@@ -39,7 +39,9 @@ const close = () => {
                 </h3>
                 <h3>
                     <span class="font-bold mr-2">Data:</span>
-                    <span class="text-end">{{ formatDatePure(new Date()) }}</span>
+                    <span class="text-end">{{
+                        formatDatePure(new Date())
+                    }}</span>
                 </h3>
             </div>
             <h1 class="text-2xl font-bold text-center">RECIBO</h1>
@@ -66,7 +68,6 @@ const close = () => {
                 </p>
             </div>
             <table class="table w-full">
-                <!-- head -->
                 <thead>
                     <tr>
                         <th>Produtos</th>
@@ -129,13 +130,7 @@ const close = () => {
             </p>
             <p class="flex flex-col justify-center">
                 <span class="font-bold">Observações:</span>
-                <span class="text-sm"
-                    >Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat eos alias saepe impedit provident inventore.
-                    Necessitatibus optio voluptatibus odio excepturi modi
-                    voluptatem, vel corporis nostrum, reiciendis dicta mollitia?
-                    Iste, vitae?</span
-                >
+                <span class="text-sm"></span>
             </p>
         </div>
         <div class="grid gap-6">
