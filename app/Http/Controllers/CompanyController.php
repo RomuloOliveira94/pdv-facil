@@ -59,6 +59,9 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
+        if ($company->id != auth()->user()->company_id) {
+            return redirect()->route('company.index');
+        }
 
         return Inertia::render('Company/Edit', [
             'company' => $company->load('paymentTypes'),

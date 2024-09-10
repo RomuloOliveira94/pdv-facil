@@ -21,6 +21,7 @@ defineProps<{
                 <span v-show="company.cnpj">- {{ company.cnpj }}</span>
             </h2>
         </template>
+
         <SectionContainer v-if="company !== null">
             <div class="flex gap-3 justify-between items-center w-full">
                 <div class="grid gap-1">
@@ -40,14 +41,23 @@ defineProps<{
                 />
             </div>
         </SectionContainer>
-        <Link
-            v-if="company !== null"
-            :href="route('company.edit', company.id)"
-            class="btn btn-primary w-32 mt-6 self-end"
-            >Editar</Link
-        >
         <div v-else>
             <p>Empresa não encontrada.</p>
+        </div>
+        <div class="flex items-center justify-end gap-4">
+            <Link
+                v-if="company !== null"
+                :href="route('company.edit', company.id)"
+                class="btn btn-primary w-fit mt-6"
+                >Editar empresa 🏣</Link
+            >
+            <Link
+                :href="route('categories.index', company.id)"
+                :active="route().current('categories.index')"
+                class="btn btn-primary w-fit mt-6 flex items-center gap-2"
+            >
+                Gerenciar Categorias ⚙
+            </Link>
         </div>
     </AuthenticatedLayout>
 </template>

@@ -50,4 +50,9 @@ class Company extends Model
     {
         return $this->belongsToMany(PaymentType::class, 'company_payment_type');
     }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 }

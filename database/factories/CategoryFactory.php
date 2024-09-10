@@ -19,6 +19,8 @@ class CategoryFactory extends Factory
         return [
             'name' => $this->faker->word,
             'description' => $this->faker->sentence,
+            'slug' => $this->faker->slug,
+            'company_id' => \App\Models\Company::factory(),
         ];
     }
 }

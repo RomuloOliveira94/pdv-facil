@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CashierController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -31,6 +32,9 @@ Route::middleware('auth', 'company-check')->group(function () {
     Route::get('/company', [CompanyController::class, 'index'])->name('company.index');
     Route::get('/company/{company}/edit', [CompanyController::class, 'edit'])->name('company.edit');
     Route::put('/company/{company}', [CompanyController::class, 'update'])->name('company.update');
+
+    Route::get('/company/{company}/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/company/{company}/categories/create', [CategoryController::class, 'create'])->name('categories.create');
 });
 
 Route::controller(AdminController::class)->group(function () {

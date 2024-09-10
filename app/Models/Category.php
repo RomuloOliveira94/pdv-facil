@@ -12,10 +12,23 @@ class Category extends Model
     protected $fillable = [
         'name',
         'description',
+        'slug',
+        'company_id',
+    ];
+
+    const CATEGORY_TYPES = [
+        'PRODUCT' => 'Produto',
+        'PAY_ACCOUNT' => 'Contas a pagar',
+        'SERVICES' => 'Serviços'
     ];
 
     public function categorizables()
     {
         return $this->morphTo();
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 }
