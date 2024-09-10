@@ -7,7 +7,7 @@ import ToastSuccess from "@/Components/ToastSuccess.vue";
 import ToastError from "@/Components/ToastError.vue";
 import SearchInput from "@/Components/SearchInput.vue";
 import { vMaska } from "maska";
-import { Head, router } from "@inertiajs/vue3";
+import { Head, router, Link } from "@inertiajs/vue3";
 import { reactive, computed, ref } from "vue";
 import { formatMoneyToBRL, formatRoles } from "@/utils";
 import { Cashier } from "../Cashiers/types";
@@ -352,63 +352,79 @@ const clearSell = () => {
             <h1 class="text-3xl font-bold mb-2 text-gray-800 text-center">
                 Produtos
             </h1>
-            <SearchInput
-                class="my-4"
-                placeholder="Pesquisar produtos"
-                @search="searchProducts"
-                :q="query"
-            />
-            <div class="grid lg:grid-cols-4 mx-auto gap-3 text-gray-800 w-full">
+            <div v-if="products.data.length">
+                <SearchInput
+                    class="my-4"
+                    placeholder="Pesquisar produtos"
+                    @search="searchProducts"
+                    :q="query"
+                />
                 <div
-                    v-for="(product, index) in products.data"
-                    :key="index"
-                    class="card card-side border border-slate-50 items-center shadow-sm"
+                    class="grid lg:grid-cols-4 mx-auto gap-3 text-gray-800 w-full"
                 >
-                    <div class="grid p-2 gap-3 w-full">
-                        <figure v-show="product" class="h-32 relative">
-                            <span
-                                v-show="!product.imageUrl"
-                                class="text-2xl text-white font-bold absolute top-12 text-center z-10"
-                                >{{ product.name }}</span
-                            >
+                    <div
+                        v-for="(product, index) in products.data"
+                        :key="index"
+                        class="card card-side border border-slate-50 items-center shadow-sm"
+                    >
+                        <div class="grid p-2 gap-3 w-full">
+                            <figure v-show="product" class="h-32 relative">
+                                <span
+                                    v-show="!product.imageUrl"
+                                    class="text-2xl text-white font-bold absolute top-12 text-center z-10"
+                                    >{{ product.name }}</span
+                                >
+                                <div
+                                    v-show="!product.imageUrl"
+                                    class="absolute bg-black opacity-80 rounded-lg w-full"
+                                ></div>
+                                <img
+                                    :src="
+                                        product.imageUrl
+                                            ? '/storage/' + product.imageUrl
+                                            : '/images/pdvfacil.png'
+                                    "
+                                    :alt="product.name"
+                                    class="object-cover w-full h-full rounded-lg"
+                                />
+                            </figure>
                             <div
-                                v-show="!product.imageUrl"
-                                class="absolute bg-black opacity-80 rounded-lg w-full"
-                            ></div>
-                            <img
-                                :src="
-                                    product.imageUrl
-                                        ? '/storage/' + product.imageUrl
-                                        : '/images/pdvfacil.png'
-                                "
-                                :alt="product.name"
-                                class="object-cover w-full h-full rounded-lg"
-                            />
-                        </figure>
-                        <div class="flex justify-between items-center w-full">
-                            <div>
-                                <h2
-                                    class="text-wrap truncate ... font-semibold text-lg"
-                                >
-                                    {{ product.name }}
-                                </h2>
-                                <p>
-                                    {{ formatMoneyToBRL(product.price) }}
-                                </p>
-                            </div>
-                            <div class="card-actions justify-end flex-col">
-                                <button
-                                    @click="addProduct(product)"
-                                    class="btn btn-info btn-sm w-full"
-                                >
-                                    Adicionar
-                                </button>
+                                class="flex justify-between items-center w-full"
+                            >
+                                <div>
+                                    <h2
+                                        class="text-wrap truncate ... font-semibold text-lg"
+                                    >
+                                        {{ product.name }}
+                                    </h2>
+                                    <p>
+                                        {{ formatMoneyToBRL(product.price) }}
+                                    </p>
+                                </div>
+                                <div class="card-actions justify-end flex-col">
+                                    <button
+                                        @click="addProduct(product)"
+                                        class="btn btn-info btn-sm w-full"
+                                    >
+                                        Adicionar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <pagination class="mt-6" :links="linksWithSearch" />
             </div>
-            <pagination class="mt-6" :links="linksWithSearch" />
+            <div v-else>
+                <p class="text-center text-lg font-semibold">
+                    Nenhum produto encontrado...
+                </p>
+                <Link
+                    class="block text-center mt-4"
+                    :href="route('products.create')"
+                    >Adicione novos produtos para começar a vender! ➕</Link
+                >
+            </div>
         </div>
 
         <Modal

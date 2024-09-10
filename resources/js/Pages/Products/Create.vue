@@ -7,6 +7,10 @@ import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 
+defineProps({
+    errors: Object,
+});
+
 const form = useForm({
     name: "",
     price: "",
@@ -31,7 +35,7 @@ const submit = () => {
         <SectionContainer>
             <form @submit.prevent="submit">
                 <div>
-                    <InputLabel for="name" value="Name" />
+                    <InputLabel for="name" value="Nome" />
 
                     <TextInput
                         id="name"
@@ -42,11 +46,11 @@ const submit = () => {
                         autocomplete="name"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.name" />
+                    <InputError class="mt-2" :message="errors.name" />
                 </div>
 
                 <div class="mt-4">
-                    <InputLabel for="price" value="Price" />
+                    <InputLabel for="price" value="Preço" />
 
                     <TextInput
                         id="price"
@@ -60,11 +64,11 @@ const submit = () => {
                         placeholder="R$ 00.00"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.price" />
+                    <InputError class="mt-2" :message="errors.price" />
                 </div>
 
                 <div class="mt-4">
-                    <InputLabel for="category" value="Category" />
+                    <InputLabel for="category" value="Categoria" />
 
                     <TextInput
                         id="category"
@@ -74,7 +78,7 @@ const submit = () => {
                         autocomplete="new-category"
                     />
 
-                    <InputError class="mt-2" :message="form.errors.category" />
+                    <InputError class="mt-2" :message="errors.category" />
                 </div>
 
                 <div class="mt-4">
@@ -95,7 +99,7 @@ const submit = () => {
                         {{ form.progress.percentage }}%
                     </progress>
 
-                    <InputError class="mt-2" :message="form.errors.image" />
+                    <InputError class="mt-2" :message="errors.image" />
                 </div>
 
                 <div class="flex items-center justify-between mt-4 gap-6">
