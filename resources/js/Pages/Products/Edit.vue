@@ -128,6 +128,7 @@ const removeCategory = (index) => {
                         class="file-input w-full bg-inherit mt-1 block"
                         @input="form.image = $event.target.files[0]"
                     />
+                    <small>Tamanho máximo 2MB</small>
 
                     <progress
                         v-if="form.progress"

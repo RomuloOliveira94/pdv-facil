@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -38,8 +37,8 @@ class UpdateProductRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'image.image' => 'The image must be a file of type: jpeg, png, jpg, gif, svg.',
-            'image.max' => 'The image must not be greater than 2MB.',
+            'image.image' => 'A imagem deve ser um arquivo do tipo: jpeg, png, jpg, gif, svg.',
+            'image.max' => 'A imagem não pode ser maior que 2MB.',
         ];
     }
 }

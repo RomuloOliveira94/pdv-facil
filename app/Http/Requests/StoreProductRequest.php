@@ -19,6 +19,14 @@ class StoreProductRequest extends FormRequest
         return false;
     }
 
+    public function messages(): array
+    {
+        return [
+            'image.image' => 'A imagem deve ser um arquivo do tipo: jpeg, png, jpg, gif, svg.',
+            'image.max' => 'A imagem não pode ser maior que 2MB.',
+        ];
+    }
+
     public function prepareForValidation()
     {
         $this->merge([
@@ -31,17 +39,9 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'price' => ['required', 'numeric', 'min:0'],
-            'categories' => ['required', 'array'],
+            'categories' => ['nullable', 'array'],
             'image' => ['nullable', 'image', 'max:2048'],
             'imageUrl' => ['nullable', 'string', 'max:255'],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'image.image' => 'The image must be a file of type: jpeg, png, jpg, gif, svg.',
-            'image.max' => 'The image must not be greater than 2MB.',
         ];
     }
 }
