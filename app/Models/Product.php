@@ -4,12 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
     use HasFactory;
 
     protected $fillable = ['name', 'price', 'company_id', 'imageUrl'];
+
+    protected $appends = ['image'];
+
+    public function getImageAttribute()
+    {
+        return $this->imageUrl ? Storage::url($this->imageUrl) : null;
+    }
 
     public function company()
     {

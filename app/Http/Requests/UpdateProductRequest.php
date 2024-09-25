@@ -19,20 +19,8 @@ class UpdateProductRequest extends FormRequest
 
     public function prepareForValidation()
     {
-        $image_path = '';
-
-        if ($this->file('image')) {
-            Storage::delete('public/' . $this->imageUrl);
-
-            $image = $this->file('image');
-            $image_name = time() . '_' . $image->getClientOriginalName();
-            $image_path = $this->image->storeAs('public/products', $image_name);
-            $image_path = str_replace('public/', '', $image_path);
-        }
-
         $this->merge([
             'price' => str_replace('R$', '', $this->price),
-            'imageUrl' => $image_path ? $image_path : $this->imageUrl,
         ]);
     }
 

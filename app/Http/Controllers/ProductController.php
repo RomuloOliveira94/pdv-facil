@@ -44,6 +44,12 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = $image->store('products', 'r2');
+            $request['imageUrl'] = $imagePath;
+        }
+
         $newProduct = Product::create($request->all());
         $newProduct->categories()->sync($request->categories);
 
@@ -70,6 +76,12 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = $image->store('products', 'r2');
+            $request['imageUrl'] = $imagePath;
+        }
+
         $product->update($request->all());
         $product->categories()->sync($request->categories);
 

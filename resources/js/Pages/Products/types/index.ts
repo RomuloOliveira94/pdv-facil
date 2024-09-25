@@ -4,6 +4,7 @@ export interface Product {
     price: number;
     categories: [];
     imageUrl: string;
+    image: string;
 }
 
 export interface ProductWithPaginate {

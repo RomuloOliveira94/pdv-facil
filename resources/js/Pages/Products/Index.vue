@@ -121,7 +121,7 @@ const searchProducts = (search) => {
                             <img
                                 :src="
                                     product.imageUrl
-                                        ? '/storage/' + product.imageUrl
+                                        ? product.image
                                         : '/images/pdvfacil.png'
                                 "
                                 :alt="product.name"
