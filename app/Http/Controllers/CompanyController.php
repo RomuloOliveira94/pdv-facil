@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
 use App\Models\Company;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class CompanyController extends Controller
@@ -14,6 +15,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
+
         $user_company = auth()->user()->company;
         //show only the companies that the user has access to
         return Inertia::render('Company/Index', [
@@ -36,8 +38,15 @@ class CompanyController extends Controller
     {
         $user = auth()->user();
         $clear_payment_types = array_filter($request->payment_types);
+        $data = $request->validated();
 
-        $company = Company::create($request->all());
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = $image->store('logos', 'r2');
+            $data['logo'] = $imagePath;
+        }
+
+        $company = Company::create($request->validated());
         $company->paymentTypes()->sync($clear_payment_types);
 
         $user->company_id = $company->id;
@@ -75,8 +84,15 @@ class CompanyController extends Controller
     {
         $clear_payment_types = array_filter($request->payment_types);
 
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imagePath = $image->store('logos', 'r2');
+            $company->logo = $imagePath;
+        }
+
         $company->paymentTypes()->sync($clear_payment_types);
-        $company->update($request->all());
+        $company->update($request->validated());
+        $company->save();
         return redirect()->route('company.index');
     }
 

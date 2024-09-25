@@ -45,9 +45,9 @@ const submit = () => {
         city: form.city,
         state: form.state,
         email: form.email,
-        logo: form.logo,
+        // logo: form.logo,
         pix_key: form.pix_key,
-        image: form.image,
+        // image: form.image,
         payment_types: [
             form.credit_cart ? "1" : "",
             form.debit_cart ? "2" : "",
@@ -264,16 +264,16 @@ const submit = () => {
                         />
                     </label>
 
-                    <label class="form-control w-full flex items-center">
+                    <!-- <label class="form-control w-full flex items-center">
                         <div class="label grid gap-2">
                             <span class="label-text">Logo</span>
-                            <!-- <img
+                            <img
                                 :src="form.image"
                                 :alt="form.name"
                                 width="100"
                                 height="100"
                                 class="rounded-lg object-cover"
-                            /> -->
+                            />
                         </div>
 
                         <input
@@ -287,7 +287,7 @@ const submit = () => {
                         />
 
                         <InputError class="mt-2" :message="errors.logo" />
-                    </label>
+                    </label>-->
                 </div>
 
                 <div class="mt-4">

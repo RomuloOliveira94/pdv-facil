@@ -19,29 +19,28 @@ class UpdateCompanyRequest extends FormRequest
         return false;
     }
 
-    public function prepareForValidation()
+    /* public function prepareForValidation()
     {
         $image_path = '';
 
         if ($this->file('image')) {
-            Storage::delete('public/' . $this->logo);
+            //Storage::delete('public/' . $this->logo);
 
             $image = $this->file('image');
             $image_name = time() . '_' . $image->getClientOriginalName();
-            $image_path = $this->image->storeAs('public/images', $image_name);
-            $image_path = str_replace('public/', '', $image_path);
+            Storage::putFileAs('public', $image, $image_name);
         }
 
         $this->merge([
             'logo' => $image_path ? $image_path : $this->logo,
         ]);
-    }
+    } */
 
 
     public function rules(): array
     {
         return [
-            'name' => ['required','string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
             'cnpj' => ['nullable', 'string', 'min:18', 'max:18'],
             'email' => ['nullable', 'string', 'email', 'max:255'],
             'phone' => ['required', 'string', 'min:11', 'max:15'],
@@ -53,7 +52,6 @@ class UpdateCompanyRequest extends FormRequest
             'state' => ['required', 'string', 'max:255'],
             'zip_code' => ['required', 'string', 'min:8'],
             'pix_key' => ['nullable', 'string', 'max:255'],
-            'logo' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'max:2048'],
             'payment_types' => 'array',
         ];

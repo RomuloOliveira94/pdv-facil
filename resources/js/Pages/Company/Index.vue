@@ -35,7 +35,7 @@ defineProps<{
                     <h2>{{ company.phone }}</h2>
                 </div>
                 <img
-                    :src="'/storage/' + company.logo"
+                    :src="$page.props.logo.url"
                     :alt="company.name"
                     class="w-40 h-40 object-cover rounded-lg"
                 />

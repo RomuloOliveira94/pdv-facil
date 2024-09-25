@@ -24,6 +24,7 @@ const form = useForm({
     state: props.company.state,
     email: props.company.email,
     logo: props.company.logo,
+    logo_url: props.company.logo_url,
     pix_key: props.company.pix_key,
     credit_cart: props.company.payment_types.some(
         (payment) => payment.code == "1"
@@ -263,7 +264,7 @@ const submit = () => {
                         <div class="label grid gap-2">
                             <span class="label-text">Logo</span>
                             <img
-                                :src="'/storage/' + form.logo"
+                                :src="form.logo ? form.logo_url : $page.props.logo.url"
                                 :alt="form.name"
                                 width="100"
                                 height="100"
@@ -277,7 +278,7 @@ const submit = () => {
                             @input="
                                 form.image = (
                                     $event.target as HTMLInputElement
-                                ).files[0]
+                                ).files[0];
                             "
                         />
 

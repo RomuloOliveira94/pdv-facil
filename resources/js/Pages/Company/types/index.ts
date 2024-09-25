@@ -3,6 +3,7 @@ export interface Company {
     name: string;
     email: string;
     logo: string;
+    logo_url: string;
     cnpj: string;
     phone: string;
     address: string;

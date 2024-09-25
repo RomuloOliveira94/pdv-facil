@@ -28,8 +28,8 @@ class StoreCompanyRequest extends FormRequest
             'state' => ['required', 'string', 'max:255'],
             'zip_code' => ['required', 'string', 'min:8'],
             'pix_key' => ['nullable', 'string', 'max:255'],
-            'logo' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'max:2048'],
+            /* 'logo' => ['nullable', 'image', 'max:2048'],
+            'image' => ['nullable', 'image', 'max:2048'], */
             'payment_types' => 'array',
         ];
     }
